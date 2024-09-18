@@ -72,7 +72,7 @@ const getAvis=async(req,res)=>{
   }catch(e){
      res.status(500).json({
        status: httpStatus.ERROR,
-       message: error.message,
+       message: e.message,
      });
 
   }

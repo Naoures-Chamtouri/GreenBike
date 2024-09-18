@@ -1,7 +1,7 @@
-import Bottombar from "@/components/shared/bottombar";
+
 import Categories from "@/components/shared/categories";
 import Filters from "@/components/veloVente/filters";
-import TopCatalog from "@/components/shared/topCatalog";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,11 +10,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import ContentBarData from "@/components/used/Catalogue/ContentBarData";
-import { useQuery } from "@tanstack/react-query";
+
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import Cart from "@/components/veloVente/Cart";
+import ShoppingCart from "@/components/veloVente/ShoppingCart";
+import VeloVenteContentData from "@/components/veloVente/VeloVenteContentData";
 
 function CatalogueVeloVente() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -29,6 +30,8 @@ function CatalogueVeloVente() {
       const result = await response.json();
       return result.data;
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes avant le refetch
+    placeholderData: keepPreviousData, // Garde les anciennes données visibles
   });
 
   return (
@@ -59,18 +62,17 @@ function CatalogueVeloVente() {
             )}
           </BreadcrumbList>
         </Breadcrumb>
-       <Cart/>
+        <ShoppingCart />
       </div>
       <Categories
         titre={selectedCategory ? selectedCategory.name : "Vélos à Vendre"}
         onCategoryChange={setSelectedCategory}
       />
       <div className="mt-20 h-0.5 bg-customGreen"></div>
-      <div className="flex">
+      <div className="flex min-h-lvh ">
         <Filters selectedCategory={selectedCategory} />
-        <ContentBarData
+        <VeloVenteContentData
           velos={velosVente}
-          titre="Ajouter au Panier"
           selectedCategory={selectedCategory}
         />
       </div>

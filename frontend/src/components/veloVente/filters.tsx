@@ -4,18 +4,26 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox"; 
-import { useState } from "react";
+
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button"; 
 import Stack from "@mui/material/Stack";
-import { wrap } from "module";
+import { useFilterVenteContext } from "@/context/FiltersVenteContext";
+
 
 function Filters({selectedCategory}) {
-  const [selectedTypes, setSelectedTypes] = useState([]);
-  const [selectedMarques, setSelectedMarques] = useState([]);
-  const [selectedPrice, setSelectedPrice] = useState("");
+const {
+  selectedTypes,
+  setSelectedTypes,
+  selectedMarques,
+  setSelectedMarques,
+  selectedPrice,
+  setSelectedPrice,
+  resetVenteFilters,
+  removeVenteFilter
+}=useFilterVenteContext()
    const url = selectedCategory
      ? `http://localhost:4000/client/types/${selectedCategory.id}`
      : "http://localhost:4000/client/types";
@@ -23,9 +31,8 @@ function Filters({selectedCategory}) {
      console.log()
 
   const { data: types } = useQuery({
-    queryKey: ["types",selectedCategory],
+    queryKey: ["types", selectedCategory],
     queryFn: async () => {
-
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch types");
@@ -33,6 +40,8 @@ function Filters({selectedCategory}) {
       const result = await response.json();
       return result.data;
     },
+    staleTime: 5 * 60 * 1000,
+    placeholderData: [],
   });
 
   const { data: marques } = useQuery({
@@ -45,6 +54,8 @@ function Filters({selectedCategory}) {
       const result = await response.json();
       return result.data;
     },
+    staleTime: 5 * 60 * 1000,
+    placeholderData: [],
   });
 
   const handleTypeChange = (typeId) => {
@@ -62,25 +73,7 @@ function Filters({selectedCategory}) {
     );
   };
 
-  const handleRemoveFilter = (filter, type) => {
-    if (type === "type") {
-      setSelectedTypes((prevSelectedTypes) =>
-        prevSelectedTypes.filter((t) => t !== filter)
-      );
-    } else if (type === "marque") {
-      setSelectedMarques((prevSelectedMarques) =>
-        prevSelectedMarques.filter((m) => m !== filter)
-      );
-    } else if (type === "price") {
-      setSelectedPrice("");
-    }
-  };
-
-  const handleResetFilters = () => {
-    setSelectedTypes([]);
-    setSelectedMarques([]);
-    setSelectedPrice("");
-  };
+  
 
   const filtres=[...selectedMarques,...selectedTypes,...selectedPrice]
 
@@ -97,7 +90,7 @@ function Filters({selectedCategory}) {
           </h3>
           <Button
             variant="text"
-            onClick={handleResetFilters}
+            onClick={resetVenteFilters}
             style={{ marginLeft: "auto", color: "green" }}
           >
             Reset Filters
@@ -107,7 +100,7 @@ function Filters({selectedCategory}) {
               <Chip
                 key={index}
                 label={type}
-                onDelete={() => handleRemoveFilter(type, "type")}
+                onDelete={() => removeVenteFilter(type, "type")}
                 color="success"
                 variant="outlined"
               />
@@ -116,7 +109,7 @@ function Filters({selectedCategory}) {
               <Chip
                 key={index}
                 label={marque}
-                onDelete={() => handleRemoveFilter(marque, "marque")}
+                onDelete={() => removeVenteFilter(marque, "marque")}
                 color="success"
                 variant="outlined"
               />
@@ -124,7 +117,7 @@ function Filters({selectedCategory}) {
             {selectedPrice && (
               <Chip
                 label={`Prix: ${selectedPrice}`}
-                onDelete={() => handleRemoveFilter(selectedPrice, "price")}
+                onDelete={() => removeVenteFilter(selectedPrice, "price")}
                 color="success"
                 variant="outlined"
               />

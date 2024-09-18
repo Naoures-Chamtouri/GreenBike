@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
-import Utilisateur from "./utilisateur";
+import Utilisateur from "./utilisateur.js";
 
 const guideSchema = new mongoose.Schema({
   utilisateur: { type: Utilisateur.schema, required: true },
-  specialité:[{type:String}]
+  cv:{type:String},
+  etat:{type:String,enum:["accepté","refusé"],default:"refusé"}
 });
 
-const Guide = mongoose.model("guide", clientSchema, "guide");
+const Guide = mongoose.model("guide", guideSchema, "guide");
 export default Guide;

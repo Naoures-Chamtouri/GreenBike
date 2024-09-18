@@ -4,12 +4,12 @@ import { Outlet } from "react-router-dom";
 
 function RootLayout() {
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <Topbar />
-      <div className="">
-        <Outlet  />
+      <div className="min-h-lvh">
+        <Outlet />
       </div>
-      <Bottombar/>
+      <Bottombar />
     </div>
   );
 }

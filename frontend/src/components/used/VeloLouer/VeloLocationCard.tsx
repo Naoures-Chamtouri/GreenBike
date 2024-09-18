@@ -1,19 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
-function Card({ velo, button }) {
+function VeloLocationCard({ velo }) {
   const navigate = useNavigate();
 
-  const handleVeloClick = (ref, link,velo) => {
-    navigate(`/${link}/${ref}`,{state:{velo}});
+  const handleVeloClick = (ref, velo) => {
+    navigate(`/velo-a-louer/${ref}`,{state:{velo}});
   };
 
   return (
     <div
       className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden h-96"
       onClick={() => {
-        const link =
-          button === "Ajouter au Panier" ? "velo-a-vendre" : "velo-a-louer";
-        handleVeloClick(velo.velo.ref, link,velo);
+        handleVeloClick(velo.velo.ref, velo);
       }}
     >
       <img
@@ -26,19 +24,19 @@ function Card({ velo, button }) {
           {velo.velo.marque.nom}
         </h2>
         <p className="text-green-600 text-xl font-bold mt-2">
-          {button === "Réserver"
-            ? `${velo.prixHeure} DT/Heure`
-            : `${velo.prix} DT`}
+        
+            {velo.prixHeure} DT/Heure
+           
         </p>
 
         <p className="text-gray-500 mb-5 text-cu h-8">
           {velo.velo.type.categorie.nom}
           {velo.velo.type.nom} {velo.velo.modele} {velo.velo.couleur[0].nom}
         </p>
-        <button className="py-2 border hover:bg-customGreen">{button}</button>
+        <button className="py-2 border hover:bg-customGreen">Louer</button>
       </div>
     </div>
   );
 }
 
-export default Card;
+export default VeloLocationCard;

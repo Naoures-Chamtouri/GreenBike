@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Carousel from "@/components/ui/carousel";
-import Cart from "@/components/veloVente/Cart";
 import { useLocation } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 import NumberStepper from "@/components/ui/numberStepper";
-import { Modal, Box, Typography } from "@mui/material";
+import { Modal, Box, Typography, Snackbar, Alert } from "@mui/material";
 import AvisSection from "@/components/used/avisSection";
+import { useVeloVenteCart } from "@/context/VeloVenteCartContext";
+import ShoppingCart from "@/components/veloVente/ShoppingCart";
+import CartAlert from "@/functions/CartAlert";
+import { useState } from "react";
 
-function PageVelo() {
+
+function PageVeloVente() {
+  const [value, setValue] = useState(1);
   const location = useLocation();
   const { velo } = location.state || {};
   const titre =
@@ -29,11 +34,22 @@ function PageVelo() {
 
   // État pour contrôler l'ouverture du modal
   const [openModal, setOpenModal] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlertOpen(false);
+  };
+  
 
   // Fonctions pour ouvrir et fermer le modal
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-  console.log(velo)
+ const {addProductToCart}=useVeloVenteCart()
+
+
 
   return (
     <div>
@@ -59,7 +75,7 @@ function PageVelo() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Cart />
+        <ShoppingCart />
       </div>
 
       <div className="mt-36  mb-12 flex">
@@ -85,7 +101,6 @@ function PageVelo() {
             </h2>
           </div>
 
-          {/* Bouton pour voir les caractéristiques */}
           <button
             onClick={handleOpenModal}
             className="relative mt-5 ml-14 text-lg px-6 pr-8 py-2 border-2 rounded-sm border-customGreen active:bg-gray-300"
@@ -152,15 +167,35 @@ function PageVelo() {
             </Box>
           </Modal>
 
-          <NumberStepper stock={velo.stock} />
-          <button className="rounded-sm border-customGreen text-lg py-2 px-5 border hover:bg-customGreen mt-7 ml-24">
-            Ajouter au Panier
+          <NumberStepper stock={velo.stock} setvalue={setValue} />
+          <button
+            className="rounded-sm border-customGreen text-lg py-2 px-5 border hover:bg-customGreen mt-7 ml-24"
+            onClick={() => {
+              addProductToCart(velo._id, value);
+              setAlertOpen(true);
+            }}
+          >
+            Ajouter Au Panier
           </button>
         </div>
+        <Snackbar
+          open={alertOpen}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Produit ajouté au panier avec succès !
+          </Alert>
+        </Snackbar>
       </div>
       <AvisSection id={velo._id} />
     </div>
   );
 }
 
-export default PageVelo;
+export default PageVeloVente;

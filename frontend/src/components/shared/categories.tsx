@@ -1,9 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useFilterVenteContext } from "@/context/FiltersVenteContext";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 function Categories({ titre, onCategoryChange }) {
-  // État pour stocker la catégorie sélectionnée
+
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const { resetVenteFilters, setSelectedCategory, selectedCategory } =
+    useFilterVenteContext();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["categories"],
@@ -15,6 +18,8 @@ function Categories({ titre, onCategoryChange }) {
       const result = await response.json();
       return result.data;
     },
+    staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) return <p>Chargement en cours...</p>;
@@ -22,7 +27,7 @@ function Categories({ titre, onCategoryChange }) {
   if (!data || data.length === 0) return <p>Aucune catégorie trouvée.</p>;
 
   return (
-    <div className="text-center">
+    <div className="text-center min-h-32">
       <h1 className="text-2xl font-bold mt-10 mb-6">{titre}</h1>
       <div className="flex flex-wrap justify-center space-x-5">
         {data.map((category) => (
@@ -38,6 +43,8 @@ function Categories({ titre, onCategoryChange }) {
               // Mettre à jour la catégorie sélectionnée
               setSelectedCategoryId(category._id);
               onCategoryChange({ id: category._id, name: category.nom });
+              resetVenteFilters()
+              setSelectedCategory(category._id)
             }}
           >
             {category.nom}

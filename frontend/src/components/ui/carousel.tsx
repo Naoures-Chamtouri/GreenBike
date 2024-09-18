@@ -23,22 +23,22 @@ function Carousel({ images }) {
         <img
           src={images[currentIndex]}
           alt={`Slide ${currentIndex + 1}`}
-          className="object-cover w-full h-[300px]"
+          className="object-cover w-full h-[380px]"
         />
       </div>
 
       {/* Boutons de navigation */}
       <div
         onClick={handlePrevClick}
-        className="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white text-gray-800 px-3 py-3 rounded-full shadow hover:bg-gray-200"
+        className="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white text-gray-800 px-1 py-1 rounded-full shadow hover:bg-gray-200"
       >
-        <IoIosArrowBack className="w-7 h-7" />
+        <IoIosArrowBack className="w-6 h-6" />
       </div>
       <div
         onClick={handleNextClick}
-        className="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white text-gray-800 px-3 py-3 rounded-full shadow hover:bg-gray-200"
+        className="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white text-gray-800 px-1 py-1 rounded-full shadow hover:bg-gray-200"
       >
-        <IoIosArrowForward className="w-7 h-7" />
+        <IoIosArrowForward className="w-6 h-6" />
       </div>
 
       {/* Indicateurs pour les slides */}

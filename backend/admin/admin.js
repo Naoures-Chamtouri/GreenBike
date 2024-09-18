@@ -16,15 +16,17 @@ import categorieAgeRouter from "./routers/categorieAge.js";
 import cadreRouter from "./routers/cadre.js"
 import veloVenteRouter from "./routers/veloVente.js";
 import veloLocationRouter from "./routers/veloLocation.js";
+import guideRouter from "./routers/guide.js"
 dotenv.config();
 const port = process.env.PORT;
-
-databaseConnection();
-
 const app = express();
+
+/* databaseConnection();
+
+
 app.use(morgan("tiny"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); */
 
 app.use("/admin/adresses",adresseRouter);
 app.use("/admin/couleurs",couleurRouter);
@@ -40,7 +42,6 @@ app.use("/admin/categoriesAge",categorieAgeRouter);
 app.use("/admin/cadres",cadreRouter);
 app.use("/admin/veloVentes",veloVenteRouter);
 app.use("/admin/veloLocations",veloLocationRouter);
-app
-app.listen(port, () => {
-  console.log("litening on port ");
-});
+app.use("/admin/guides",guideRouter);
+
+export default app;

@@ -1,6 +1,7 @@
-import Card from "./Card";
+import VeloLocationCard from "./VeloLocationCard";
 
-function ContentBarData({ velos, titre, selectedCategory }) {
+
+function VeloLocationContentData({ velos, selectedCategory }) {
   const velosToDispaly = selectedCategory
     ? velos.filter((velo) => {
         console.log(velo.velo.type.categorie.nom);
@@ -12,10 +13,10 @@ function ContentBarData({ velos, titre, selectedCategory }) {
   return (
     <div className="mr-3 mt-8 ml-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-4">
       {velosToDispaly?.map((velo) => (
-        <Card key={velo._id} velo={velo} button={titre} />
+        <VeloLocationCard key={velo._id} velo={velo}  />
       ))}
     </div>
   );
 }
 
-export default ContentBarData;
+export default VeloLocationContentData;

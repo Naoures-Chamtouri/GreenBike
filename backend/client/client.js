@@ -10,18 +10,19 @@ import typeRouter from "./routers/type.js";
 import marqueRouter from "./routers/marque.js"
 import veloVenteRouter from "./routers/veloVente.js";
 import avisRouter from "./routers/avis.js";
-import veloLocationRouter from "./routers/veloLocation.js"
-
+import veloLocationRouter from "./routers/veloLocation.js";
+import baladeRouter from "./routers/balade.js";
 dotenv.config();
 const port = process.env.PORT;
-
-databaseConnection();
-
 const app = express();
+
+/* databaseConnection();
+
+
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); */
 
 app.use("/client",authenticationRouter);
 app.use("/client/profile",profileRouter);
@@ -31,8 +32,7 @@ app.use("/client/marques",marqueRouter);
 app.use("/client/veloVentes",veloVenteRouter);
 app.use("/client/avis",avisRouter);
 app.use("/client/veloLocations",veloLocationRouter);
+app.use("/client/balades",baladeRouter);
 
 
-app.listen(port, () => {
-  console.log("listening on port ");
-});
+export default app

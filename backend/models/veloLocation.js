@@ -17,6 +17,11 @@ const veloLocationSchema= new mongoose.Schema({
     avis:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Avis"
+    }],
+    stock:{type:Number,required:true},
+
+    adresseDisponible:[{type:mongoose.Schema.Types.ObjectId,
+        ref:"Adresse"
     }]
 });
 const VeloLocation = mongoose.model(

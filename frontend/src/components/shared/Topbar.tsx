@@ -48,7 +48,7 @@ function Topbar() {
       <div className="mx-auto w-full px-4 z-20 shadow-customGreen shadow-sm sm:px-6 lg:px-8">
         <div className="flex justify-center  items-center h-16">
           <div className="flex space-x-28">
-            <a href="#" className="text-black hover:text-gray-500">
+            <a href="/" className="text-black hover:text-gray-500">
               Accueil
             </a>
             {/*  <div className="relative group">
@@ -104,7 +104,7 @@ function Topbar() {
             <a href="/velo-a-vendre" className="text-black hover:text-gray-500">
               Vente des Vélos
             </a>
-            <a href="#" className="text-black hover:text-gray-500">
+            <a href="/balades" className="text-black hover:text-gray-500">
               Balades
             </a>
            

@@ -80,6 +80,7 @@ const register = async (req, res) => {
         numTelephone,
         image,
         adresse,
+        role:"client"
       },
     });
 

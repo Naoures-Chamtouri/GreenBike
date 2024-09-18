@@ -1,21 +1,22 @@
-
 import { TextField, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useState } from "react";
 
-function NumberStepper({ stock }) {
-  const [value, setValue] = useState(1);
+function NumberStepper({ stock, setvalue }) {
+  const [value, setValue] = useState(1); // Use local state for value
 
   const handleIncrement = () => {
     if (value < stock) {
       setValue(value + 1);
+      setvalue(value + 1); // Update parent state as well
     }
   };
 
   const handleDecrement = () => {
     if (value > 1) {
       setValue(value - 1);
+      setvalue(value - 1); // Update parent state as well
     }
   };
 
@@ -34,6 +35,7 @@ function NumberStepper({ stock }) {
         onChange={(e) => {
           const newValue = Math.min(Math.max(Number(e.target.value), 1), stock);
           setValue(newValue);
+          setvalue(newValue); // Update parent state
         }}
       />
       <IconButton onClick={handleIncrement} disabled={value >= stock}>
