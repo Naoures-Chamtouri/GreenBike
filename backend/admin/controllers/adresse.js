@@ -1,23 +1,16 @@
-import Adresse from "../../models/adresse.js"
+import AdresseLocal from "../../models/adresseLocal.js"
 
 
- const addAdresse = async (req, res) => {
-  try {
-    const { ville, codePostal } = req.body;
-    if (!ville || !codePostal ) {
-      return res.status(400).json({ message: "Tous les champs sont requis." });
-    }
-    const newAdresse = new Adresse({
-      ville,
-      codePostal
-    });
-
-    await newAdresse.save();
-
-    res.status(201).json(newAdresse);
-  } catch (error) {
+ const getAdresse=async(req,res)=>{
+  try{
+    const adresses=await AdresseLocal.find()
+    return res.status(200).json({status:"success",data:adresses})
     
-    res.status(500).json({ message: "Erreur serveur", error: error.message });
+  }catch(e){
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Erreur lors de la synchronisation du panier", error });
   }
-};
-export default {addAdresse};
+ }
+export default {getAdresse};

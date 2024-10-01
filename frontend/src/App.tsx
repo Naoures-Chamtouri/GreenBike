@@ -13,33 +13,60 @@ import PageVeloLocation from "./_root/pages/PageVeloLocation";
 import PageBalade from "./_root/pages/PageBalade";
 import VeloVenteProvider from "./context/VeloVenteCartContext";
 import FilterVenteProvider from "./context/FiltersVenteContext"
+import AuthProvider from "./context/AuthContext";
+import PageCommande from "./_root/pages/PageCommande";
+import FilterLocationProvider from "./context/FiltersLocationContext";
+import PageLocation from "./_root/pages/PageLocation";
+import FilterBaladeProvider from "./context/FiltersBaladeContext";
+import MesCommandes from "./_root/pages/MesCommandes";
 
 function App() {
   return (
-    <FilterVenteProvider>
-      <VeloVenteProvider>
-        <main className="flex h-screen ">
-          <Routes>
-            {/* public routes */}
-            <Route element={<AuthLayout />}>
-              <Route path="/sign-in" element={<SigninForm />} />
-              <Route path="/sign-up" element={<SignupForm />} />
-            </Route>
-            {/* private routes */}
-            <Route element={<RootLayout />}>
-              <Route index element={<Home />} />
-              //index mean the starting page
-              <Route path="/velo-a-vendre" element={<CatalogueVeloVente />} />
-              <Route path="/velo-a-vendre/:ref" element={<PageVeloVente />} />
-              <Route path="/velo-a-louer" element={<CatalogueVeloLocation />} />
-              <Route path="/velo-a-louer/:ref" element={<PageVeloLocation />} />
-              <Route path="/balades" element={<CatalogueBalade />} />
-              <Route path="/balades/:ref" element={<PageBalade />} />
-            </Route>
-          </Routes>
-        </main>
-      </VeloVenteProvider>
-    </FilterVenteProvider>
+    <AuthProvider>
+      <FilterVenteProvider>
+        <FilterLocationProvider>
+          <FilterBaladeProvider>
+            <VeloVenteProvider>
+              <main className="flex h-screen ">
+                <Routes>
+                  {/* public routes */}
+                  <Route element={<AuthLayout />}>
+                    <Route path="/sign-in" element={<SigninForm />} />
+                    <Route path="/sign-up" element={<SignupForm />} />
+                  </Route>
+                  {/* private routes */}
+                  <Route element={<RootLayout />}>
+                    <Route index element={<Home />} />
+                    //index mean the starting page
+                    <Route
+                      path="/velo-a-vendre"
+                      element={<CatalogueVeloVente />}
+                    />
+                    <Route
+                      path="/velo-a-vendre/:ref"
+                      element={<PageVeloVente />}
+                    />
+                    <Route
+                      path="/velo-a-louer"
+                      element={<CatalogueVeloLocation />}
+                    />
+                    <Route
+                      path="/velo-a-louer/:ref"
+                      element={<PageVeloLocation />}
+                    />
+                    <Route path="/balades" element={<CatalogueBalade />} />
+                    <Route path="/balades/:ref" element={<PageBalade />} />
+                    <Route path="/commande" element={<PageCommande />} />
+                    <Route path="/location" element={<PageLocation />} />
+                    <Route path="/mes-commandes" element={<MesCommandes/>} />
+                  </Route>
+                </Routes>
+              </main>
+            </VeloVenteProvider>
+          </FilterBaladeProvider>
+        </FilterLocationProvider>
+      </FilterVenteProvider>
+    </AuthProvider>
   );
 }
 

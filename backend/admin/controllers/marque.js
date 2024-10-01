@@ -34,4 +34,14 @@ const createMarque = async (req, res) => {
   }
 };
 
-export default {createMarque}
+const getAllMarques=async(req,res)=>{
+  try{
+    const marques=await Marque.find();
+    return res.status(200).json({status:httpStatus.SUCCESS,data:marques});
+  }catch(e){
+    return res.status(500).json({ status:httpStatus.ERROR, message: "Erreur serveur"})
+
+  }
+}
+
+export default {createMarque,getAllMarques}

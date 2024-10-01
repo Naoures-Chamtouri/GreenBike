@@ -44,7 +44,6 @@ function CatalogueBalade() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <ReservationCart />
       </div>
       <div className="text-center mt-16 mb-8">
         <h1 className="text-3xl font-bold">Les Balades</h1>

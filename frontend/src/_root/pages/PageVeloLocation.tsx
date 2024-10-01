@@ -13,31 +13,37 @@ import { IoIosArrowForward } from "react-icons/io";
 import NumberStepper from "@/components/ui/numberStepper";
 import { Modal, Box, Typography } from "@mui/material";
 import AvisSection from "@/components/used/avisSection";
+import RentalModal from "@/components/used/VeloLouer/locationModal";
 
 function PageVeloLocation() {
+
   const location = useLocation();
   const { velo } = location.state || {};
   const titre =
-    velo.velo.type.nom + 
-    " " +
-    velo.velo.type.categorie.nom +
+    velo.velo.categorie.nom +
     " " +
     velo.velo.marque.nom +
     " " +
     velo.velo.modele;
   const images = velo.velo.images.map((image) => image.path);
 
-  // État pour contrôler l'ouverture du modal
+
   const [openModal, setOpenModal] = useState(false);
 
-  // Fonctions pour ouvrir et fermer le modal
+  
+  const [modalLocationOpen, setModalLocationOpen] = useState(false);
+
+  
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-  console.log(velo);
+
+  
+  const handleLocationModalOpen = () => setModalLocationOpen(true);
+  const handleLocationModalClose = () => setModalLocationOpen(false);
 
   return (
     <div>
-      <div className="topCatalog relative ">
+      <div className="topCatalog relative">
         <Breadcrumb className="mt-3 ml-7">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -54,28 +60,27 @@ function PageVeloLocation() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href="" className="text-sm">
-                {titre} {velo.velo.ref}
+                {titre} {velo._id}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <ShoppingCart/>
+      
       </div>
 
-      <div className="mt-36  mb-12 flex">
+      <div className="mt-36 mb-12 flex h-96">
         <Carousel images={images} />
-        <div className="w-1/3 mr-10 ">
-          <h1 className="text-2xl ">{titre}</h1>
+        <div className="w-1/3 mr-10">
+          <h1 className="text-2xl">{titre}</h1>
           <span className="text-gray-400">Référence: {velo.velo.ref}</span>
-          <h1 className="text-xl w-36 pr-10 pl-3 py-2 mt-4 bg-customGreen-light">
-            {velo.prixHeure}TND/Heure
+          <h1 className="text-xl w-fit pr-10 pl-3 py-2 mt-4 bg-customGreen-light">
+            {velo.prixJour} TND/Jour
           </h1>
           <div className="mt-5">
             <h2>
               <span className="text-customGreen">Description:</span>
               {velo.velo.description}
             </h2>
-        
           </div>
 
           {/* Bouton pour voir les caractéristiques */}
@@ -130,10 +135,6 @@ function PageVeloLocation() {
                   <li>Catégorie d'âge: {velo.velo.categorieAge.nom}</li>
                   <li>Moteur: {velo.velo.moteur?.nom || "Non applicable"}</li>
                   <li>Pliable: {velo.velo.pliable ? "Oui" : "Non"}</li>
-                  <li>
-                    Date d'ajout:{" "}
-                    {new Date(velo.velo.dateAjout).toLocaleDateString()}
-                  </li>
                 </ul>
               </Typography>
               <button
@@ -144,12 +145,16 @@ function PageVeloLocation() {
               </button>
             </Box>
           </Modal>
-
-          <NumberStepper stock={velo.stock} />
-          <button className="rounded-sm border-customGreen text-lg py-2 px-5 border hover:bg-customGreen mt-7 ml-32">
-           Louer
+          <button
+            className="rounded-sm border-customGreen text-2xl py-3 px-6 border hover:bg-customGreen mt-7 ml-32"
+            onClick={handleLocationModalOpen}
+          >
+            Louer
           </button>
+          <RentalModal open={modalLocationOpen} onClose={handleLocationModalClose} velo={velo}/>
         </div>
+
+      
       </div>
       <AvisSection id={velo._id} />
     </div>

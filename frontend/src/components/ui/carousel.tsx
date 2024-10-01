@@ -17,13 +17,13 @@ function Carousel({ images }) {
   };
 
   return (
-    <div className="relative w-full h-[300px] bg-gray-700 max-w-lg mx-auto">
+    <div className="relative w-full h-[300px] bg-white max-w-lg mx-auto">
       {/* Conteneur d'image avec une taille fixe */}
       <div className="overflow-hidden rounded-lg w-full   flex ">
         <img
           src={images[currentIndex]}
           alt={`Slide ${currentIndex + 1}`}
-          className="object-cover w-full h-[380px]"
+          className="object-cover w-full h-[300px]"
         />
       </div>
 

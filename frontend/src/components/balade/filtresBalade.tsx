@@ -7,41 +7,33 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
-  ExpandMore as ExpandMoreIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
 import { Chip } from "@mui/material";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useFilterBaladeContext } from "@/context/FiltersBaladeContext"; 
 
 function FiltresBalade() {
-  const [selectedDifficulties, setSelectedDifficulties] = useState([]);
+  const {
+    selectedNiveau,
+    setSelectedNiveau,
+    selectedLieu,
+    setSelectedLieu,
+    selectedMin,
+    setSelectedMin,
+    selectedMax,
+    setSelectedMax,
+    resetBaladesFilters,} =useFilterBaladeContext();
+
   const [searchPlace, setSearchPlace] = useState(""); // État temporaire pour la saisie
-  const [selectedPlace, setSelectedPlace] = useState(""); // État pour le filtre actif
-  const [minDuration, setMinDuration] = useState("");
-  const [maxDuration, setMaxDuration] = useState("");
 
-  // Mettre à jour les cases à cocher
-  const handleDifficultyChange = (diff) => {
-    setSelectedDifficulties((prevSelected) =>
-      prevSelected.includes(diff)
-        ? prevSelected.filter((id) => id !== diff)
-        : [...prevSelected, diff]
-    );
-  };
-
-  const handleResetFilters = () => {
-    setSelectedDifficulties([]);
-    setSelectedPlace("");
-    setMinDuration("");
-    setMaxDuration("");
-  };
 
   const handlePlaceInput = (e) => {
     setSearchPlace(e.target.value);
   };
 
   const handlePlaceSearch = () => {
-    setSelectedPlace(searchPlace);
+    setSelectedLieu(searchPlace);
     console.log(`Rechercher par lieu: ${searchPlace}`);
   };
 
@@ -50,12 +42,14 @@ function FiltresBalade() {
       handlePlaceSearch();
     }
   };
-
-  // Mise à jour des filtres
+const resetFilters=()=>{
+  resetBaladesFilters();
+  setSearchPlace("")
+}
   const filtres = [
-    ...selectedDifficulties,
-    selectedPlace,
-    minDuration && maxDuration && `Durée: ${minDuration}h - ${maxDuration}h`,
+    ...selectedNiveau,
+    selectedLieu,
+    selectedMin && selectedMax && `Durée: ${selectedMin}h - ${selectedMax}h`,
   ].filter(Boolean);
 
   return (
@@ -68,38 +62,38 @@ function FiltresBalade() {
               Filtres Actifs ({filtres.length})
             </h3>
             <button
-              onClick={handleResetFilters}
+              onClick={resetFilters}
               className="text-green-500 hover:underline"
             >
               Reset Filters
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
-            {selectedDifficulties.map((diff, index) => (
+            {selectedNiveau.map((niveau, index) => (
               <Chip
                 key={index}
-                label={diff}
-                onDelete={() => handleDifficultyChange(diff)}
+                label={niveau}
+                onDelete={() => setSelectedNiveau((prev) => prev.filter((n) => n !== niveau))}
                 deleteIcon={<CloseIcon />}
                 color="success"
                 variant="outlined"
               />
             ))}
-            {selectedPlace && (
+            {selectedLieu && (
               <Chip
-                label={selectedPlace}
-                onDelete={() => setSelectedPlace("")}
+                label={selectedLieu}
+                onDelete={() => setSelectedLieu("")}
                 deleteIcon={<CloseIcon />}
                 color="success"
                 variant="outlined"
               />
             )}
-            {minDuration && maxDuration && (
+            {selectedMin && selectedMax && (
               <Chip
-                label={`Durée: ${minDuration}h - ${maxDuration}h`}
+                label={`Durée: ${selectedMin}h - ${selectedMax}h`}
                 onDelete={() => {
-                  setMinDuration("");
-                  setMaxDuration("");
+                  setSelectedMin("");
+                  setSelectedMax("");
                 }}
                 deleteIcon={<CloseIcon />}
                 color="success"
@@ -121,7 +115,7 @@ function FiltresBalade() {
             id="searchPlace"
             type="text"
             placeholder="Lieu..."
-            className="w-full outline-none"
+            className="w-80 outline-none "
             value={searchPlace}
             onChange={handlePlaceInput}
             onBlur={handlePlaceSearch}
@@ -130,7 +124,7 @@ function FiltresBalade() {
         </div>
       </div>
 
-      {/* Filtres par difficultés */}
+      {/* Filtres par niveaux */}
       <div className="pl-4">
         <Accordion type="single" defaultValue="item-1" collapsible>
           <AccordionItem value="item-1">
@@ -139,16 +133,22 @@ function FiltresBalade() {
             </AccordionTrigger>
             <AccordionContent>
               <div>
-                {["facile", "modéré", "difficile"].map((diff) => (
-                  <div key={diff} className=" mt-4 flex items-center space-x-2">
+                {["facile", "modéré", "difficile"].map((niveau) => (
+                  <div key={niveau} className="mt-4 flex items-center space-x-2">
                     <Checkbox
-                      id={diff}
+                      id={niveau}
                       className="h-4 w-4 rounded border-gray-300 text-customGreen focus:ring-green-500"
-                      checked={selectedDifficulties.includes(diff)}
-                      onCheckedChange={() => handleDifficultyChange(diff)}
+                      checked={selectedNiveau.includes(niveau)}
+                      onCheckedChange={() => {
+                        setSelectedNiveau((prevSelected) =>
+                          prevSelected.includes(niveau)
+                            ? prevSelected.filter((n) => n !== niveau)
+                            : [...prevSelected, niveau]
+                        );
+                      }}
                     />
-                    <label htmlFor={diff} className=" text-sm text-gray-700">
-                      {diff}
+                    <label htmlFor={niveau} className="text-sm text-gray-700">
+                      {niveau}
                     </label>
                   </div>
                 ))}
@@ -169,8 +169,8 @@ function FiltresBalade() {
                   type="number"
                   min="1"
                   max="12"
-                  value={minDuration}
-                  onChange={(e) => setMinDuration(e.target.value)}
+                  value={selectedMin}
+                  onChange={(e) => setSelectedMin(e.target.value)}
                   className="w-16 p-1 border border-green-500 rounded text-center"
                 />
                 <span>à</span>
@@ -178,14 +178,14 @@ function FiltresBalade() {
                   type="number"
                   min="1"
                   max="12"
-                  value={maxDuration}
-                  onChange={(e) => setMaxDuration(e.target.value)}
+                  value={selectedMax}
+                  onChange={(e) => setSelectedMax(e.target.value)}
                   className="w-16 p-1 border border-green-500 rounded text-center"
                 />
               </div>
               <div className="flex justify-between text-sm text-gray-500 mt-2">
-                <span>Min: {minDuration}h</span>
-                <span>Max: {maxDuration}h</span>
+                <span>Min: {selectedMin}h</span>
+                <span>Max: {selectedMax}h</span>
               </div>
             </AccordionContent>
           </AccordionItem>

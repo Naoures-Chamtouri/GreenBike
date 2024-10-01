@@ -9,9 +9,9 @@ function VeloLocationCard({ velo }) {
 
   return (
     <div
-      className="max-w-xs bg-white shadow-lg rounded-lg overflow-hidden h-96"
+      className="w-64 h-96 bg-white shadow-lg rounded-lg overflow-hidden"
       onClick={() => {
-        handleVeloClick(velo.velo.ref, velo);
+        handleVeloClick(velo._id, velo);
       }}
     >
       <img
@@ -24,14 +24,12 @@ function VeloLocationCard({ velo }) {
           {velo.velo.marque.nom}
         </h2>
         <p className="text-green-600 text-xl font-bold mt-2">
-        
-            {velo.prixHeure} DT/Heure
-           
+          {velo.prixJour} DT/Jour
         </p>
 
         <p className="text-gray-500 mb-5 text-cu h-8">
-          {velo.velo.type.categorie.nom}
-          {velo.velo.type.nom} {velo.velo.modele} {velo.velo.couleur[0].nom}
+          {velo.velo.categorie.nom}
+           {velo.velo.modele} {velo.velo.couleur[0].nom}
         </p>
         <button className="py-2 border hover:bg-customGreen">Louer</button>
       </div>

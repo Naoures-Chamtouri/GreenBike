@@ -44,8 +44,8 @@ const ShoppingCartItem = ({ id, initialQuantity }) => {
 
       <div className="flex-grow">
         <h3 className="text-xl font-semibold mb-1 text-gray-800">
-          {item.velo.modele} - {item.velo.marque.nom} - {item.velo.type.nom} -{" "}
-          {item.velo.type.categorie.nom}
+          {item.velo.modele} - {item.velo.marque.nom} -  -{" "}
+          {item.velo.categorie.nom}
         </h3>
         <p className="text-gray-600 mb-1">Ref: {item.velo.ref}</p>
         <p className="text-gray-600 mb-1">Prix: {item.prix} TND</p>
@@ -65,7 +65,7 @@ const ShoppingCartItem = ({ id, initialQuantity }) => {
         </button>
         <span className="text-lg font-medium text-gray-800">{quantity}</span>
         <button
-          onClick={() => addProductToCart(id, 1)}
+          onClick={() => addProductToCart(id, 1,item.prix,item.stock)}
           className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors duration-200"
           aria-label="Increase quantity"
           disabled={quantity==item.stock}

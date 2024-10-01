@@ -1,3 +1,4 @@
+import { useFilterLocationContext } from "@/context/FiltersLocationContext";
 import { useFilterVenteContext } from "@/context/FiltersVenteContext";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -7,6 +8,8 @@ function Categories({ titre, onCategoryChange }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const { resetVenteFilters, setSelectedCategory, selectedCategory } =
     useFilterVenteContext();
+    const { resetLocationFilters, setSelectedLocationCategory, selectedLocationCategory } =
+      useFilterLocationContext();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["categories"],
@@ -44,7 +47,9 @@ function Categories({ titre, onCategoryChange }) {
               setSelectedCategoryId(category._id);
               onCategoryChange({ id: category._id, name: category.nom });
               resetVenteFilters()
+              resetLocationFilters()
               setSelectedCategory(category._id)
+              setSelectedLocationCategory(category._id)
             }}
           >
             {category.nom}

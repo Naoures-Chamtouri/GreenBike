@@ -4,7 +4,7 @@ const router=express.Router();
 
 router.get("/",veloLocationController.getAllVeloLocations);
 router.get("/:id",veloLocationController.getVeloLocationById);
-router.get("/filter",veloLocationController.getVeloLocationsByFilter);
+router.post("/filter",veloLocationController.getVeloLocationsByFilter);
 
 
 export default router;

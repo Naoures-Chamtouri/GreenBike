@@ -1,7 +1,7 @@
 import CategorieVelo from "../../models/categorieVelo.js";
 import httpStatus from "../../utils/httpStatus.js";
 
-export const ajouterCategorieVelo = async (req, res) => {
+ const ajouterCategorieVelo = async (req, res) => {
   const { nom } = req.body;
 
   if (!nom) {
@@ -29,3 +29,15 @@ export const ajouterCategorieVelo = async (req, res) => {
     res.status(500).json({ message: "Erreur du serveur." });
   }
 };
+
+const getAllCategories=async(req,res)=>{
+  try{
+    const categories=await CategorieVelo.find();
+    res.status(200).json({status:httpStatus.SUCCESS,data:categories})
+
+  }catch(error){
+    console.error("Erreur lors de la récupération des catégories de vélo :", error);
+  }
+}
+
+export default {ajouterCategorieVelo,getAllCategories}

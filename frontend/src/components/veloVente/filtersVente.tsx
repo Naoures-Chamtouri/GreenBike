@@ -40,7 +40,7 @@ const {
       const result = await response.json();
       return result.data;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
     placeholderData: [],
   });
 
@@ -54,7 +54,7 @@ const {
       const result = await response.json();
       return result.data;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
     placeholderData: [],
   });
 
@@ -78,7 +78,7 @@ const {
   const filtres=[...selectedMarques,...selectedTypes,...selectedPrice]
 
   return (
-    <div className="w-1/5 pr-3 border-r-2 border-gray-100 pt-3">
+    <div className="flex-shrink-0 w-1/5 pr-3 border-r-2 border-gray-100 pt-3">
       {filtres.length > 0 && (
         <div>
           <h3 className="text-lg">
@@ -160,31 +160,33 @@ const {
       </div>
 
       {/* Section Filtres Par Type */}
-      {types?.length >0 &&(<div className="type-filtre pl-4">
-        <Accordion type="single" defaultValue="item-2" collapsible>
-          <AccordionItem value="item-2">
-            <AccordionTrigger className="text-lg">Par Type</AccordionTrigger>
-            <AccordionContent>
-              {types?.map((type) => (
-                <div
-                  key={type._id}
-                  className="mt-4 flex items-center space-x-2"
-                >
-                  <Checkbox
-                    id={type._id}
-                    checked={selectedTypes.includes(type.nom)}
-                    className="h-4 w-4 rounded border-gray-300 text-customGreen focus:ring-green-500"
-                    onCheckedChange={() => handleTypeChange(type.nom)}
-                  />
-                  <label htmlFor={type._id} className="text-gray-700">
-                    {type.nom}
-                  </label>
-                </div>
-              ))}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>)}
+      {types?.length > 0 && (
+        <div className="type-filtre pl-4">
+          <Accordion type="single" defaultValue="item-2" collapsible>
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-lg">Par Type</AccordionTrigger>
+              <AccordionContent>
+                {types?.map((type) => (
+                  <div
+                    key={type._id}
+                    className="mt-4 flex items-center space-x-2"
+                  >
+                    <Checkbox
+                      id={type._id}
+                      checked={selectedTypes.includes(type.nom)}
+                      className="h-4 w-4 rounded border-gray-300 text-customGreen focus:ring-green-500"
+                      onCheckedChange={() => handleTypeChange(type.nom)}
+                    />
+                    <label htmlFor={type._id} className="text-gray-700">
+                      {type.nom}
+                    </label>
+                  </div>
+                ))}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      )}
 
       <div className="marque-filtre pl-4">
         <Accordion type="single" defaultValue="item-3" collapsible>

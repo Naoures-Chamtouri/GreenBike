@@ -1,4 +1,5 @@
 import Client from '../../models/client.js';
+import Panier from '../../models/panier.js'
 import httpStatus from '../../utils/httpStatus.js';
 import generateToken from '../../utils/generateToken.js';
 import bcrypt from 'bcryptjs';
@@ -8,11 +9,11 @@ const login = async (req, res) => {
     const { email, motDePasse } = req.body;
     console.log("Email reçu :", email);
 
-    // Recherche du client
+    
     const clients = await Client.find({ "utilisateur.email": email }).limit(1);
     console.log("Clients trouvés :", clients);
 
-    // Si aucun client n'est trouvé ou le tableau est vide
+    
     if (clients.length === 0) {
       return res.status(404).json({
         status: httpStatus.ERROR,
@@ -20,22 +21,27 @@ const login = async (req, res) => {
       });
     }
 
-    // Prendre le premier client du tableau
+   
     const client = clients[0];
     console.log("Client trouvé :", client);
 
-    // Vérifiez si le client a été trouvé
+   
     if (client && client.utilisateur) {
       const isPasswordValid = bcrypt.compareSync(
         motDePasse,
         client.utilisateur.motDePasse
       );
 
+      const clientObj = client.toObject();
+
+     
+      delete clientObj.utilisateur.motDePasse;
+
       if (isPasswordValid) {
         generateToken(res, client._id);
         res.status(200).json({
           status: httpStatus.SUCCESS,
-          data: client,
+          data: clientObj,
         });
       } else {
         return res.status(404).json({
@@ -57,7 +63,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   try {
-    const { nomUtilisateur, email, motDePasse, numTelephone, adresse } =
+    const { nomUtilisateur, email, motDePasse } =
       req.body;
     const image =req.file ? req.file.path : undefined;
 
@@ -77,20 +83,26 @@ const register = async (req, res) => {
         nomUtilisateur,
         email,
         motDePasse: motDePasseHache,
-        numTelephone,
         image,
-        adresse,
         role:"client"
       },
     });
+  
 
     await client.save();
+      const panier = new Panier({
+        client:client._id
+      });
+      await panier.save();
 
     generateToken(res, client._id);
+const clientObj = client.toObject();
 
+
+delete clientObj.utilisateur.motDePasse;
     res.status(200).json({
       status: httpStatus.SUCCESS,
-      data: client,
+      data: clientObj,
     });
   } catch (error) {
     console.log(error);

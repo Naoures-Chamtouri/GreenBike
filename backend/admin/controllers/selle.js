@@ -26,5 +26,12 @@ const addSelle = async (req, res) => {
     });
   }
 };
-
-export default {addSelle}
+const getAllSelles=async(req,res)=>{
+  try{
+const selles=await Selle.find();
+return res.json({status:"success",data:selles})
+  }catch(error){
+    return res.status(500).json('error')
+  }
+}
+export default {addSelle,getAllSelles}

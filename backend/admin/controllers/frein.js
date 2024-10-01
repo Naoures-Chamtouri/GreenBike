@@ -11,15 +11,14 @@ const addFrein = async (req, res) => {
       });
     }
 
-    // Création d'une nouvelle instance du modèle Frein
+    
     const nouveauFrein = new Frein({
       type: type,
     });
 
-    // Sauvegarde dans la base de données
+   
     const freinEnregistre = await nouveauFrein.save();
 
-    // Retourner une réponse de succès avec les détails du frein ajouté
     res.status(201).json({
       status: "success",
       data: freinEnregistre,
@@ -32,4 +31,17 @@ const addFrein = async (req, res) => {
     });
   }
 };
-export default {addFrein}
+
+const getAllFreins=async(req,res)=>{
+  try{
+    const freins=await Frein.find();
+    return res.json({status:"success",data:freins})
+
+  }catch(e){
+    return res.status(500).json({
+      status:"error",
+      message:"Erreur lors de la récupération des freins",
+    })
+  }
+}
+export default {addFrein,getAllFreins}

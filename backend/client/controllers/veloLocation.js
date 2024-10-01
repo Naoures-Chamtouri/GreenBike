@@ -13,6 +13,7 @@ import Marque from "../../models/marque.js";
 import Type from "../../models/type.js";
 import Image from "../../models/image.js";
 import CategorieVelo from "../../models/categorieVelo.js";
+import AdresseLocal from "../../models/adresseLocal.js";
 
 const getAllVeloLocations = async (req, res) => {
   try {
@@ -35,15 +36,18 @@ const getAllVeloLocations = async (req, res) => {
           { path: "frein", model: Frein },
           { path: "categorieAge", model: CategorieAge },
           { path: "moteur", model: Moteur },
+          { path: "couleur", model: Couleur },
         ],
       })
-      .populate({ path: "avis", model: Avis });
+      .populate({ path: "avis", model: Avis })
+      .populate({ path: "adresseDisponible", model: AdresseLocal });
 
     res.status(200).json({
       status: httpStatus.SUCCESS,
       data: veloLocations,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: httpStatus.ERROR,
       message: error.message,
@@ -55,15 +59,15 @@ const getVeloLocationById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const veloLocation = await VeloLocation.findById(id)
+    const veloLocations = await VeloLocation.findById(id)
       .populate({
         path: "velo",
         populate: [
           {
             path: "type",
             model: Type,
-            populate: { path: "categorie", model: CategorieVelo },
           },
+          { path: "categorie", model: CategorieVelo },
           { path: "marque", model: Marque },
           { path: "couleur", model: Couleur },
           { path: "images", model: Image },
@@ -74,9 +78,11 @@ const getVeloLocationById = async (req, res) => {
           { path: "frein", model: Frein },
           { path: "categorieAge", model: CategorieAge },
           { path: "moteur", model: Moteur },
+          { path: "couleur", model: Couleur },
         ],
       })
-      .populate({ path: "avis", model: Avis });
+      .populate({ path: "avis", model: Avis })
+      .populate({ path: "adresseDisponible", model: AdresseLocal });
 
     if (!veloLocation) {
       return res.status(404).json({
@@ -87,9 +93,10 @@ const getVeloLocationById = async (req, res) => {
 
     res.status(200).json({
       status: httpStatus.SUCCESS,
-      data: veloLocation,
+      data: veloLocations,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       status: httpStatus.ERROR,
       message: error.message,
@@ -99,34 +106,77 @@ const getVeloLocationById = async (req, res) => {
 
 const getVeloLocationsByFilter = async (req, res) => {
   try {
-    const filter = {};
+    const types = req.body.types || [];
+    const marques = req.body.marques || [];
+    const categorie = req.body.categorie || "";
 
-    // Example of possible filters
-    if (req.query.type) {
-      filter["velo.type"] = req.query.type;
+    console.log("Types:", types);
+    console.log("Marques:", marques);
+    console.log("Categorie:", categorie);
+
+    let typeIds = [];
+
+   
+    if (types.length > 0) {
+      const foundTypes = await Type.find({ nom: { $in: types } }).select("_id");
+      typeIds = foundTypes.map((type) => type._id);
+    }
+    
+    else if (categorie !== "") {
+      const foundTypesByCategory = await Type.find({
+        categorie: categorie,
+      }).select("_id");
+
+     
+      if (foundTypesByCategory.length === 0) {
+        return res.status(200).json({
+          status: httpStatus.SUCCESS,
+          data: [], 
+        });
+      }
+
+      typeIds = foundTypesByCategory.map((type) => type._id);
     }
 
-    if (req.query.marque) {
-      filter["velo.marque"] = req.query.marque;
+    let marqueIds = [];
+    if (marques.length > 0) {
+      const foundMarques = await Marque.find({ nom: { $in: marques } }).select(
+        "_id"
+      );
+      marqueIds = foundMarques.map((marque) => marque._id);
     }
 
-    if (req.query.prixMin) {
-      filter.prixJour = { ...filter.prixJour, $gte: req.query.prixMin };
+    const query = {};
+
+  
+    if (typeIds.length > 0) {
+      query["velo.type"] = { $in: typeIds };
+    } else if (types.length > 0 || categorie !== "") {
+     
+     
+      return res.status(200).json({
+        status: httpStatus.SUCCESS,
+        data: [], 
+      });
     }
 
-    if (req.query.prixMax) {
-      filter.prixJour = { ...filter.prixJour, $lte: req.query.prixMax };
+   
+    if (marqueIds.length > 0) {
+      query["velo.marque"] = { $in: marqueIds };
     }
 
-    const veloLocations = await VeloLocation.find(filter)
+   
+
+   
+    const veloLocations = await VeloLocation.find(query)
       .populate({
         path: "velo",
         populate: [
           {
             path: "type",
             model: Type,
-            populate: { path: "categorie", model: CategorieVelo },
           },
+          { path: "categorie", model: CategorieVelo },
           { path: "marque", model: Marque },
           { path: "couleur", model: Couleur },
           { path: "images", model: Image },
@@ -137,16 +187,79 @@ const getVeloLocationsByFilter = async (req, res) => {
           { path: "frein", model: Frein },
           { path: "categorieAge", model: CategorieAge },
           { path: "moteur", model: Moteur },
+          { path: "couleur", model: Couleur },
         ],
       })
-      .populate({ path: "avis", model: Avis });
+      .populate({ path: "avis", model: Avis })
+      .populate({ path: "adresseDisponible", model: AdresseLocal });
 
     res.status(200).json({
       status: httpStatus.SUCCESS,
       data: veloLocations,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
+      status: httpStatus.ERROR,
+      message: error.message,
+    });
+  }
+};
+const checkAvailability = async (req, res) => {
+  try {
+    const { startDate, endDate, numBikes, veloId } = req.body;
+
+   
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+   
+    const locations = await Location.find({
+      velo: veloId,
+      $or: [
+        {
+          dateDebut: { $lte: end },
+          dateFin: { $gte: start },
+        },
+        {
+          dateDebut: { $gte: start, $lte: end },
+        },
+      ],
+    });
+
+    
+    const totalRentedBikes = locations.reduce((total, location) => {
+      return total + location.quantité; 
+    }, 0);
+
+
+    const bike = await VeloLocation.findById(veloId);
+
+    if (!bike) {
+      return res.status(404).json({
+        status: httpStatus.NOT_FOUND,
+        message: "Vélo non trouvé.",
+      });
+    }
+
+  
+    const availableBikes = bike.stock; 
+    if (totalRentedBikes + numBikes > availableBikes) {
+      return res.status(400).json({
+        status: httpStatus.BAD_REQUEST,
+        message: "Quantité demandée non disponible pour ces dates.",
+      });
+    }
+
+    
+    return res.status(200).json({
+      status: httpStatus.SUCCESS,
+      message: "Vélo disponible pour la location.",
+      availableBikes: availableBikes - totalRentedBikes, 
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
       status: httpStatus.ERROR,
       message: error.message,
     });

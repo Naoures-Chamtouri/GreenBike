@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import Guide from "../models/guide.js"; 
+import dotenv from "dotenv";
 dotenv.config();
 
 const guideAuthMiddleware = async (req, res, next) => {

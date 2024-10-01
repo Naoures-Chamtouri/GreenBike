@@ -1,6 +1,7 @@
-import { ajouterCategorieVelo } from "../controllers/categorieVelo.js";
+import categorieVeloController from "../controllers/categorieVelo.js";
 import express from "express";
 const router = express.Router();
-router.post("/", ajouterCategorieVelo);
+router.post("/", categorieVeloController.ajouterCategorieVelo);
+router.get("/",categorieVeloController.getAllCategories);
 
 export default router;

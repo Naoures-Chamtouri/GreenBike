@@ -16,7 +16,8 @@ import categorieAgeRouter from "./routers/categorieAge.js";
 import cadreRouter from "./routers/cadre.js"
 import veloVenteRouter from "./routers/veloVente.js";
 import veloLocationRouter from "./routers/veloLocation.js";
-import guideRouter from "./routers/guide.js"
+import guideRouter from "./routers/guide.js";
+import commandeRouter from "./routers/commande.js";
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
@@ -43,5 +44,6 @@ app.use("/admin/cadres",cadreRouter);
 app.use("/admin/veloVentes",veloVenteRouter);
 app.use("/admin/veloLocations",veloLocationRouter);
 app.use("/admin/guides",guideRouter);
+app.use("/admin/commandes", commandeRouter);
 
 export default app;

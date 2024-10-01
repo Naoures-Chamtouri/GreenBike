@@ -4,14 +4,13 @@ import Moteur from "../../models/moteur.js";
 // Fonction pour ajouter un nouveau moteur
 const addMoteur = async (req, res) => {
   try {
-    const { type, puissance, typeBatterie, autonomie } = req.body;
+    const { type, puissance } = req.body;
 
     // Création d'une nouvelle instance du modèle Moteur
     const nouveauMoteur = new Moteur({
       type: type || "",
       puissance: puissance || 0,
-      typeBatterie: typeBatterie || "",
-      autonomie: autonomie || 0,
+      
     });
 
     // Sauvegarde dans la base de données

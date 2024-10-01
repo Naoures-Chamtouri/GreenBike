@@ -5,7 +5,7 @@ const veloLocationSchema= new mongoose.Schema({
 
     velo:{type:Velo.schema,
         required:true    },
-    prixHeure:{
+    prixJour:{
         type:Number,
         required:true
 
@@ -21,7 +21,7 @@ const veloLocationSchema= new mongoose.Schema({
     stock:{type:Number,required:true},
 
     adresseDisponible:[{type:mongoose.Schema.Types.ObjectId,
-        ref:"Adresse"
+        ref:"AdresseLocal"
     }]
 });
 const VeloLocation = mongoose.model(

@@ -7,9 +7,15 @@ const veloSchema = new mongoose.Schema({
     required:true,
     default:shortid.generate
   },
+  taille:String,
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Type",
+    default:''
+  },
+  categorie: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Categorie",
   },
 
   modele: { type: String, required: true, default: "" },

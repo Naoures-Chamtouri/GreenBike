@@ -38,12 +38,14 @@ const getTypesbyCategory = async (req, res) => {
         data: types,
       });
     } else {
-      res.status(404).json({
+      res.status(200).json({
         status: httpStatus.NOT_FOUND,
         message: "Aucun type de vélo trouvé pour la catégorie spécifiée.",
+        data:[]
       });
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       status: httpStatus.ERROR,
       message: "Erreur lors de la récupération des types de vélos.",

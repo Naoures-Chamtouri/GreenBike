@@ -1,5 +1,5 @@
 import Categories from "@/components/shared/categories";
-import Filters from "@/components/veloVente/filters";
+import Filters from "@/components/used/VeloLouer/filtersLocation";
 
 import {
   Breadcrumb,
@@ -9,7 +9,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -32,8 +31,8 @@ function CatalogueVeloVente() {
       console.log(result);
       return result.data;
     },
-    staleTime: 5 * 60 * 1000,
-    placeholderData: keepPreviousData,
+    staleTime: 1 * 60 * 1000,
+    placeholderData:keepPreviousData,
   });
 
   return (

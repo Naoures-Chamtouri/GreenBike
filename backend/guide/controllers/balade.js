@@ -103,7 +103,7 @@ const getBaladeById = async (req, res) => {
       });
     }
 
-    // Vérifie si la balade appartient au guide
+    
     if (balade.guide.toString() !== req.guide._id.toString()) {
       return res.status(404).json({
         status: httpStatus.BAD_REQUEST,

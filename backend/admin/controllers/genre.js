@@ -1,11 +1,11 @@
 import Genre from "../../models/genre.js";
 
-// Fonction pour ajouter un nouveau genre
+
  const addGenre = async (req, res) => {
   try {
     const { nom } = req.body;
 
-    // Vérifie si le nom est fourni
+   
     if (!nom) {
       return res.status(400).json({
         status: "error",
@@ -13,21 +13,21 @@ import Genre from "../../models/genre.js";
       });
     }
 
-    // Création d'une nouvelle instance du modèle Genre
+   
     const nouveauGenre = new Genre({
       nom: nom,
     });
 
-    // Sauvegarde dans la base de données
+   
     const genreEnregistre = await nouveauGenre.save();
 
-    // Retourner une réponse de succès avec les détails du genre ajouté
-    res.status(201).json({
+   
+    return res.status(200).json({
       status: "success",
       data: genreEnregistre,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Erreur lors de l'ajout du genre",
       error: error.message,
@@ -35,4 +35,20 @@ import Genre from "../../models/genre.js";
   }
 };
 
-export default {addGenre};
+const getAllGenres=async(req,res)=>{
+  try{
+    const genres=await Genre.find();
+    return res.status(200).json({
+      status: "success",
+      data: genres,
+    });
+
+  }catch(error){
+return res.status(500).json({
+  status: "error",
+  message: "Erreur lors de l'ajout du genre",
+  error: error.message,
+});
+  }
+}
+export default {addGenre,getAllGenres};

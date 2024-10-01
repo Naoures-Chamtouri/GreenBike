@@ -35,4 +35,55 @@ const getBaladebyId=async(req,res)=>{
             .json({ staus: httpStatus.ERROR, message: error.message });
     }
 }
-export default { getAllBalades, getBaladebyId };
+
+ const filterBalades = async (req, res) => {
+   const { lieu, niveau, min, max } = req.body;
+  
+
+   try {
+     const filters = {};
+
+     
+     if (lieu) {
+    
+       filters.$or = [
+         { "adresseDepart.location": { $regex: lieu, $options: "i" } },
+         { "adresseArrivée.location": { $regex: lieu, $options: "i" } },
+       ];
+     }
+
+     if (niveau && niveau.length > 0) {
+       filters.Difficulté = { $in: niveau }; 
+     }
+
+     if (min || max) {
+       filters.duree = {};
+       if (min) {
+         filters.duree.$gte = Number(min); 
+       }
+       if (max) {
+         filters.duree.$lte = Number(max); 
+       }
+     }
+     
+
+     const balades = await Balade.find(filters)
+      .populate(
+        { path: "adresseDepart", model: AdresseBalade }).populate(
+        { path: "adresseArrivée", model: AdresseBalade }
+      ).populate({path:"guide",model:Guide}); 
+
+     return res.status(200).json({
+       status:httpStatus.SUCCESS,
+       data: balades,
+     });
+   } catch (error) {
+     console.error(error);
+     return res.status(500).json({
+       status:httpStatus.ERROR,
+       message: "Une erreur est survenue lors de la récupération des balades.",
+     });
+   }
+ };
+
+export default { getAllBalades, getBaladebyId,filterBalades };

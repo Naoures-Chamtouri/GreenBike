@@ -1,4 +1,5 @@
 import multer from "multer";
+
 const FILE_TYPE_MAP = {
   "image/png": "png",
   "image/jpg": "jpg",
@@ -6,7 +7,8 @@ const FILE_TYPE_MAP = {
 };
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./student/uploads");
+    const uploadPath = path.resolve(__dirname, "../uploads");
+    cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
     const extension = FILE_TYPE_MAP[file.mimetype];

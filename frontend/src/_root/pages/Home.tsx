@@ -1,11 +1,11 @@
 import Contact from "@/components/shared/Contact";
 import ServiceCart from "@/components/ui/serviceCart";
 import Slider3D from "@/components/ui/Slider3D";
+import { useAuth } from "@/context/AuthContext";
 
 
 function Home() {
-
-  
+ 
   return (
     <div className="">
       <div className=" top-home relative">

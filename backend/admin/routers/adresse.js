@@ -3,7 +3,8 @@ import adresseController from "../controllers/adresse.js";
 
 const router = express.Router();
 
-// Route pour ajouter une nouvelle adresse
-router.post("/add",adresseController.addAdresse);
+
+/* router.post("/add",adresseController.addAdresse); */
+router.get("/",adresseController.getAdresse);
 
 export default router;

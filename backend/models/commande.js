@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+import LignePanier from "./lignePanier.js";
 
 const commandeSchema = new mongoose.Schema({
-  panier: { type: mongoose.Schema.Types.ObjectId, ref: "Panier" },
+  client:{type:mongoose.Schema.Types.ObjectId,ref:"Client"},
+  numTelephone:{type:String},
+ articles :[{type:LignePanier.schema}],
   adresseLivraison: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,ref:"Adresse",
     required: true,
   },
   statutCommande: {
@@ -17,5 +20,9 @@ const commandeSchema = new mongoose.Schema({
   },
   dateLivraison: {
     type: Date,
-  }
+  },
+  total:Number
 });
+
+const Commande= mongoose.model("commande",commandeSchema,"commande");
+export default Commande;

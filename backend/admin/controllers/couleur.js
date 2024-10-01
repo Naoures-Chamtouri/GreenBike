@@ -16,4 +16,16 @@ const addCouleur = async (req, res) => {
     res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 };
-export default {addCouleur};
+
+const getAllCouleurs=async(req,res)=>{
+  try{
+    const couleurs=await Couleur.find();
+    return res.status(200).json(
+      {staus:"success",data:couleurs}
+    )
+  }
+  catch(e){
+    console.log(e)
+  }
+}
+export default {addCouleur,getAllCouleurs};

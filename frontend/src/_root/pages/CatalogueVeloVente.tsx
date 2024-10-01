@@ -1,6 +1,5 @@
-
 import Categories from "@/components/shared/categories";
-import Filters from "@/components/veloVente/filters";
+import Filters from "@/components/veloVente/filtersVente";
 
 import {
   Breadcrumb,
@@ -24,10 +23,12 @@ function CatalogueVeloVente() {
     queryKey: ["velos"],
     queryFn: async () => {
       const response = await fetch("http://localhost:4000/client/veloVentes");
+
       if (!response.ok) {
         throw new Error("Failed to fetch velos");
       }
       const result = await response.json();
+      console.log(result.data)
       return result.data;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes avant le refetch

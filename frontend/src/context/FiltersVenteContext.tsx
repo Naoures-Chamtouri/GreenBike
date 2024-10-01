@@ -1,54 +1,61 @@
 import { createContext, useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
-// Create context
+
 const FilterVenteContext = createContext([]);
 
 // Custom hook to use the context
-
+// eslint-disable-next-line react-refresh/only-export-components
+export const useFilterVenteContext = () => useContext(FilterVenteContext);
 
 const FilterVenteProvider = ({ children }) => {
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedMarques, setSelectedMarques] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState("");
-  const [selectedCategory,setSelectedCategory]=useState("")
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  
   const fetchFilteredVelos = async () => {
-    
-    const response = await fetch("http://localhost:4000/client/veloVentes/filter", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        types: selectedTypes,
-        marques: selectedMarques,
-        prix: selectedPrice,
-       categorie:selectedCategory 
-      }),
-    });
+    const response = await fetch(
+      "http://localhost:4000/client/veloVentes/filter",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          types: selectedTypes,
+          marques: selectedMarques,
+          prix: selectedPrice,
+          categorie: selectedCategory,
+        }),
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch filtered velos");
     }
     const result = await response.json();
-    console.log(result.data)
     return result.data;
   };
-
 
   const {
     data: filteredVelos,
     error,
     isLoading,
   } = useQuery({
-    queryKey:["filteredVelos", selectedTypes, selectedMarques, selectedPrice,selectedCategory],
-    queryFn:fetchFilteredVelos,
-      staleTime: 5 * 60 * 1000,
-      placeholderData:[]
-});
+    queryKey: [
+      "filteredVelos",
+      selectedTypes,
+      selectedMarques,
+      selectedPrice,
+      selectedCategory,
+    ],
+    queryFn: fetchFilteredVelos,
+    staleTime: 1 * 60 * 1000,
+    placeholderData: [],
+  });
 
- 
   const resetVenteFilters = () => {
     setSelectedTypes([]);
     setSelectedMarques([]);
@@ -72,7 +79,8 @@ const FilterVenteProvider = ({ children }) => {
   return (
     <FilterVenteContext.Provider
       value={{
-        selectedCategory,setSelectedCategory,
+        selectedCategory,
+        setSelectedCategory,
         selectedTypes,
         setSelectedTypes,
         selectedMarques,
@@ -87,9 +95,16 @@ const FilterVenteProvider = ({ children }) => {
       }}
     >
       {children}
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+        transitionDuration={{ appear: 500, enter: 500, exit: 500 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </FilterVenteContext.Provider>
   );
 };
+
 export default FilterVenteProvider;
-// eslint-disable-next-line react-refresh/only-export-components
-export const useFilterVenteContext = () =>{ return useContext(FilterVenteContext)};

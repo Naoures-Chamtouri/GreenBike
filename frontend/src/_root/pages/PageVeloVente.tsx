@@ -23,9 +23,9 @@ function PageVeloVente() {
   const location = useLocation();
   const { velo } = location.state || {};
   const titre =
-    velo.velo.type.nom +
+    velo.velo.type?velo.velo.type.nom:"" +
     " " +
-    velo.velo.type.categorie.nom +
+    velo.velo.categorie.nom +
     " " +
     velo.velo.marque.nom +
     " " +
@@ -34,14 +34,9 @@ function PageVeloVente() {
 
   // État pour contrôler l'ouverture du modal
   const [openModal, setOpenModal] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
+ 
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setAlertOpen(false);
-  };
+  
   
 
   // Fonctions pour ouvrir et fermer le modal
@@ -70,7 +65,7 @@ function PageVeloVente() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink href="" className="text-sm">
-                {titre} {velo.velo.ref}
+                {titre} {velo._id}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -145,17 +140,14 @@ function PageVeloVente() {
                     Couleur: {velo.velo.couleur.map((c) => c.nom).join(", ")}
                   </li>
                   <li>Genre: {velo.velo.genre.map((g) => g.nom).join(", ")}</li>
-                  <li>Roue: {velo.velo.roue.map((r) => r.nom).join(", ")}</li>
-                  <li>Cadre: {velo.velo.cadre.nom}</li>
-                  <li>Selle: {velo.velo.selle.nom}</li>
-                  <li>Frein: {velo.velo.frein.map((f) => f.nom).join(", ")}</li>
+                  <li>Roue: {velo.velo.roue.map((r) => r.materiau).join(", ")}</li>
+                  <li>Cadre: {velo.velo.cadre.materiau}</li>
+                  <li>Selle: {velo.velo.selle.materiau}</li>
+                  <li>Frein: {velo.velo.frein.map((f) => f.type).join(", ")}</li>
                   <li>Catégorie d'âge: {velo.velo.categorieAge.nom}</li>
-                  <li>Moteur: {velo.velo.moteur?.nom || "Non applicable"}</li>
+                  <li>Moteur: {velo.velo.moteur?.type || "Non applicable"}</li>
                   <li>Pliable: {velo.velo.pliable ? "Oui" : "Non"}</li>
-                  <li>
-                    Date d'ajout:{" "}
-                    {new Date(velo.velo.dateAjout).toLocaleDateString()}
-                  </li>
+                 
                 </ul>
               </Typography>
               <button
@@ -171,27 +163,14 @@ function PageVeloVente() {
           <button
             className="rounded-sm border-customGreen text-lg py-2 px-5 border hover:bg-customGreen mt-7 ml-24"
             onClick={() => {
-              addProductToCart(velo._id, value);
-              setAlertOpen(true);
+              addProductToCart(velo._id, value,velo.prix,velo.stock);
+             
             }}
           >
             Ajouter Au Panier
           </button>
         </div>
-        <Snackbar
-          open={alertOpen}
-          autoHideDuration={2000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        >
-          <Alert
-            onClose={handleClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            Produit ajouté au panier avec succès !
-          </Alert>
-        </Snackbar>
+      
       </div>
       <AvisSection id={velo._id} />
     </div>
