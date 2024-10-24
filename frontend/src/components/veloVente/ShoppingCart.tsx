@@ -17,7 +17,7 @@ function ShoppingCart() {
   };
 
   const handleCheckout = async() => {
-await syncCartWithBackend();
+ await syncCartWithBackend(); 
     navigate("/commande")
   };
   const itemNumb = itemNumber(); 

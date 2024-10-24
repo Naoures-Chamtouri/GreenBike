@@ -21,7 +21,7 @@ function RightSide({ balade, setAnchorElPopOver, setSuccessMessage,handlePopover
         </div>
         <div className="text-center">
           <p className="text-sm text-gray-500 font-medium">Distance</p>
-          <p className="text-lg font-semibold">{balade.longeur} km</p>
+          <p className="text-lg font-semibold">{balade.distance} km</p>
         </div>
 
         <div className="text-center">

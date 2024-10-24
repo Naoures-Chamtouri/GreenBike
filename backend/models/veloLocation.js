@@ -5,7 +5,7 @@ const veloLocationSchema= new mongoose.Schema({
 
     velo:{type:Velo.schema,
         required:true    },
-    prixJour:{
+    prixHeure:{
         type:Number,
         required:true
 

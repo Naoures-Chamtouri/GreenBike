@@ -29,8 +29,8 @@ function CardBalade({ balade }) {
       >
         <CardMedia
           component="img"
-          // Assurez-vous que la hauteur est fixe
-          image={balade.images[0]}
+        
+          image={balade.images[0].path}
           alt={balade.nom}
           sx={{
             height: "200px",
@@ -62,7 +62,7 @@ function CardBalade({ balade }) {
             <div className="flex">
               <FaMapMarkerAlt className=" h-5 w-5 text-gray-500 mr-1" />
               <Typography variant="body2">
-                {balade.adresseDepart.location}
+                {balade.adresseDepart.nom}
               </Typography>
             </div>
             <div className="flex mt-3 ">
@@ -79,7 +79,7 @@ function CardBalade({ balade }) {
                 DISTANCE
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {balade.longeur} km
+                {balade.distance} km
               </Typography>
             </div>
             <div>

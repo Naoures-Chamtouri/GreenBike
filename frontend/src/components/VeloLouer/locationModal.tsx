@@ -9,9 +9,8 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  TextField,
 } from "@mui/material";
-
-import "react-datepicker/dist/react-datepicker.css";
 import { isWithinInterval, parseISO, differenceInDays } from "date-fns";
 import NumberStepper from "@/components/ui/numberStepper";
 import { useNavigate } from "react-router-dom";
@@ -20,9 +19,8 @@ import axios from "axios";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { green } from "@mui/material/colors";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs from "dayjs";
 
 const rentalSchema = z.object({
   pickupLocation: z.string().nonempty("Le lieu de récupération est requis."),
@@ -43,17 +41,17 @@ const rentalSchema = z.object({
 
 function RentalModal({ open, onClose, velo }) {
   const navigate = useNavigate();
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
   const [pickupLocation, setPickupLocation] = useState("");
+  const[adresse,setAdresse]=useState("")
   const [numBikes, setNumBikes] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [reservedPeriods, setReservedPeriods] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [availability, setAvailability] = useState(true);
-  const [startTime, setStartTime] = useState(null); // État pour l'heure de début
-  const [endTime, setEndTime] = useState(null); // État pour l'heure de fin
+  const [duration,setDuration] = useState(0);
+  const [availabilityError, setAvailabilityError] = useState("")
 
   const isDateDisabled = (date) => {
     return reservedPeriods.some((period) =>
@@ -65,10 +63,11 @@ function RentalModal({ open, onClose, velo }) {
   };
 
   const calculateTotalPrice = (start, end) => {
-    if (start && end && velo.prixJour) {
-      const days = differenceInDays(end, start) + 1;
-      if (days > 0) {
-        return days * velo.prixJour * numBikes;
+    if (start && end && velo.prixHeure) {
+      const Duration = end.diff(start, "hour", true);
+      setDuration(Duration)
+      if (Duration > 0) {
+        return Duration * velo.prixHeure * numBikes;
       }
     }
     return 0;
@@ -79,11 +78,16 @@ function RentalModal({ open, onClose, velo }) {
       const price = calculateTotalPrice(startDate, endDate);
       setTotalPrice(price);
     }
-  }, [startDate, endDate, numBikes, velo.prixJour]);
+  }, [startDate, endDate, numBikes, velo.prixHeure]);
 
   const validateForm = () => {
     try {
-      rentalSchema.parse({ pickupLocation, startDate, endDate, numBikes });
+      rentalSchema.parse({
+        pickupLocation,
+        startDate: startDate ? startDate.toDate() : null,
+        endDate: endDate ? endDate.toDate() : null,
+        numBikes,
+      });
       setErrors({});
       return true;
     } catch (err) {
@@ -100,42 +104,54 @@ function RentalModal({ open, onClose, velo }) {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/check-availability",
+        "http://localhost:4000/client/locations/check-availability",
         {
-          startDate,
-          endDate,
+          startDate: startDate ? startDate.toISOString() : null,
+          endDate: endDate ? endDate.toISOString() : null,
           numBikes,
           veloId: velo._id,
         }
       );
-      setAvailability(response.data.available);
+      const available = response.data.data.available;
+    
       setLoading(false);
+      return available;
     } catch (error) {
       console.error(
         "Erreur lors de la vérification de la disponibilité:",
         error
       );
+      setLoading(false);
+      return false;
     }
   };
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    await checkAvailability();
+    const isAvailable = await checkAvailability();
 
-    if (availability) {
-      navigate("/location", {
-        state: {
-          velo,
-          startDate,
-          endDate,
-          numBikes,
-          totalPrice,
-          pickupLocation,
-        },
-      });
+    if (isAvailable) {
+     const reservationDetails = {
+       velo,
+       startDate: startDate ? startDate.toISOString() : null,
+       endDate: endDate ? endDate.toISOString() : null,
+       numBikes,
+       totalPrice,
+       pickupLocation,
+       duration,
+       adresse,
+     };
+
+     localStorage.setItem(
+       "reservationDetails",
+       JSON.stringify(reservationDetails)
+     );
+
+     // Rediriger vers la page de réservation
+     navigate("/location");
     } else {
-      alert("La quantité demandée n'est pas disponible pour ces dates.");
+      setAvailabilityError("La quantité demandée n'est pas disponible pour ces dates.");
     }
   };
 
@@ -172,18 +188,33 @@ function RentalModal({ open, onClose, velo }) {
                   <Select
                     labelId="pickup-location-label"
                     value={pickupLocation}
-                    onChange={(e) => setPickupLocation(e.target.value)}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      setPickupLocation(selectedId);
+
+                      // Chercher l'adresse complète après avoir récupéré l'ID
+                      const selectedAddress = velo.adresseDisponible.find(
+                        (adresse) => adresse._id === selectedId
+                      );
+                      if (selectedAddress) {
+                        const fullAddress = `${selectedAddress.adresse}, ${selectedAddress.district}, ${selectedAddress.delegation}, ${selectedAddress.ville}`;
+                        setAdresse(fullAddress);
+                      }
+                    }}
                     label="Local de récupération"
                     color="success"
                   >
                     {velo.adresseDisponible &&
                     velo.adresseDisponible.length > 0 ? (
-                      velo.adresseDisponible.map((adresse) => (
-                        <MenuItem key={adresse._id} value={adresse._id}>
-                          {adresse.adresse}, {adresse.district},{" "}
-                          {adresse.delegation}, {adresse.ville}
-                        </MenuItem>
-                      ))
+                      velo.adresseDisponible.map((adresse) => {
+                        const fullAddress = `${adresse.adresse}, ${adresse.district}, ${adresse.delegation}, ${adresse.ville}`;
+
+                        return (
+                          <MenuItem key={adresse._id} value={adresse._id}>
+                            {fullAddress}
+                          </MenuItem>
+                        );
+                      })
                     ) : (
                       <MenuItem disabled>Aucune adresse disponible</MenuItem>
                     )}
@@ -195,7 +226,6 @@ function RentalModal({ open, onClose, velo }) {
                   )}
                 </FormControl>
               </Grid>
-
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom>
                   Nombre de Vélos
@@ -207,15 +237,13 @@ function RentalModal({ open, onClose, velo }) {
                   </Typography>
                 )}
               </Grid>
-
-              <Grid item xs={6}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
+              <Grid item xs={20}>
+                <DemoContainer components={["DateTimePicker"]}>
+                  <DateTimePicker
+                    sx={datePickerStyle}
                     label="Date Debut"
                     value={startDate}
-                    onChange={(value) => {
-                      setStartDate(value);
-                    }}
+                    onChange={(value) => setStartDate(dayjs(value))}
                   />
                 </DemoContainer>
                 {errors.startDate && (
@@ -224,25 +252,13 @@ function RentalModal({ open, onClose, velo }) {
                     {errors.startDate}
                   </Typography>
                 )}
-              </Grid>
-              <Grid item xs={6}>
-                <DemoContainer components={["TimePicker"]}>
-                  <TimePicker
-                    label="Heure de début"
-                    value={startTime}
-                    onChange={(newValue) => setStartTime(newValue)}
-                  />
-                </DemoContainer>
-              </Grid>
 
-              <Grid item xs={6}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    label="Basic date picker"
+                <DemoContainer components={["DateTimePicker"]}>
+                  <DateTimePicker
+                    sx={datePickerStyle}
+                    label="Date de fin"
                     value={endDate}
-                    onChange={(value) => {
-                      setEndDate(value);
-                    }}
+                    onChange={(value) => setEndDate(dayjs(value))}
                   />
                 </DemoContainer>
                 {errors.endDate && (
@@ -252,27 +268,20 @@ function RentalModal({ open, onClose, velo }) {
                   </Typography>
                 )}
               </Grid>
-              <Grid item xs={6}>
-                <DemoContainer components={["TimePicker"]}>
-                  <TimePicker
-                    label="Heure de fin"
-                    value={endTime}
-                    onChange={(newValue) => setEndTime(newValue)}
-                  />
-                </DemoContainer>
-              </Grid>
             </Grid>
-
             {loading && (
               <div className="flex justify-center mt-2">
                 <span className="loader"></span>
               </div>
             )}
-
+            {availabilityError && (
+              <Typography color="error" variant="caption" sx={{ mt: 2 }}>
+                {availabilityError}
+              </Typography>
+            )}
             <Typography variant="h6" sx={{ mt: 2 }}>
               Prix Total: {totalPrice} TND
             </Typography>
-
             <Button
               onClick={handleSubmit}
               variant="contained"
@@ -289,5 +298,17 @@ function RentalModal({ open, onClose, velo }) {
     </LocalizationProvider>
   );
 }
+
+const datePickerStyle = {
+  "& .MuiInputBase-root": {
+    borderColor: "#16A34A",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#16A34A",
+  },
+  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#16A34A",
+  },
+};
 
 export default RentalModal;

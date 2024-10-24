@@ -1,5 +1,5 @@
 import Categories from "@/components/shared/categories";
-import Filters from "@/components/used/VeloLouer/filtersLocation";
+import Filters from "@/components/VeloLouer/filtersLocation";
 
 import {
   Breadcrumb,
@@ -12,7 +12,7 @@ import {
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import VeloLocationContentData from "@/components/used/VeloLouer/VeloLocationContentData";
+import VeloLocationContentData from "@/components/VeloLouer/VeloLocationContentData";
 
 function CatalogueVeloVente() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -32,7 +32,7 @@ function CatalogueVeloVente() {
       return result.data;
     },
     staleTime: 1 * 60 * 1000,
-    placeholderData:keepPreviousData,
+    placeholderData: keepPreviousData,
   });
 
   return (

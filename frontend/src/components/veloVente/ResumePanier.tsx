@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import Loader from "../shared/loader";
-import { useVeloVenteCart } from "@/context/VeloVenteCartContext";
+
 
 function ResumePanier({setArticles}) {
   const [panier, setPanier] = useState([]);
@@ -60,7 +60,7 @@ function ResumePanier({setArticles}) {
             />
             <div className="flex-1">
               <h3 className="text-lg font-semibold">
-                {item.article.velo.categorie.nom} - {item.article.velo.modele}{" "}
+                {item.article.velo.marque.nom} - {item.article.velo.modele}{" "}
                 (Ref: {item.article.velo.ref})
               </h3>
               <p className="text-sm text-gray-600">

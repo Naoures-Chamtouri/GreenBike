@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext"; 
 import axios from "axios";
 import {useVeloVenteCart} from "@/context/VeloVenteCartContext";
@@ -21,6 +21,8 @@ function SigninForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(""); 
 
+  const location = useLocation();
+const from = location.state?.from?.pathname || "/";
   const form = useForm({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -51,9 +53,10 @@ function SigninForm() {
      
       setUser(response.data.data); 
       console.log(response.data.data)
-      syncCartWithBackend();
-
-      navigate("/"); 
+     
+await syncCartWithBackend(); 
+       navigate(from, { replace: true });
+         
     } catch (error) {
       setError("Échec de la connexion. Vérifiez vos identifiants.");
       setUser(null); 

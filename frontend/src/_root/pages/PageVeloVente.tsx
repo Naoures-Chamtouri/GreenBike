@@ -16,6 +16,7 @@ import { useVeloVenteCart } from "@/context/VeloVenteCartContext";
 import ShoppingCart from "@/components/veloVente/ShoppingCart";
 import CartAlert from "@/functions/CartAlert";
 import { useState } from "react";
+import CaracteristicModal from "@/components/shared/CaracteristicModal";
 
 
 function PageVeloVente() {
@@ -105,72 +106,22 @@ function PageVeloVente() {
           </button>
 
           {/* Modal pour afficher les caractéristiques */}
-          <Modal
-            open={openModal}
-            onClose={handleCloseModal}
-            aria-labelledby="caracteristiques-title"
-            aria-describedby="caracteristiques-description"
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 400,
-                bgcolor: "background.paper",
-                boxShadow: 24,
-                p: 4,
-                borderRadius: 2,
-              }}
-            >
-              <Typography
-                id="caracteristiques-title"
-                variant="h6"
-                component="h2"
-              >
-                Caractéristiques du Vélo
-              </Typography>
-              <Typography id="caracteristiques-description" sx={{ mt: 2 }}>
-                <ul>
-                  <li>Poids: {velo.velo.poids} kg</li>
-                  <li>Nombre de vitesses: {velo.velo.nbrVitesse}</li>
-                  <li>Suspension: {velo.velo.suspension}</li>
-                  <li>
-                    Couleur: {velo.velo.couleur.map((c) => c.nom).join(", ")}
-                  </li>
-                  <li>Genre: {velo.velo.genre.map((g) => g.nom).join(", ")}</li>
-                  <li>Roue: {velo.velo.roue.map((r) => r.materiau).join(", ")}</li>
-                  <li>Cadre: {velo.velo.cadre.materiau}</li>
-                  <li>Selle: {velo.velo.selle.materiau}</li>
-                  <li>Frein: {velo.velo.frein.map((f) => f.type).join(", ")}</li>
-                  <li>Catégorie d'âge: {velo.velo.categorieAge.nom}</li>
-                  <li>Moteur: {velo.velo.moteur?.type || "Non applicable"}</li>
-                  <li>Pliable: {velo.velo.pliable ? "Oui" : "Non"}</li>
-                 
-                </ul>
-              </Typography>
-              <button
-                onClick={handleCloseModal}
-                className="mt-4 px-4 py-2 text-white bg-customGreen rounded"
-              >
-                Fermer
-              </button>
-            </Box>
-          </Modal>
+          <CaracteristicModal
+            openModal={openModal}
+            handleCloseModal={handleCloseModal}
+            velo={velo}
+          />
 
           <NumberStepper stock={velo.stock} setvalue={setValue} />
           <button
             className="rounded-sm border-customGreen text-lg py-2 px-5 border hover:bg-customGreen mt-7 ml-24"
             onClick={() => {
-              addProductToCart(velo._id, value,velo.prix,velo.stock);
-             
+              addProductToCart(velo._id, value, velo.prix, velo.stock);
             }}
           >
             Ajouter Au Panier
           </button>
         </div>
-      
       </div>
       <AvisSection id={velo._id} />
     </div>

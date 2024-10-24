@@ -629,9 +629,10 @@ function VeloLocationForm() {
                 label="Taille"
                 onChange={(event) => setTaille(event.target.value)}
               >
-                <MenuItem value={10}>S</MenuItem>
-                <MenuItem value={20}>XL</MenuItem>
-                <MenuItem value={30}>XXL</MenuItem>
+                <MenuItem value="S">S</MenuItem>
+                <MenuItem value="M">M</MenuItem>
+                <MenuItem value="XL">XL</MenuItem>
+                <MenuItem value="XXL">XXL</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -657,7 +658,7 @@ function VeloLocationForm() {
               color="success"
               id="prix-input"
               type="number"
-              label="Prix Jour"
+              label="Prix/Heure"
               variant="outlined"
               value={prix}
               onChange={(event) => setPrix(event.target.value)}
@@ -690,7 +691,6 @@ function VeloLocationForm() {
             />
           </div>
           <div className="flex justify-center space-x-6 mb-6">
-           
             <FormControl className="w-1/3">
               <InputLabel
                 id="couleurs-label"
@@ -727,11 +727,13 @@ function VeloLocationForm() {
               >
                 {adresses.map((adresse) => (
                   <MenuItem key={adresse._id} value={adresse._id}>
-                    {adresse.adresse} {adresse.district} {adresse.delegation} {adresse.ville}                  </MenuItem>
+                    {adresse.adresse} {adresse.district} {adresse.delegation}{' '}
+                    {adresse.ville}{' '}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
-           </div>
+          </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Description */}
@@ -760,7 +762,6 @@ function VeloLocationForm() {
             />
           </div>
 
-          
           <div className="flex justify-center items-center px-5 ">
             <DragComponent
               ownerLicense={ownerLicense}

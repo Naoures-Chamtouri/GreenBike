@@ -54,18 +54,17 @@ const veloSchema = new mongoose.Schema({
       ref: "Image",
     },
   ],
-  genre: [
+  genre: 
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Genre",
     },
-  ],
-  roue: [
+  roue: 
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Roue",
     },
-  ],
+  
   cadre: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cadre",
@@ -74,7 +73,7 @@ const veloSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Selle",
   },
-  frein: [{ type: mongoose.Schema.Types.ObjectId, ref: "Frein" }],
+  frein: { type: mongoose.Schema.Types.ObjectId, ref: "Frein" },
   categorieAge: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "CategorieAge",

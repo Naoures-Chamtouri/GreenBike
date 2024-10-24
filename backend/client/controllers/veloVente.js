@@ -153,7 +153,7 @@ const getVeloVentesByFilter = async (req, res) => {
       marqueIds = foundMarques.map((marque) => marque._id);
     }
 
-    const query = {};
+    const query = {  stock: { $gt: 0 } };
 
     
     if (typeIds.length > 0) {

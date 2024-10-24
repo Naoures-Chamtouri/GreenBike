@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, IconButton, InputLabel,  MenuItem, Select, TextField } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, FormHelperText, IconButton, InputLabel,  MenuItem, Select, selectClasses, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { useVeloContext } from "../../context/VeloContext";
@@ -13,244 +13,189 @@ function VeloForm() {
 
 
  
- const {categories,setTypes,types,genres,ages,freins,selles,marques,couleurs}=useVeloContext();
+ const {categories,genres,ages,freins,selles,marques,couleurs}=useVeloContext();
    const [ownerLicense, setOwnerLicense] = useState([]);
- const[categorie,setCategorie]=useState({})
-  const [type,setType]=useState('');
-  const [modele,setModele]=useState('');
-  const [genre,setGenre]=useState('');
-  const [age,setAge]=useState('');
-  const [taille,setTaille]=useState('');
-  const [description,setDescription]=useState('')
-  const [etat,setEtat]=useState('');
-  const [prix,setPrix]=useState(0);
-  const[duree,setDuree]=useState('');
-  const [stock,setStock]=useState(0);
-  const [isPliable,setPliable]=useState(false)
-  const [suspension,setSuspension]=useState('');
-  const [vitesse,setVitesse]=useState(0);
-  const [roue, setRoue] = useState({
-    materiau: '',
-    taille: '',
-    poids: '',
-  });
-  const [cadre, setCadre] = useState({
-    materiau: '',
-    taille: ''
-  });const [moteur, setMoteur] = useState({
-    type: '',
-    puissance: '',
-  });
-  const [selle, setSelle] = useState({
-    materiau: '',
-  });
-  const [frein,setFrein]=useState({
-    type:''
-  })
-    const [marque, setMarque] = useState('');
+   const [types,setTypes]=useState([])
+   const [errors, setErrors] = useState({});
+
+   const initialValues = {
+     categorie: '',
+     type: '',
+     modele: '',
+     marque: '',
+     genre: '',
+     age: '',
+     taille: '',
+     description: '',
+     etat: '',
+     prix: 0,
+     stock:0,
+     duree: '',
+     isPliable: false,
+     suspension: '',
+     vitesse: 0,
+     roue: { materiau: '', taille: '', poids: '' },
+     cadre: { materiau: '', taille: '' },
+     moteur: {
+       type: '',
+       puissance: '',
+     },
+     frein:'',
+     selle:'',
+     newMarque:'',
+     selectedCouleurs:[]
+   };
+   const [formValues,setFormValues]=useState(initialValues)
+
+  
+  
+ 
+ 
+ 
+   
       const [isAddingMarque, setIsAddingMarque] = useState(false);
-      const [newMarque, setNewMarque] = useState('');
-      const [selectedCouleurs, setSelectedCouleurs] = useState([]);
+    
+      
 
 
 const [showPopover,setShowPopover]=useState(false)
   const handleSubmit=async()=>{
-  let formIsValid = true;
+
+     let formIsValid = true;
+  console.log(formValues)
   
-  // Validation de tous les champs
-  if (!categorie) {
+  
+  if (!formValues.categorie) {
     formIsValid = false;
     console.log("La catégorie est obligatoire");
   }
   
-  if (!type) {
+  if (!formValues.type) {
     formIsValid = false;
     console.log("Le type est obligatoire");
   }
 
-  if (!modele) {
+  if (!formValues.modele) {
     formIsValid = false;
     console.log("Le modèle est obligatoire");
   }
 
-  if (!genre) {
+  if (!formValues.genre) {
     formIsValid = false;
     console.log("Le genre est obligatoire");
   }
 
-  if (!age) {
+  if (!formValues.age) {
     formIsValid = false;
     console.log("La catégorie d'âge est obligatoire");
   }
 
-  if (!taille) {
+  if (!formValues.taille) {
     formIsValid = false;
     console.log("La taille est obligatoire");
   }
 
-  if (!description) {
+  if (!formValues.description) {
     formIsValid = false;
     console.log("La description est obligatoire");
   }
 
-  if (!etat) {
+  if (!formValues.etat) {
     formIsValid = false;
     console.log("L'état est obligatoire");
   }
 
-  if (prix <= 0) {
+  if (formValues.prix <= 0) {
     formIsValid = false;
     console.log("Le prix doit être supérieur à 0");
   }
 
-  if (!duree) {
+  if (!formValues.duree) {
     formIsValid = false;
     console.log("La durée est obligatoire");
   }
 
-  if (stock <= 0) {
+  if (formValues.stock <= 0) {
     formIsValid = false;
     console.log("Le stock doit être supérieur à 0");
   }
 
-  if (!roue.materiau || !roue.taille || !roue.poids) {
+  if (!formValues.roue.materiau || !formValues.roue.taille || !formValues.roue.poids) {
     formIsValid = false;
     console.log("Tous les attributs de la roue sont obligatoires");
   }
 
-  if (!cadre.materiau || !cadre.taille) {
+  if (!formValues.cadre.materiau || !formValues.cadre.taille) {
     formIsValid = false;
     console.log("Tous les attributs du cadre sont obligatoires");
   }
 
  
 
-  if (!selle.materiau) {
+  if (!formValues.selle) {
     formIsValid = false;
     console.log("Le matériau de la selle est obligatoire");
   }
 
-  if (!frein.type) {
+  if (!formValues.frein) {
     formIsValid = false;
     console.log("Le type de frein est obligatoire");
   }
 
-  if (!marque && !isAddingMarque) {
+  if (!formValues.marque && !isAddingMarque) {
     formIsValid = false;
     console.log("La marque est obligatoire");
   }
 
-  if (isAddingMarque && !newMarque) {
+  if (isAddingMarque && !formValues.newMarque) {
     formIsValid = false;
     console.log("Le champ nouvelle marque est obligatoire");
   }
 
-  if (selectedCouleurs.length === 0) {
+  if (formValues.selectedCouleurs.length === 0) {
     formIsValid = false;
     console.log("Vous devez sélectionner au moins une couleur");
   }
 
-  if(formIsValid){
-    try{
-const velo = {
-    categorie,
-    type,
-    modele,
-    genre,
-    age,
-    taille,
-    description,
-    etat,
-    prix,
-    duree,
-    stock,
-    isPliable,
-    suspension,
-    vitesse,
-    roue,
-    cadre,
-    moteur,
-    selle: selle.materiau,
-    frein: frein.type,
-    ownerLicense,
-    selectedCouleurs,
-    marque,
-    newMarque
-  };
-console.log(velo)
-    const response = await axios.post(
-          "http://localhost:4000/admin/veloVentes",
+  if (formIsValid) {
+    try {
+      const velo = {
+        ...formValues,
+        ownerLicense,
+      };
+      console.log(velo);
+      const response = await axios.post(
+        'http://localhost:4000/admin/veloVentes',
         velo,
-          {
-            withCredentials: true,
-          }
-        );
-        console.log("Commande passée avec succès:", response.data);
-         setShowPopover(true);
-          setTimeout(() => {
-          setShowPopover(false)
-         }, 2000);
-         setCategorie({});
-         setType("");
-         setModele("");
-         setGenre("");
-         setAge("");
-         setTaille("");
-         setDescription("");
-         setEtat("");
-         setPrix(0);
-         setDuree("");
-         setStock(0);
-         setPliable(false);
-         setSuspension('');
-         setVitesse(0);
-         setRoue({
-           materiau: '',
-           taille: '',
-           poids: '',
-         });
-         setCadre({
-           materiau: '',
-           taille: '',
-         });
-         setMoteur({
-           type: '',
-           puissance: '',
-         });
-         setSelle({materiau: ""});
-         setFrein({
-           type: ''
-         });
-         setSelectedCouleurs([]);
-         setMarque('');
-         setNewMarque('')
-         
-
-      
-         
-
-        
-
-       
-      } catch (error) {
-        console.error("Erreur lors du passage de la commande:", error);
-      }
-    }else{
-      alert("tout les champs son required")
+        {
+          withCredentials: true,
+        },
+      );
+      console.log('Ajout de velo avec succès:', response.data);
+      setShowPopover(true);
+      setTimeout(() => {
+        setShowPopover(false);
+      }, 2000);
+      setFormValues(initialValues);
+    } catch (error) {
+      console.error('Erreur lors du passage de la commande:', error);
     }
+  } else {
+    alert('tout les champs son required');
+  }
     }
 
 
-  
-
- 
-  
+const handleChange = (event) => {
+  const { name, value } = event.target;
+  setFormValues({ ...formValues, [name]: value });
+};
 
 
  useEffect(() => {
-  if(categorie!=''){
+  if(formValues.categorie!=''){
   axios
-    .get(`http://localhost:4000/admin/types/${categorie._id}`)
+    .get(`http://localhost:4000/admin/types/${formValues.categorie._id}`)
     .then((response) => {
       setTypes(response.data.data);
      
@@ -259,7 +204,7 @@ console.log(velo)
     .catch((error) => {
     
     });}
-}, [categorie]);
+}, [formValues.categorie]);
 
   /*Carateristiques */
  
@@ -282,7 +227,7 @@ console.log(velo)
                 Vente des Velos /
               </Link>
             </li>
-            <li className="font-medium text-primary">Velos</li>
+            <li className="font-medium text-green">Velos</li>
           </ol>
         </nav>
       </div>
@@ -294,37 +239,25 @@ console.log(velo)
         <AccordionDetails className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex justify-center space-x-6 mb-6">
             {/* Categorie */}
-            <FormControl className="w-1/3 "required={true}>
+            <FormControl
+              className="w-1/3"
+              required={true}
+            
+            >
               <InputLabel
                 id="categorie-label"
-                sx={{
-                  '&.Mui-focused': {
-                    color: 'green',
-                  },
-                }}
+                sx={{ '&.Mui-focused': { color: 'green' } }}
               >
                 Categorie
               </InputLabel>
               <Select
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
                 labelId="categorie-label"
                 id="categorie-select"
-                value={categorie}
+                name="categorie"
+                value={formValues.categorie}
                 label="Categorie"
-                onChange={(event) => setCategorie(event.target.value)}
+                onChange={handleChange}
+                sx={selectStyles}
               >
                 {categories.map((categorie) => (
                   <MenuItem key={categorie._id} value={categorie}>
@@ -332,40 +265,25 @@ console.log(velo)
                   </MenuItem>
                 ))}
               </Select>
+             
             </FormControl>
 
             {/* Type */}
-            <FormControl className="w-1/3">
+            <FormControl className="w-1/3" >
               <InputLabel
                 id="type-label"
-                sx={{
-                  '&.Mui-focused': {
-                    color: 'green',
-                  },
-                }}
+                sx={{ '&.Mui-focused': { color: 'green' } }}
               >
                 Type
               </InputLabel>
               <Select
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
                 labelId="type-label"
                 id="type-select"
-                value={type}
+                name="type"
+                value={formValues.type}
                 label="Type"
-                onChange={(event) => setType(event.target.value)}
+                onChange={handleChange}
+                sx={selectStyles}
               >
                 {types.map((type) => (
                   <MenuItem key={type._id} value={type._id}>
@@ -373,60 +291,37 @@ console.log(velo)
                   </MenuItem>
                 ))}
               </Select>
+           
             </FormControl>
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
-            {/* Marque */}
             <FormControl className="w-1/3">
               {isAddingMarque ? (
-                // TextField for adding new marque
                 <TextField
                   label="Nouvelle Marque"
-                  value={newMarque}
-                  onChange={(e) => setNewMarque(e.target.value)}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'green',
-                      },
-                    },
-                  }}
+                  name="newMarque"
+                  value={formValues.newMarque}
+                  onChange={handleChange}
+                  sx={textFieldStyles}
+               
                 />
               ) : (
                 <>
                   <InputLabel
                     id="marque-label"
-                    sx={{
-                      '&.Mui-focused': {
-                        color: 'green',
-                      },
-                    }}
+                    sx={{ '&.Mui-focused': { color: 'green' } }}
                   >
                     Marque
                   </InputLabel>
                   <Select
                     labelId="marque-label"
                     id="marque-select"
-                    value={marque}
+                    name="marque"
+                    value={formValues.marque}
                     label="Marque"
-                    onChange={(event) => {
-                      setMarque(event.target.value);
-                    }}
-                    sx={{
-                      '& .MuiSelect-select': {
-                        color: 'green',
-                      },
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'green',
-                      },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'green',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'green',
-                      },
-                    }}
+                    onChange={handleChange}
+                    sx={selectStyles}
                   >
                     {marques.map((marque) => (
                       <MenuItem key={marque._id} value={marque._id}>
@@ -434,26 +329,15 @@ console.log(velo)
                       </MenuItem>
                     ))}
                   </Select>
+                
                 </>
               )}
-
-              <IconButton
-                onClick={toggleAddMarque}
-                sx={{ ml: 2, color: 'green' }}
-              >
-                <AddIcon />
-              </IconButton>
             </FormControl>
 
-            {/* Couleurs */}
-            <FormControl className="w-1/3">
+            <FormControl className="w-1/3" >
               <InputLabel
                 id="couleurs-label"
-                sx={{
-                  '&.Mui-focused': {
-                    color: 'green',
-                  },
-                }}
+                sx={{ '&.Mui-focused': { color: 'green' } }}
               >
                 Couleurs
               </InputLabel>
@@ -461,25 +345,10 @@ console.log(velo)
                 labelId="couleurs-label"
                 id="couleurs-select"
                 multiple
-                value={selectedCouleurs}
-                onChange={(event) => {
-                  setSelectedCouleurs(event.target.value)
-                }}
-        
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
+                name="selectedCouleurs"
+                value={formValues.selectedCouleurs}
+                onChange={handleChange}
+                sx={selectStyles}
               >
                 {couleurs.map((couleur) => (
                   <MenuItem key={couleur._id} value={couleur._id}>
@@ -487,67 +356,41 @@ console.log(velo)
                   </MenuItem>
                 ))}
               </Select>
+           
             </FormControl>
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Modele */}
             <TextField
-              sx={{
-                '& .MuiSelect-select': {
-                  color: 'green',
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-              }}
               className="w-1/3"
               color="success"
               id="modele-input"
               label="Modele"
               variant="outlined"
-              value={modele}
-              onChange={(event) => setModele(event.target.value)}
+              name="modele"
+              value={formValues.modele}
+              onChange={handleChange}
+            
+              sx={textFieldStyles} // Reuse this for custom styles
             />
 
             {/* Genre */}
-            <FormControl className="w-1/3">
+            <FormControl className="w-1/3" >
               <InputLabel
                 id="genre-label"
-                sx={{
-                  '&.Mui-focused': {
-                    color: 'green',
-                  },
-                }}
+                sx={{ '&.Mui-focused': { color: 'green' } }}
               >
                 Genre
               </InputLabel>
               <Select
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
                 labelId="genre-label"
                 id="genre-select"
-                value={genre}
+                name="genre"
+                value={formValues.genre}
                 label="Genre"
-                onChange={(event) => setGenre(event.target.value)}
+                onChange={handleChange}
+                sx={selectStyles} // Reuse this for custom styles
               >
                 {genres.map((genre) => (
                   <MenuItem key={genre._id} value={genre._id}>
@@ -555,12 +398,13 @@ console.log(velo)
                   </MenuItem>
                 ))}
               </Select>
+             
             </FormControl>
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Categorie Age */}
-            <FormControl className="w-1/3">
+            <FormControl className="w-1/3" error={!!errors.age}>
               <InputLabel
                 id="age-label"
                 sx={{
@@ -572,25 +416,13 @@ console.log(velo)
                 Categorie Age
               </InputLabel>
               <Select
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
+                sx={selectStyles} // Reuse select styles for consistency
                 labelId="age-label"
                 id="age-select"
-                value={age}
+                name="age"
+                value={formValues.age}
                 label="Categorie Age"
-                onChange={(event) => setAge(event.target.value)}
+                onChange={handleChange}
               >
                 {ages.map((age) => (
                   <MenuItem key={age._id} value={age._id}>
@@ -598,10 +430,11 @@ console.log(velo)
                   </MenuItem>
                 ))}
               </Select>
+            
             </FormControl>
 
             {/* Taille */}
-            <FormControl className="w-1/3">
+            <FormControl className="w-1/3" >
               <InputLabel
                 id="taille-label"
                 sx={{
@@ -613,117 +446,73 @@ console.log(velo)
                 Taille
               </InputLabel>
               <Select
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
+                sx={selectStyles} // Consistent select styling
                 labelId="taille-label"
                 id="taille-select"
-                value={taille}
+                name="taille"
+                value={formValues.taille}
                 label="Taille"
-                onChange={(event) => setTaille(event.target.value)}
+                onChange={handleChange}
               >
-                <MenuItem value={10}>S</MenuItem>
-                <MenuItem value={20}>XL</MenuItem>
-                <MenuItem value={30}>XXL</MenuItem>
+                <MenuItem value="S">S</MenuItem>
+                <MenuItem value="XL">XL</MenuItem>
+                <MenuItem value="XXL">XXL</MenuItem>
               </Select>
+           
             </FormControl>
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Price */}
             <TextField
-              sx={{
-                '& .MuiSelect-select': {
-                  color: 'green',
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-              }}
+              sx={textFieldStyles} // Custom styles for consistency
               className="w-1/3"
               color="success"
               id="prix-input"
               type="number"
-              label="Prix"
+              label="Prix/DT"
               variant="outlined"
-              value={prix}
-              onChange={(event) => setPrix(event.target.value)}
+              name="prix"
+              value={formValues.prix}
+              onChange={handleChange}
+             
             />
 
             {/* Stock */}
             <TextField
-              sx={{
-                '& .MuiSelect-select': {
-                  color: 'green',
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-              }}
+              sx={textFieldStyles}
               className="w-1/3"
               color="success"
               id="stock-input"
               type="number"
               label="Stock"
               variant="outlined"
-              value={stock}
-              onChange={(event) => setStock(event.target.value)}
+              name="stock"
+              value={formValues.stock}
+              onChange={handleChange}
+            
             />
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Description */}
             <TextField
-              sx={{
-                '& .MuiSelect-select': {
-                  color: 'green',
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-              }}
+              sx={textFieldStyles}
               className="w-2/3"
               color="success"
               id="description-input"
               label="Description"
               variant="outlined"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              name="description"
+              value={formValues.description}
+              onChange={handleChange}
+            
             />
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Etat */}
-            <FormControl className="w-1/3">
+            <FormControl className="w-1/3" >
               <InputLabel
                 id="etat-label"
                 sx={{
@@ -735,55 +524,33 @@ console.log(velo)
                 Etat
               </InputLabel>
               <Select
-                sx={{
-                  '& .MuiSelect-select': {
-                    color: 'green',
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'green',
-                  },
-                }}
+                sx={selectStyles}
                 labelId="etat-label"
                 id="etat-select"
-                value={etat}
+                name="etat"
+                value={formValues.etat}
                 label="Etat"
-                onChange={(event) => setEtat(event.target.value)}
+                onChange={handleChange}
               >
                 <MenuItem value="Bon">Bon</MenuItem>
                 <MenuItem value="Moyen">Moyen</MenuItem>
                 <MenuItem value="Mauvais">Mauvais</MenuItem>
               </Select>
+             
             </FormControl>
 
             {/* Usage Duration */}
             <TextField
-              sx={{
-                '& .MuiSelect-select': {
-                  color: 'green',
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-              }}
+              sx={textFieldStyles}
               className="w-1/3"
               color="success"
               id="duree-input"
-              label="Durée d'utilisation"
+              label="Durée d'utilisation (annee/mois)"
               variant="outlined"
-              value={duree}
-              onChange={(event) => setDuree(event.target.value)}
+              name="duree"
+              value={formValues.duree}
+              onChange={handleChange}
+             
             />
           </div>
           <div className="flex justify-center items-center px-5 ">
@@ -805,22 +572,36 @@ console.log(velo)
         <AccordionDetails className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex justify-center space-x-6 mb-6">
             <TextField
+              sx={{
+                '& .MuiSelect-select': {
+                  color: 'black',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'green',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'green',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'green',
+                },
+              }}
               className="w-1/3"
               color="success"
               id="vitesse-input"
               label="Nombre Vitesse"
               variant="outlined"
-              value={vitesse}
-              onChange={(event) => {
-                setVitesse(event.target.value);
-              }}
+              name="vitesse"
+              value={formValues.vitesse}
+              onChange={handleChange}
+             
             />
 
             {/* Suspension */}
             <TextField
               sx={{
                 '& .MuiSelect-select': {
-                  color: 'green',
+                  color: 'black',
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderColor: 'green',
@@ -837,16 +618,16 @@ console.log(velo)
               id="suspension-input"
               label="Suspension"
               variant="outlined"
-              value={suspension}
-              onChange={(event) => {
-                setSuspension(event.target.value);
-              }}
+              name="suspension"
+              value={formValues.suspension}
+              onChange={handleChange}
+             
             />
           </div>
           <div className="">
             <div className="text-xl mb-3 font-bold">Roue</div>
             <div className="flex justify-center space-x-6 mb-6">
-              <FormControl className="w-1/3">
+              <FormControl className="w-1/3" >
                 <InputLabel
                   id="materiau-roue-label"
                   sx={{
@@ -860,7 +641,7 @@ console.log(velo)
                 <Select
                   sx={{
                     '& .MuiSelect-select': {
-                      color: 'green',
+                      color: 'black',
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: 'green',
@@ -874,22 +655,22 @@ console.log(velo)
                   }}
                   labelId="materiau-roue-label"
                   id="materiau-roue-select"
-                  value={roue.materiau}
-                  onChange={(event) =>
-                    setRoue({ ...roue, materiau: event.target.value })
-                  }
+                  name="roue.materiau"
+                  value={formValues.roue.materiau}
+                  onChange={handleChange}
                 >
                   <MenuItem value="Aluminium">Aluminium</MenuItem>
                   <MenuItem value="Carbone">Carbone</MenuItem>
                   <MenuItem value="Acier">Acier</MenuItem>
                   <MenuItem value="Composite">Composite</MenuItem>
                 </Select>
+             
               </FormControl>
 
               <TextField
                 sx={{
                   '& .MuiSelect-select': {
-                    color: 'green',
+                    color: 'black',
                   },
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'green',
@@ -906,15 +687,15 @@ console.log(velo)
                 id="roue-taille-input"
                 label="Taille"
                 variant="outlined"
-                value={roue.taille}
-                onChange={(event) =>
-                  setRoue({ ...roue, taille: event.target.value })
-                }
+                name="roue.taille"
+                value={formValues.roue.taille}
+                onChange={handleChange}
+               
               />
               <TextField
                 sx={{
                   '& .MuiSelect-select': {
-                    color: 'green',
+                    color: 'black',
                   },
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'green',
@@ -931,10 +712,10 @@ console.log(velo)
                 id="poids-input"
                 label="Poids"
                 variant="outlined"
-                value={roue.poids}
-                onChange={(event) =>
-                  setRoue({ ...roue, poids: event.target.value })
-                }
+                name="roue.poids"
+                value={formValues.roue.poids}
+                onChange={handleChange}
+                
               />
             </div>
           </div>
@@ -955,7 +736,7 @@ console.log(velo)
                 <Select
                   sx={{
                     '& .MuiSelect-select': {
-                      color: 'green',
+                      color: 'black',
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: 'green',
@@ -969,10 +750,9 @@ console.log(velo)
                   }}
                   labelId="cadre-materiau-label"
                   id="cadre-materiau-select"
-                  value={cadre.materiau}
-                  onChange={(event) =>
-                    setCadre({ ...cadre, materiau: event.target.value })
-                  }
+                  name="cadre.materiau"
+                  value={formValues.cadre.materiau}
+                  onChange={handleChange}
                 >
                   <MenuItem value="Aluminium">Aluminium</MenuItem>
                   <MenuItem value="Carbone">Carbone</MenuItem>
@@ -984,7 +764,7 @@ console.log(velo)
               <TextField
                 sx={{
                   '& .MuiSelect-select': {
-                    color: 'green',
+                    color: 'black',
                   },
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'green',
@@ -1001,10 +781,10 @@ console.log(velo)
                 id="cadre-taille-input"
                 label="Taille du Cadre"
                 variant="outlined"
-                value={cadre.taille}
-                onChange={(event) =>
-                  setCadre({ ...cadre, taille: event.target.value })
-                }
+                name="cadre.taille"
+                value={formValues.cadre.taille}
+                onChange={handleChange}
+               
               />
             </div>
           </div>
@@ -1012,7 +792,7 @@ console.log(velo)
           <div>
             <div className="text-xl mb-3 font-bold">Selle</div>
             <div className="flex justify-center space-x-6 mb-6">
-              <FormControl className="w-1/3">
+              <FormControl className="w-1/3" >
                 <InputLabel
                   id="frein-label"
                   sx={{
@@ -1026,7 +806,7 @@ console.log(velo)
                 <Select
                   sx={{
                     '& .MuiSelect-select': {
-                      color: 'green',
+                      color: 'black',
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: 'green',
@@ -1040,10 +820,9 @@ console.log(velo)
                   }}
                   labelId="frein-label"
                   id="frein-select"
-                  value={selle.materiau}
-                  onChange={(event) =>
-                    setSelle({ ...selle, materiau: event.target.value })
-                  }
+                  name="selle"
+                  value={formValues.selle}
+                  onChange={handleChange}
                 >
                   {selles.map((selle) => (
                     <MenuItem key={selle._id} value={selle._id}>
@@ -1058,7 +837,7 @@ console.log(velo)
             <div className="text-xl mb-3 font-bold">Frein</div>
 
             <div className="flex justify-center space-x-6 mb-6">
-              <FormControl className="w-1/3">
+              <FormControl className="w-1/3" >
                 <InputLabel
                   id="frein-label"
                   sx={{
@@ -1072,7 +851,7 @@ console.log(velo)
                 <Select
                   sx={{
                     '& .MuiSelect-select': {
-                      color: 'green',
+                      color: 'black',
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
                       borderColor: 'green',
@@ -1086,10 +865,9 @@ console.log(velo)
                   }}
                   labelId="frein-label"
                   id="frein-select"
-                  value={frein.type}
-                  onChange={(event) =>
-                    setFrein({ ...frein, type: event.target.value })
-                  }
+                  name="frein"
+                  value={formValues.frein}
+                  onChange={handleChange}
                 >
                   {freins.map((frein) => (
                     <MenuItem key={frein._id} value={frein._id}>
@@ -1101,7 +879,7 @@ console.log(velo)
             </div>
           </div>
           <div>
-            {categorie.nom == 'Vélos Electriques ' && (
+            {formValues.categorie == '66b9e84c0ad7a738f5cfe402' && (
               <div>
                 <div className="text-xl mb-3 font-bold">Moteur</div>
                 <div className="flex justify-center space-x-6 mb-6">
@@ -1119,7 +897,7 @@ console.log(velo)
                     <Select
                       sx={{
                         '& .MuiSelect-select': {
-                          color: 'green',
+                          color: 'black',
                         },
                         '& .MuiOutlinedInput-notchedOutline': {
                           borderColor: 'green',
@@ -1133,10 +911,9 @@ console.log(velo)
                       }}
                       labelId="moteur-label"
                       id="moteur=select"
-                      value={moteur.type}
-                      onChange={(event) =>
-                        setMoteur({ ...moteur, type: event.target.value })
-                      }
+                      name="moteur.type"
+                      value={formValues.moteur.type}
+                      onChange={handleChange}
                     >
                       <MenuItem value="Moteurs de course">
                         Moteurs de course
@@ -1152,7 +929,7 @@ console.log(velo)
                   <TextField
                     sx={{
                       '& .MuiSelect-select': {
-                        color: 'green',
+                        color: 'black',
                       },
                       '& .MuiOutlinedInput-notchedOutline': {
                         borderColor: 'green',
@@ -1169,10 +946,10 @@ console.log(velo)
                     id="puissance"
                     label="puissance"
                     variant="outlined"
-                    value={moteur.puissance}
-                    onChange={(event) =>
-                      setMoteur({ ...moteur, puissance: event.target.value })
-                    }
+                    name="moteur.puissance"
+                    value={formValues.moteur.puissance}
+                    onChange={handleChange}
+                   
                   />
                 </div>
               </div>
@@ -1188,17 +965,20 @@ console.log(velo)
                       type="checkbox"
                       id="checkboxLabelTwo"
                       className="sr-only"
-                      onChange={() => {
-                        setPliable(!isPliable);
-                      }}
+                      name="isPliable"
+                      value={!formValues.isPliable}
+                      onChange={handleChange}
                     />
                     <div
                       className={`mr-4 flex h-5 w-5 items-center justify-center rounded border ${
-                        isPliable && 'border-green bg-gray dark:bg-transparent'
+                        formValues.isPliable &&
+                        'border-green bg-gray dark:bg-transparent'
                       }`}
                     >
                       <span
-                        className={`opacity-0 ${isPliable && '!opacity-100'}`}
+                        className={`opacity-0 ${
+                          formValues.isPliable && '!opacity-100'
+                        }`}
                       >
                         <svg
                           width="15"
@@ -1236,12 +1016,33 @@ console.log(velo)
         </Button>
       </div>
       {showPopover && (
-        <div className="fixed top-25 right-4 p-4 bg-green-400 text-white rounded shadow-lg">
+        <div className="fixed top-25 right-4 p-4 bg-green-200 text-white rounded shadow-lg">
           vélo ajoutée avec succès !
         </div>
       )}
     </div>
   );
 }
+const selectStyles = {
+  '& .MuiSelect-select': {
+    color: 'black',
+  },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'green',
+  },
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'green',
+  },
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'green',
+  },
+};
 
+const textFieldStyles = {
+  '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+      borderColor: 'green',
+    },
+  },
+};
 export default VeloForm

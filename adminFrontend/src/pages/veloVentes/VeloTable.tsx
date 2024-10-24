@@ -1,28 +1,48 @@
 import { useEffect, useState } from 'react';
 import { Package } from '../../types/package';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import SupprimeModal from './SupprimeModal';
 
 
 
 const VeloTable = ({searchTerm}) => {
+   const [open, setOpen] = useState(false);
 
-    const [velos, setVelos] = useState([]);
+   const handleOpen = () => setOpen(true);
 
-    useEffect(() => {
+   const handleClose = () => setOpen(false);
+
+
+  
+    const navigate=useNavigate()
+
+    const handleVoirVelo=(id,velo)=>{
+      navigate(`/VenteVelos/Velos/${id}`, {state: {velo}})
+
+    }
+
+     const { data: velos } = useQuery({
+       queryKey: ['velosVente'],
+       queryFn: async () => {
+         const response = await fetch(
+           'http://localhost:4000/admin/veloVentes',
+         );
+
+         if (!response.ok) {
+           throw new Error('Failed to fetch velos');
+         }
+         const result = await response.json();
+         console.log(result.data);
+         return result.data;
+       },
       
-      axios
-        .get('http://localhost:4000/admin/veloVentes')
-        .then((response) => {
-          setVelos(response.data.data);
-          console.log(response.data.data)
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des vélos:', error);
-        });
-    }, []);
+       placeholderData: keepPreviousData, 
+     });
 
 
-     const filteredVelos = velos.filter((velo) => {
+     const filteredVelos = velos?velos.filter((velo) => {
        return (
          velo.velo.marque.nom
            .toLowerCase()
@@ -34,7 +54,7 @@ const VeloTable = ({searchTerm}) => {
          velo.prix.toString().includes(searchTerm) ||
          velo.stock.toString().includes(searchTerm)
        );
-     });
+     }):[];
 
 
   return (
@@ -68,7 +88,7 @@ const VeloTable = ({searchTerm}) => {
               <tr key={key}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h4 className="font-medium text-black dark:text-white">
-                    {velo.velo.marque.nom}
+                    {velo.velo.marque?.nom}
                   </h4>
                   <p className="text-sm"></p>
                 </td>
@@ -81,7 +101,7 @@ const VeloTable = ({searchTerm}) => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h4 className="font-medium text-black dark:text-white">
-                    {velo.velo.categorie.nom}
+                    {velo.velo.categorie?.nom}
                   </h4>
                   <p className="text-sm"></p>
                 </td>
@@ -97,14 +117,18 @@ const VeloTable = ({searchTerm}) => {
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button className="hover:text-primary voir-velo">
+                    <button
+                      className="hover:text-green"
+                      onClick={() => {
+                        handleVoirVelo(velo._id, velo);
+                      }}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
                         height="18"
                         viewBox="0 0 18 18"
                         fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
                           d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
@@ -116,7 +140,10 @@ const VeloTable = ({searchTerm}) => {
                         />
                       </svg>
                     </button>
-                    <button className="hover:text-primary delete">
+                    <button
+                      className="hover:text-green-600"
+                      onClick={handleOpen}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
@@ -143,6 +170,11 @@ const VeloTable = ({searchTerm}) => {
                         />
                       </svg>
                     </button>
+                    <SupprimeModal
+                      open={open}
+                      handleClose={handleClose}
+                      veloId={velo._id}
+                    />
                   </div>
                 </td>
               </tr>

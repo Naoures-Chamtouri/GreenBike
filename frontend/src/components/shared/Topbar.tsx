@@ -35,6 +35,12 @@ function Topbar() {
   const handleCommandeClick=()=>{
     navigate('/mes-commandes');
   }
+  const handleLocationClick = () => {
+    navigate("/mes-locations");
+  };
+   const handleReservationClick = () => {
+     navigate("/mes-reservations");
+   };
 
    const handleLogout = async () => {
      try {
@@ -164,12 +170,12 @@ function Topbar() {
                     Mes Commandes
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLocationClick}>
                   <Typography variant="body2" color="text.primary">
                     Locations Vélos
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleReservationClick}>
                   <Typography variant="body2" color="text.primary">
                     Réservation Balades
                   </Typography>

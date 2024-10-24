@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import { Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
+
 // Définir le schéma de validation avec Zod
 const personInfoSchema = z.object({
   nom: z.string().nonempty("Le nom est requis"),
@@ -26,8 +27,10 @@ const addressSchema = z.object({
 });
 
 const PageCommande = () => {
+   
   const navigate=useNavigate()
-  const { VeloVenteCartItems,clearCart } = useVeloVenteCart();
+  const { VeloVenteCartItems, clearCart, syncCartWithBackend } =
+    useVeloVenteCart();
   const { user } = useAuth();
   const [villes, setVilles] = useState([]);
   const [delegations, setDelegations] = useState([]);
@@ -44,6 +47,7 @@ const PageCommande = () => {
     const [showPopover, setShowPopover] = useState(false);
     const articles =VeloVenteCartItems.map(item => item.id);
   useEffect(() => {
+    
     const fetchVilles = async () => {
       const response = await axios.get(
         "http://localhost:4000/client/adresses/villes",

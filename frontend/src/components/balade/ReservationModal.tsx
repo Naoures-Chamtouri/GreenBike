@@ -55,18 +55,18 @@ const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSu
             className="mb-6 text-customgreen font-bold text-center"
             sx={{ fontSize: "28px" }}
           >
-            Réservation de Balade
+            Réservation de Balade 
           </Typography>
 
           <form onSubmit={handleSubmit}>
             <TextField
               label="Nom"
               fullWidth
-              value={user ? user.utilisateur.nomUtilisateur : nom}
+              value={user ? user.utilisateur?.nomUtilisateur : nom}
               onChange={(e) => setNom(e.target.value)}
               className="mb-6 "
               required
-              disabled={!!user.utilisateur.nomUtilisateur}
+              disabled={!!user?.utilisateur.nomUtilisateur}
               InputLabelProps={{
                 style: { color: "black" },
               }}
@@ -84,14 +84,14 @@ const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSu
               label="Numéro de téléphone"
               fullWidth
               value={
-                user.utilisateur.numTelephone
-                  ? user.utilisateur.numTelephone
+                user
+                  ? user.utilisateur?.numTelephone
                   : numTelephone
               }
               onChange={(e) => setNumTelephone(e.target.value)}
               className="mb-6 "
               required
-              disabled={!!user.utilisateur.numTelephone}
+              disabled={!!user?.utilisateur?.numTelephone}
               InputLabelProps={{
                 style: { color: "black" },
               }}

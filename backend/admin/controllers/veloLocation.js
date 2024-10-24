@@ -94,7 +94,7 @@ const createVeloLocation = async (req, res) => {
     const newVeloLocation = await VeloLocation.create({
       velo: newVelo,
       stock,
-      prixJour: prix,
+      prixHeure: prix,
       adresseDisponible,
     });
     return res.status(201).json({
@@ -196,5 +196,137 @@ const getVeloLocationById = async (req, res) => {
     });
   }
 };
+const updateVeloLocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      categorie,
+      type,
+      modele,
+      genre,
+      age,
+      taille,
+      description,
+     
+      prix,
+     adresseDisponible,
+      stock,
+      isPliable,
+      suspension,
+      vitesse,
+      roue,
+      cadre,
+      moteur,
+      selle,
+      frein,
+      marque,
+      newMarque,
+      selectedCouleurs,
+      ownerLicense,
+    } = req.body;
+    console.log(categorie);
+    // Recherche du vélo en vente avec son sous-document "velo"
+    const veloLocation = await VeloLocation.findById(id).populate("velo");
 
-export default { createVeloLocation,getAllVeloLocations,getVeloLocationById };
+    if (!veloLocation) {
+      return res.status(404).json({
+        status: httpStatus.NOT_FOUND,
+        message: "Vélo de Location non trouvé",
+      });
+    }
+
+    // Mise à jour des champs du sous-document "velo"
+    if (categorie) veloLocation.velo.categorie = categorie._id;
+    if (type && categorie.nom != "Vélos Electriques ")
+      veloLocation.velo.type = type;
+    if (modele) veloLocation.velo.modele = modele;
+    if (genre) veloLocation.velo.genre = genre;
+    if (age) veloLocation.velo.categorieAge = age;
+    if (taille) veloLocation.velo.taille = taille;
+    if (description) veloLocation.velo.description = description;
+    if (suspension !== undefined) veloLocation.velo.suspension = suspension;
+    if (vitesse) veloLocation.velo.vitesse = vitesse;
+    if (isPliable !== undefined) veloLocation.velo.pliable = isPliable;
+    if (selle) veloLocation.velo.selle = selle;
+    if (frein) veloLocation.velo.frein = frein;
+    if (selectedCouleurs) veloLocation.velo.couleur = selectedCouleurs;
+
+    // Mise à jour des images
+    if (ownerLicense && ownerLicense.length > 0) {
+      const images = await Promise.all(
+        ownerLicense.map(async (imageData) => {
+          const newImage = new Image({
+            name: imageData.name,
+            path: imageData.photo,
+          });
+          return await newImage.save();
+        })
+      );
+      veloLocation.velo.images = images.map((image) => image._id);
+    }
+
+ 
+    if (roue) {
+      if (veloLocation.velo.roue) {
+        await Roue.findByIdAndUpdate(veloLocation.velo.roue, roue, {
+          new: true,
+        });
+      } else {
+        const newRoue = await Roue.create(roue);
+       veloLocation.velo.roue = newRoue._id;
+      }
+    }
+
+    if (cadre) {
+      if (veloLocation.velo.cadre) {
+        await Cadre.findByIdAndUpdate(veloLocation.velo.cadre, cadre, {
+          new: true,
+        });
+      } else {
+        const newCadre = await Cadre.create(cadre);
+        veloLocation.velo.cadre = newCadre._id;
+      }
+    }
+
+    // Mise à jour du moteur (même logique que roue et cadre)
+    if (moteur) {
+      if (veloLocation.velo.moteur) {
+        await Moteur.findByIdAndUpdate(veloLocation.velo.moteur, moteur, {
+          new: true,
+        });
+      } else {
+        const newMoteur = await Moteur.create(moteur);
+       veloLocation.velo.moteur = newMoteur._id;
+      }
+    }
+
+    // Mise à jour de la marque
+    if (newMarque) {
+      const createdMarque = await Marque.create({ nom: newMarque });
+      veloLocation.velo.marque = createdMarque._id;
+    } else if (marque) {
+      veloLocation.velo.marque = marque;
+    }
+
+    
+  
+    if (prix) veloLocation.prixHeure = prix;
+    if (adresseDisponible) veloLocation.adresseDisponible = adresseDisponible;
+    if (stock) veloLocation.stock = stock;
+
+    await veloLocation.save();
+
+    return res.status(200).json({
+      status: httpStatus.SUCCESS,
+      data: veloLocation,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: httpStatus.ERROR,
+      message: error.message,
+    });
+  }
+};
+
+export default { createVeloLocation,getAllVeloLocations,getVeloLocationById ,updateVeloLocation};

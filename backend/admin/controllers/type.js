@@ -53,7 +53,7 @@ const getTypesbyCategory = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    res.status(500).json({
+    return res.status(500).json({
       status: httpStatus.ERROR,
       message: "Erreur lors de la récupération des types de vélos.",
       error: error.message || error
@@ -61,5 +61,30 @@ const getTypesbyCategory = async (req, res) => {
   }
 };
 
+const getAllTypes=async(req,res)=>{
+  try{
+    const types=await Type.find();
+      if (types.length > 0) {
+        res.status(200).json({
+          status: httpStatus.SUCCESS,
+          data: types,
+        });
+      } else {
+        res.status(200).json({
+          status: httpStatus.NOT_FOUND,
+          message: "Aucun type de vélo trouvé",
+          data: [],
+        });
+      }
 
-export default {createType,getTypesbyCategory};
+  }catch(error){
+    console.log(error)
+     return res.status(500).json({
+       status: httpStatus.ERROR,
+       message: "Erreur lors de la récupération des types de vélos.",
+       error: error.message || error,
+     });
+  }
+}
+
+export default {createType,getTypesbyCategory,getAllTypes};

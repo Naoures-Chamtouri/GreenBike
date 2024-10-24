@@ -7,11 +7,52 @@ import Type from "../../models/type.js";
 import CategorieVelo from "../../models/categorieVelo.js";
 import Marque from "../../models/marque.js";
 import Image from "../../models/image.js";
+import Client from "../../models/client.js"
+import Ville from "../../models/ville.js";
+import District from "../../models/district.js";
+import Delegation from "../../models/delegation.js";
 
 
 const getAllCommandes=async(req,res)=>{
     try{
-        const commandes = await Commande.find();
+        const commandes = await Commande.find()
+          .populate({
+            path: "articles",
+            populate: {
+              path: "article",
+              populate: {
+                path: "velo",
+                populate: [
+                  {
+                    path: "type",
+                    model: Type,
+                  },
+                  { path: "categorie", model: CategorieVelo },
+                  { path: "marque", model: Marque },
+                  { path: "images", model: Image },
+                ],
+              },
+              model: VeloVente,
+            },
+            model: LignePanier,
+          })
+          .populate({
+            path: "adresseLivraison",
+            
+        populate:[
+          {path:"ville",model:Ville},
+          {path:"district",model:District},
+          {path:"delegation",model:Delegation}
+
+        ],
+            model: Adresse,
+          })
+          .populate({
+            path: "client",
+            model: Client,
+            select:
+              "utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone ",
+          });
         if (commandes.length>0){
             return res.status(200).json({status:httpStatus.SUCCESS,data:commandes});
         
@@ -50,7 +91,7 @@ const getCommande=async(req,res)=>{
           .populate({
             path: "adresseLivraison",
             model: Adresse,
-          });
+          }).populate({path:"client",model:Client,select:"utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone "});
         if (commandes){
             return res.status(200).json({status:httpStatus.SUCCESS,data:commandes});
         }
@@ -71,12 +112,35 @@ const updateCommande = async (req, res) => {
     const { statutCommande, dateLivraison } = req.body;
 
    
-    const commande = await Commande.findById(commandeId);
+    const commande = await Commande.findById(commandeId).populate({
+            path: "articles",
+            populate: {
+              path: "article",
+              populate: {
+                path: "velo",
+                populate: [
+                  {
+                    path: "type",
+                    model: Type,
+                  },
+                  { path: "categorie", model: CategorieVelo },
+                  { path: "marque", model: Marque },
+                  { path: "images", model: Image },
+                ],
+              },
+              model: VeloVente,
+            },
+            model: LignePanier,
+          })
+          .populate({
+            path: "adresseLivraison",
+            model: Adresse,
+          }).populate({path:"client",model:Client,select:"utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone "});;
     if (!commande) {
       return res.status(404).json({ message: "Commande non trouvée" });
     }
 
-  
+   
     if (dateLivraison) {
       commande.dateLivraison = dateLivraison;
     }

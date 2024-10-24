@@ -10,5 +10,5 @@ async function databaseConnection() {
     console.error("Error connecting to MongoDB:", error);
   }
 }
-databaseConnection();
+
 export default databaseConnection;

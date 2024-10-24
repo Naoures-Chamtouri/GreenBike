@@ -3,19 +3,21 @@ import httpStatus from "../../utils/httpStatus.js";
 import Balade from "../../models/balade.js";
 import mongoose from "mongoose";
 import AdresseBalade from "../../models/adresseBalade.js";
-import Guide from "../../models/guide.js"
+import Image from "../../models/image.js"
+
 
 const getAllBalades=async(req,res)=>{
     try{
-      const Balades = await Balade.find().populate(
-        { path: "adresseDepart", model: AdresseBalade }).populate(
-        { path: "adresseArrivée", model: AdresseBalade }
-      ).populate({path:"guide",model:Guide}); 
+      const Balades = await Balade.find()
+        .populate({ path: "adresseDepart", model: AdresseBalade })
+        .populate({ path: "adresseArrivée", model: AdresseBalade })
+        .populate({ path: "images", model: Image });
+
        return res.status(200).json({status:httpStatus.SUCCESS,data:Balades})
       
     }catch(error){
-        return
-        res.status(500).json({staus:httpStatus.ERROR,message:error.message});
+      console.log(error)
+        return res.status(500).json({staus:httpStatus.ERROR,message:error.message});
     }
 
 
@@ -68,10 +70,9 @@ const getBaladebyId=async(req,res)=>{
      
 
      const balades = await Balade.find(filters)
-      .populate(
-        { path: "adresseDepart", model: AdresseBalade }).populate(
-        { path: "adresseArrivée", model: AdresseBalade }
-      ).populate({path:"guide",model:Guide}); 
+       .populate({ path: "adresseDepart", model: AdresseBalade })
+       .populate({ path: "adresseArrivée", model: AdresseBalade })
+       .populate({ path: "images", model: Image });
 
      return res.status(200).json({
        status:httpStatus.SUCCESS,

@@ -87,14 +87,14 @@ function MesCommandes() {
               </div>
             ))}
 
-            {commande.adresseLivraison && (
+           {commande.adresseLivraison && (
               <div className="mt-4">
                 <p className="font-semibold text-gray-700">
                   Adresse de Livraison :
                 </p>
-                <p className="text-gray-600">{commande.adresseLivraison}</p>
+                <p className="text-gray-600">{commande.adresseLivraison.district.nom}, {commande.adresseLivraison.delegation.nom}, {commande.adresseLivraison.ville.nom}</p>
               </div>
-            )}
+            )} 
 
             <p className="mt-4 text-gray-600">
               Date de Livraison prévue :{" "}

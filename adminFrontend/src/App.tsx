@@ -5,9 +5,7 @@ import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
-import Calendar from './pages/Calendar';
 import Chart from './pages/Chart';
-import ECommerce from './pages/Dashboard/ECommerce';
 import FormElements from './pages/Form/FormElements';
 import FormLayout from './pages/Form/FormLayout';
 import Profile from './pages/Profile';
@@ -18,9 +16,17 @@ import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import Velos from './pages/veloVentes/Velo';
 import VeloForm from './pages/veloVentes/veloForm';
-import VelosLocation from './pages/veloLocation/velo';
+import VelosLocation from './pages/veloLocation/Velo';
 import VeloProvider from './context/VeloContext';
 import VeloLocationForm from './pages/veloLocation/veloLocationForm';
+import Commandes from "./pages/veloVentes/Commande"
+import PageVelo from './pages/veloVentes/PageVelo';
+import PageVeloLocation from './pages/veloLocation/PageVeloLocation';
+import Balade from './pages/UiElements/balades/Balade';
+import BaladeForm from './pages/UiElements/balades/BaladeForm';
+import PageBalade from './pages/UiElements/balades/PageBalade';
+import PageParticipant from './pages/UiElements/balades/Participant';
+import Locations from './pages/veloLocation/Location';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +46,6 @@ function App() {
     <DefaultLayout>
       <VeloProvider>
         <Routes>
-         
           <Route
             index
             path="/VenteVelos/Velos"
@@ -59,6 +64,22 @@ function App() {
             }
           />
           <Route
+            path="/VenteVelos/Velos/:id"
+            element={
+              <>
+                <PageVelo />
+              </>
+            }
+          />
+          <Route
+            path="/VenteVelos/Commandes"
+            element={
+              <>
+                <Commandes />
+              </>
+            }
+          />
+          <Route
             path="/LocationVelos/Velos"
             element={
               <>
@@ -67,10 +88,59 @@ function App() {
             }
           />
           <Route
+            path="/LocationVelos/Velos/:id"
+            element={
+              <>
+                <PageVeloLocation />
+              </>
+            }
+          />
+          <Route
+            path="/LocationVelos/Locations"
+            element={
+              <>
+                <Locations />
+              </>
+            }
+          />
+          <Route
             path="/LocationVelos/Velos/ajouter"
             element={
               <>
                 <VeloLocationForm />
+              </>
+            }
+          />
+
+          <Route
+            path="/ReservationBalades/Balades"
+            element={
+              <>
+                <Balade />
+              </>
+            }
+          />
+          <Route
+            path="/ReservationBalades/Balades/ajouter"
+            element={
+              <>
+                <BaladeForm />
+              </>
+            }
+          />
+          <Route
+            path="/ReservationBalades/Balades/:id"
+            element={
+              <>
+                <PageBalade />
+              </>
+            }
+          />
+          <Route
+            path="/ReservationBalades/Balades/participants/:id"
+            element={
+              <>
+                <PageParticipant />
               </>
             }
           />

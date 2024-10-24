@@ -19,6 +19,9 @@ import FilterLocationProvider from "./context/FiltersLocationContext";
 import PageLocation from "./_root/pages/PageLocation";
 import FilterBaladeProvider from "./context/FiltersBaladeContext";
 import MesCommandes from "./_root/pages/MesCommandes";
+import MesLocations from "./_root/pages/MesLocations";
+import MesReservations from "./_root/pages/MesReservations";
+import ProtectedRoute from "./_auth/ProtectedRoute";
 
 function App() {
   return (
@@ -34,7 +37,7 @@ function App() {
                     <Route path="/sign-in" element={<SigninForm />} />
                     <Route path="/sign-up" element={<SignupForm />} />
                   </Route>
-                  {/* private routes */}
+
                   <Route element={<RootLayout />}>
                     <Route index element={<Home />} />
                     //index mean the starting page
@@ -56,9 +59,17 @@ function App() {
                     />
                     <Route path="/balades" element={<CatalogueBalade />} />
                     <Route path="/balades/:ref" element={<PageBalade />} />
-                    <Route path="/commande" element={<PageCommande />} />
-                    <Route path="/location" element={<PageLocation />} />
-                    <Route path="/mes-commandes" element={<MesCommandes/>} />
+                    {/* private routes */}
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/commande" element={<PageCommande />} />
+                      <Route path="/location" element={<PageLocation />} />
+                      <Route path="/mes-commandes" element={<MesCommandes />} />
+                      <Route path="/mes-locations" element={<MesLocations />} />
+                      <Route
+                        path="mes-reservations"
+                        element={<MesReservations />}
+                      />
+                    </Route>
                   </Route>
                 </Routes>
               </main>

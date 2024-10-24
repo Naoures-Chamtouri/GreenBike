@@ -8,21 +8,23 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useLocation } from "react-router-dom";
-import trajet from "../../../public/assets/images/trajet.png";
 import LeftSide from "@/components/balade/LeftSide";
 import Carousel from "@/components/ui/carousel";
 import RightSide from "@/components/balade/RightSide";
 import { Alert, Box, Popover, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
+import SimpleMap from "@/components/ui/mapComponent";
 function PageBalade (){
 const location = useLocation();
 const { balade } = location.state || {};
 
 const [anchorEl, setAnchorEl] = useState(null);
 const [successMessage, setSuccessMessage] = useState("");
+const images = balade.images.map((image) => image.path);
 
   const openPopover = Boolean(anchorEl);
   const id = openPopover ? "simple-popover" : undefined;
+    
 
 
 const handlePopoverClose = () => {
@@ -51,7 +53,7 @@ const handlePopoverClose = () => {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink href="/balades" className="text-sm">
-                  {balade.nom},{balade.adresseDepart.location}
+                  {balade.nom},{balade.adresseDepart.nom}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -59,8 +61,11 @@ const handlePopoverClose = () => {
         </div>
         <div className="content  mt-24 mb-10">
           <div className="flex justify-around ">
-            <Carousel images={balade.images} />
-            <img alt="trajet" src={trajet} className="w-3/5 h-96 mr-3 " />
+            <Carousel images={images} />
+            <div className="mr-2">
+              
+              <SimpleMap trajet={balade.trajet} />
+            </div>
           </div>
           <div className="flex">
             <LeftSide balade={balade} />
@@ -71,7 +76,7 @@ const handlePopoverClose = () => {
               handlePopoverClose={handlePopoverClose}
             />
           </div>
-         
+
           <Snackbar
             open={Boolean(anchorEl)}
             autoHideDuration={2000}
@@ -83,7 +88,7 @@ const handlePopoverClose = () => {
               severity="success"
               sx={{ width: "100%" }}
             >
-             {successMessage}
+              {successMessage}
             </Alert>
           </Snackbar>
         </div>

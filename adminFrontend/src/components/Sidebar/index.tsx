@@ -282,8 +282,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-6 font-medium text-white duration-300 ease-in-out bg-green-600  ${
-                          (pathname === '/Balades' ||
-                            pathname.includes('Balades')) &&
+                          (pathname === '/ReservationBalades' ||
+                            pathname.includes('ReservationBalades')) &&
                           'bg-green-900 text-white dark:bg-meta-4'
                         }`}
                         onClick={(e) => {
@@ -321,7 +321,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
-                              to="/Balades/Balades"
+                              to="/ReservationBalades/Balades"
                               className={({ isActive }) =>
                                 'group relative flex items-center gap-2.5 rounded-md px-6 font-medium text-black duration-300 ease-in-out  ' +
                                 (isActive && '!text-black bg-green-300 ')
@@ -331,17 +331,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </NavLink>
                           </li>
 
-                          <li>
-                            <NavLink
-                              to="/Balades/Reservations"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-6 font-medium text-black duration-300 ease-in-out ' +
-                                (isActive && '!text-black bg-green-300')
-                              }
-                            >
-                              Réservations
-                            </NavLink>
-                          </li>
+                        
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}

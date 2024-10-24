@@ -77,18 +77,18 @@ export function CustomDragDrop({
     }
   }
 
-  async function convertFileBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  }
+ async function convertFileBase64(file) {
+   return new Promise((resolve, reject) => {
+     const reader = new FileReader();
+     reader.readAsDataURL(file);
+     reader.onload = () => {
+       resolve(reader.result);
+     };
+     reader.onerror = (error) => {
+       reject(error);
+     };
+   });
+ }
 
   useEffect(() => {
     function handleDragOver(e) {
@@ -189,7 +189,7 @@ export function CustomDragDrop({
       {ownerLicense.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-y-4 gap-x-4">
           {ownerLicense.map((img, index) => (
-            <div className="w-full px-3 py-3.5 rounded-md bg-slate-200 space-y-3">
+            <div key={index} className="w-full px-3 py-3.5 rounded-md bg-slate-200 space-y-3">
               <div className="flex justify-between">
                 <div className="w-[70%] flex justify-start items-center space-x-2">
                   <div

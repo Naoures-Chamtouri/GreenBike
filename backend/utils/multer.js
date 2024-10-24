@@ -7,7 +7,7 @@ const FILE_TYPE_MAP = {
 };
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadPath = path.resolve(__dirname, "../uploads");
+    const uploadPath = path.resolve(__dirname, "../../uploads");
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {

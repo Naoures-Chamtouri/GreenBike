@@ -205,69 +205,10 @@ const getVeloLocationsByFilter = async (req, res) => {
     });
   }
 };
-const checkAvailability = async (req, res) => {
-  try {
-    const { startDate, endDate, numBikes, veloId } = req.body;
 
-   
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-   
-    const locations = await Location.find({
-      velo: veloId,
-      $or: [
-        {
-          dateDebut: { $lte: end },
-          dateFin: { $gte: start },
-        },
-        {
-          dateDebut: { $gte: start, $lte: end },
-        },
-      ],
-    });
-
-    
-    const totalRentedBikes = locations.reduce((total, location) => {
-      return total + location.quantité; 
-    }, 0);
-
-
-    const bike = await VeloLocation.findById(veloId);
-
-    if (!bike) {
-      return res.status(404).json({
-        status: httpStatus.NOT_FOUND,
-        message: "Vélo non trouvé.",
-      });
-    }
-
-  
-    const availableBikes = bike.stock; 
-    if (totalRentedBikes + numBikes > availableBikes) {
-      return res.status(400).json({
-        status: httpStatus.BAD_REQUEST,
-        message: "Quantité demandée non disponible pour ces dates.",
-      });
-    }
-
-    
-    return res.status(200).json({
-      status: httpStatus.SUCCESS,
-      message: "Vélo disponible pour la location.",
-      availableBikes: availableBikes - totalRentedBikes, 
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: httpStatus.ERROR,
-      message: error.message,
-    });
-  }
-};
 
 export default {
   getAllVeloLocations,
   getVeloLocationById,
-  getVeloLocationsByFilter,
+  getVeloLocationsByFilter
 };

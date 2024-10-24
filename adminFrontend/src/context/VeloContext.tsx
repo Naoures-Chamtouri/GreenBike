@@ -29,6 +29,14 @@ useEffect(() => {
       console.error('Erreur lors de la récupération des categorie:', error);
     });
      axios
+       .get('http://localhost:4000/admin/types')
+       .then((response) => {
+         setTypes(response.data.data);
+       })
+       .catch((error) => {
+         console.error('Erreur lors de la récupération des types:', error);
+       });
+     axios
        .get('http://localhost:4000/admin/genres')
        .then((response) => {
          setGenres(response.data.data);

@@ -7,10 +7,10 @@ import AdresseLocal from "../../models/adresseLocal.js"
     return res.status(200).json({status:"success",data:adresses})
     
   }catch(e){
-    console.log(error);
+    console.log(e);
     return res
       .status(500)
-      .json({ message: "Erreur lors de la synchronisation du panier", error });
+      .json({ message: "Erreur lors de la synchronisation du panier", e });
   }
  }
 export default {getAdresse};

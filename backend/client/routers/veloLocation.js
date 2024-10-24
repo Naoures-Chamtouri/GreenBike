@@ -7,4 +7,5 @@ router.get("/:id",veloLocationController.getVeloLocationById);
 router.post("/filter",veloLocationController.getVeloLocationsByFilter);
 
 
+
 export default router;

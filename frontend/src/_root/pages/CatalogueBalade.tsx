@@ -12,7 +12,7 @@ import {
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 function CatalogueBalade() {
-  const { data: balades } = useQuery({
+ /*  const { data: balades } = useQuery({
     queryKey: ["balades"],
     queryFn: async () => {
       const response = await fetch("http://localhost:4000/client/balades");
@@ -25,7 +25,7 @@ function CatalogueBalade() {
     },
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
-  });
+  }); */
   return (
     <div>
       <div className="topCatalog relative">
@@ -52,7 +52,7 @@ function CatalogueBalade() {
       <div className=" mt-20 h-0.5 bg-customGreen"></div>
       <div className="catalogue min-h-lvh  flex ">
         <FiltresBalade />
-       <ContentBarBalade  balades={balades}/> 
+       <ContentBarBalade  /> 
       </div>
     </div>
   );

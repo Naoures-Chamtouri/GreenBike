@@ -18,6 +18,10 @@ import veloVenteRouter from "./routers/veloVente.js";
 import veloLocationRouter from "./routers/veloLocation.js";
 import guideRouter from "./routers/guide.js";
 import commandeRouter from "./routers/commande.js";
+import  baladeRouter from "./routers/balade.js";
+import reservationRouter from "./routers/reservation.js"
+import locationRouter from "./routers/location.js"
+import adresseLocalRouter from "./routers/adresseLocal.js"
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
@@ -45,5 +49,10 @@ app.use("/admin/veloVentes",veloVenteRouter);
 app.use("/admin/veloLocations",veloLocationRouter);
 app.use("/admin/guides",guideRouter);
 app.use("/admin/commandes", commandeRouter);
+app.use("/admin/balades", baladeRouter);
+app.use("/admin/reservations",reservationRouter);
+app.use("/admin/locations",locationRouter);
+app.use("/admin/adressesLocal",adresseLocalRouter);
+
 
 export default app;

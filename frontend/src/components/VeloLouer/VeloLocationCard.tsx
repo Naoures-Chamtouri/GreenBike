@@ -16,7 +16,7 @@ function VeloLocationCard({ velo }) {
     >
       <img
         className="w-full h-48 object-cover"
-        src={velo.velo.images[0]?.path}
+        src={velo.velo.images[0]?.path }
         alt={`${velo.velo.marque.nom} product`}
       />
       <div className="flex flex-col align-center p-4">
@@ -24,7 +24,7 @@ function VeloLocationCard({ velo }) {
           {velo.velo.marque.nom}
         </h2>
         <p className="text-green-600 text-xl font-bold mt-2">
-          {velo.prixJour} DT/Jour
+          {velo.prixHeure} DT/Heure
         </p>
 
         <p className="text-gray-500 mb-5 text-cu h-8">

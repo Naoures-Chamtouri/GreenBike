@@ -13,10 +13,10 @@ import { IoIosArrowForward } from "react-icons/io";
 import NumberStepper from "@/components/ui/numberStepper";
 import { Modal, Box, Typography } from "@mui/material";
 import AvisSection from "@/components/used/avisSection";
-import RentalModal from "@/components/used/VeloLouer/locationModal";
+import RentalModal from "@/components/VeloLouer/locationModal";
+import CaracteristicModal from "@/components/shared/CaracteristicModal";
 
 function PageVeloLocation() {
-
   const location = useLocation();
   const { velo } = location.state || {};
   const titre =
@@ -27,17 +27,13 @@ function PageVeloLocation() {
     velo.velo.modele;
   const images = velo.velo.images.map((image) => image.path);
 
-
   const [openModal, setOpenModal] = useState(false);
 
-  
   const [modalLocationOpen, setModalLocationOpen] = useState(false);
 
-  
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  
   const handleLocationModalOpen = () => setModalLocationOpen(true);
   const handleLocationModalClose = () => setModalLocationOpen(false);
 
@@ -65,16 +61,16 @@ function PageVeloLocation() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-      
       </div>
 
       <div className="mt-36 mb-12 flex h-96">
         <Carousel images={images} />
         <div className="w-1/3 mr-10">
           <h1 className="text-2xl">{titre}</h1>
-          <span className="text-gray-400">Référence: {velo.velo.ref}</span>
+          <h2>{velo.velo.type.nom}</h2>
+          
           <h1 className="text-xl w-fit pr-10 pl-3 py-2 mt-4 bg-customGreen-light">
-            {velo.prixJour} TND/Jour
+            {velo.prixHeure} TND/Heure
           </h1>
           <div className="mt-5">
             <h2>
@@ -93,68 +89,19 @@ function PageVeloLocation() {
           </button>
 
           {/* Modal pour afficher les caractéristiques */}
-          <Modal
-            open={openModal}
-            onClose={handleCloseModal}
-            aria-labelledby="caracteristiques-title"
-            aria-describedby="caracteristiques-description"
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 400,
-                bgcolor: "background.paper",
-                boxShadow: 24,
-                p: 4,
-                borderRadius: 2,
-              }}
-            >
-              <Typography
-                id="caracteristiques-title"
-                variant="h6"
-                component="h2"
-              >
-                Caractéristiques du Vélo
-              </Typography>
-              <Typography id="caracteristiques-description" sx={{ mt: 2 }}>
-                <ul>
-                  <li>Poids: {velo.velo.poids} kg</li>
-                  <li>Nombre de vitesses: {velo.velo.nbrVitesse}</li>
-                  <li>Suspension: {velo.velo.suspension}</li>
-                  <li>
-                    Couleur: {velo.velo.couleur.map((c) => c.nom).join(", ")}
-                  </li>
-                  <li>Genre: {velo.velo.genre.map((g) => g.nom).join(", ")}</li>
-                  <li>Roue: {velo.velo.roue.map((r) => r.nom).join(", ")}</li>
-                  <li>Cadre: {velo.velo.cadre.nom}</li>
-                  <li>Selle: {velo.velo.selle.nom}</li>
-                  <li>Frein: {velo.velo.frein.map((f) => f.nom).join(", ")}</li>
-                  <li>Catégorie d'âge: {velo.velo.categorieAge.nom}</li>
-                  <li>Moteur: {velo.velo.moteur?.nom || "Non applicable"}</li>
-                  <li>Pliable: {velo.velo.pliable ? "Oui" : "Non"}</li>
-                </ul>
-              </Typography>
-              <button
-                onClick={handleCloseModal}
-                className="mt-4 px-4 py-2 text-white bg-customGreen rounded"
-              >
-                Fermer
-              </button>
-            </Box>
-          </Modal>
+         <CaracteristicModal openModal={openModal} handleCloseModal={handleCloseModal} velo={velo} />
           <button
             className="rounded-sm border-customGreen text-2xl py-3 px-6 border hover:bg-customGreen mt-7 ml-32"
             onClick={handleLocationModalOpen}
           >
             Louer
           </button>
-          <RentalModal open={modalLocationOpen} onClose={handleLocationModalClose} velo={velo}/>
+          <RentalModal
+            open={modalLocationOpen}
+            onClose={handleLocationModalClose}
+            velo={velo}
+          />
         </div>
-
-      
       </div>
       <AvisSection id={velo._id} />
     </div>

@@ -7,11 +7,15 @@ import Type from "../../models/type.js";
 import CategorieVelo from "../../models/categorieVelo.js";
 import Marque from "../../models/marque.js";
 import Image from "../../models/image.js";
+import Ville from "../../models/ville.js";
+import District from "../../models/district.js";
+import Delegation from "../../models/delegation.js"
 
 const passerCommande = async (req, res) => {
   try {
     const clientId = req.client._id;
     const {adresseLivraison,dateLivraison,numTelephone}=req.body
+    console.log(adresseLivraison)
    
     const panier = await Panier.findOne({ client: clientId }).populate(
       {path:"articles",model:LignePanier}
@@ -30,6 +34,7 @@ const passerCommande = async (req, res) => {
         district:adresseLivraison.district,
         adresse:adresseLivraison.adresse
     })
+    await adresse.save()
   for (const article of panier.articles) {
 
       const veloVente = await VeloVente.findById(article.article);
@@ -101,6 +106,12 @@ const getCommandes=async(req,res)=>{
       },model:VeloVente}, model: LignePanier })
       .populate({
         path: "adresseLivraison",
+        populate:[
+          {path:"ville",model:Ville},
+          {path:"district",model:District},
+          {path:"delegation",model:Delegation}
+
+        ],
         model: Adresse
       });
  return res.status(201).json({
