@@ -55,7 +55,7 @@ function VeloForm() {
    
       const [isAddingMarque, setIsAddingMarque] = useState(false);
     
-      
+      console.log(formValues.categorie)
 
 
 const [showPopover,setShowPopover]=useState(false)
@@ -70,9 +70,9 @@ const [showPopover,setShowPopover]=useState(false)
     console.log("La catégorie est obligatoire");
   }
   
-  if (!formValues.type) {
+  if (!formValues.type && formValues.categorie == '66b9e84c0ad7a738f5cfe402') {
     formIsValid = false;
-    console.log("Le type est obligatoire");
+    console.log('Le type est obligatoire');
   }
 
   if (!formValues.modele) {
@@ -188,9 +188,25 @@ const [showPopover,setShowPopover]=useState(false)
 
 const handleChange = (event) => {
   const { name, value } = event.target;
-  setFormValues({ ...formValues, [name]: value });
-};
 
+  // Fonction pour mettre à jour un champ imbriqué
+  const updateNestedField = (path, value) => {
+    const keys = path.split('.'); // Split by '.' to handle nested fields like "roue.materiau"
+    let updatedValues = { ...formValues }; // Create a copy of formValues
+    let field = updatedValues;
+
+    // Parcourir les clés imbriquées pour mettre à jour la valeur correcte
+    for (let i = 0; i < keys.length - 1; i++) {
+      field = field[keys[i]];
+    }
+
+    field[keys[keys.length - 1]] = value; // Mettre à jour la clé finale
+
+    setFormValues(updatedValues); // Mettre à jour l'état
+  };
+
+  updateNestedField(name, value);
+};
 
  useEffect(() => {
   if(formValues.categorie!=''){
@@ -239,11 +255,7 @@ const handleChange = (event) => {
         <AccordionDetails className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex justify-center space-x-6 mb-6">
             {/* Categorie */}
-            <FormControl
-              className="w-1/3"
-              required={true}
-            
-            >
+            <FormControl className="w-1/3" required={true}>
               <InputLabel
                 id="categorie-label"
                 sx={{ '&.Mui-focused': { color: 'green' } }}
@@ -265,11 +277,10 @@ const handleChange = (event) => {
                   </MenuItem>
                 ))}
               </Select>
-             
             </FormControl>
 
             {/* Type */}
-            <FormControl className="w-1/3" >
+            <FormControl className="w-1/3">
               <InputLabel
                 id="type-label"
                 sx={{ '&.Mui-focused': { color: 'green' } }}
@@ -291,7 +302,6 @@ const handleChange = (event) => {
                   </MenuItem>
                 ))}
               </Select>
-           
             </FormControl>
           </div>
 
@@ -304,7 +314,6 @@ const handleChange = (event) => {
                   value={formValues.newMarque}
                   onChange={handleChange}
                   sx={textFieldStyles}
-               
                 />
               ) : (
                 <>
@@ -329,12 +338,11 @@ const handleChange = (event) => {
                       </MenuItem>
                     ))}
                   </Select>
-                
                 </>
               )}
             </FormControl>
 
-            <FormControl className="w-1/3" >
+            <FormControl className="w-1/3">
               <InputLabel
                 id="couleurs-label"
                 sx={{ '&.Mui-focused': { color: 'green' } }}
@@ -356,7 +364,6 @@ const handleChange = (event) => {
                   </MenuItem>
                 ))}
               </Select>
-           
             </FormControl>
           </div>
 
@@ -371,12 +378,11 @@ const handleChange = (event) => {
               name="modele"
               value={formValues.modele}
               onChange={handleChange}
-            
               sx={textFieldStyles} // Reuse this for custom styles
             />
 
             {/* Genre */}
-            <FormControl className="w-1/3" >
+            <FormControl className="w-1/3">
               <InputLabel
                 id="genre-label"
                 sx={{ '&.Mui-focused': { color: 'green' } }}
@@ -398,7 +404,6 @@ const handleChange = (event) => {
                   </MenuItem>
                 ))}
               </Select>
-             
             </FormControl>
           </div>
 
@@ -430,11 +435,10 @@ const handleChange = (event) => {
                   </MenuItem>
                 ))}
               </Select>
-            
             </FormControl>
 
             {/* Taille */}
-            <FormControl className="w-1/3" >
+            <FormControl className="w-1/3">
               <InputLabel
                 id="taille-label"
                 sx={{
@@ -458,7 +462,6 @@ const handleChange = (event) => {
                 <MenuItem value="XL">XL</MenuItem>
                 <MenuItem value="XXL">XXL</MenuItem>
               </Select>
-           
             </FormControl>
           </div>
 
@@ -475,7 +478,6 @@ const handleChange = (event) => {
               name="prix"
               value={formValues.prix}
               onChange={handleChange}
-             
             />
 
             {/* Stock */}
@@ -490,7 +492,6 @@ const handleChange = (event) => {
               name="stock"
               value={formValues.stock}
               onChange={handleChange}
-            
             />
           </div>
 
@@ -506,13 +507,12 @@ const handleChange = (event) => {
               name="description"
               value={formValues.description}
               onChange={handleChange}
-            
             />
           </div>
 
           <div className="flex justify-center space-x-6 mb-6">
             {/* Etat */}
-            <FormControl className="w-1/3" >
+            <FormControl className="w-1/3">
               <InputLabel
                 id="etat-label"
                 sx={{
@@ -536,7 +536,6 @@ const handleChange = (event) => {
                 <MenuItem value="Moyen">Moyen</MenuItem>
                 <MenuItem value="Mauvais">Mauvais</MenuItem>
               </Select>
-             
             </FormControl>
 
             {/* Usage Duration */}
@@ -550,7 +549,6 @@ const handleChange = (event) => {
               name="duree"
               value={formValues.duree}
               onChange={handleChange}
-             
             />
           </div>
           <div className="flex justify-center items-center px-5 ">
@@ -594,7 +592,6 @@ const handleChange = (event) => {
               name="vitesse"
               value={formValues.vitesse}
               onChange={handleChange}
-             
             />
 
             {/* Suspension */}
@@ -621,13 +618,12 @@ const handleChange = (event) => {
               name="suspension"
               value={formValues.suspension}
               onChange={handleChange}
-             
             />
           </div>
           <div className="">
             <div className="text-xl mb-3 font-bold">Roue</div>
             <div className="flex justify-center space-x-6 mb-6">
-              <FormControl className="w-1/3" >
+              <FormControl className="w-1/3">
                 <InputLabel
                   id="materiau-roue-label"
                   sx={{
@@ -664,7 +660,6 @@ const handleChange = (event) => {
                   <MenuItem value="Acier">Acier</MenuItem>
                   <MenuItem value="Composite">Composite</MenuItem>
                 </Select>
-             
               </FormControl>
 
               <TextField
@@ -690,7 +685,6 @@ const handleChange = (event) => {
                 name="roue.taille"
                 value={formValues.roue.taille}
                 onChange={handleChange}
-               
               />
               <TextField
                 sx={{
@@ -715,7 +709,6 @@ const handleChange = (event) => {
                 name="roue.poids"
                 value={formValues.roue.poids}
                 onChange={handleChange}
-                
               />
             </div>
           </div>
@@ -784,7 +777,6 @@ const handleChange = (event) => {
                 name="cadre.taille"
                 value={formValues.cadre.taille}
                 onChange={handleChange}
-               
               />
             </div>
           </div>
@@ -792,7 +784,7 @@ const handleChange = (event) => {
           <div>
             <div className="text-xl mb-3 font-bold">Selle</div>
             <div className="flex justify-center space-x-6 mb-6">
-              <FormControl className="w-1/3" >
+              <FormControl className="w-1/3">
                 <InputLabel
                   id="frein-label"
                   sx={{
@@ -837,7 +829,7 @@ const handleChange = (event) => {
             <div className="text-xl mb-3 font-bold">Frein</div>
 
             <div className="flex justify-center space-x-6 mb-6">
-              <FormControl className="w-1/3" >
+              <FormControl className="w-1/3">
                 <InputLabel
                   id="frein-label"
                   sx={{
@@ -879,7 +871,7 @@ const handleChange = (event) => {
             </div>
           </div>
           <div>
-            {formValues.categorie == '66b9e84c0ad7a738f5cfe402' && (
+            {formValues.categorie._id == '66b9e84c0ad7a738f5cfe402' ? (
               <div>
                 <div className="text-xl mb-3 font-bold">Moteur</div>
                 <div className="flex justify-center space-x-6 mb-6">
@@ -949,10 +941,11 @@ const handleChange = (event) => {
                     name="moteur.puissance"
                     value={formValues.moteur.puissance}
                     onChange={handleChange}
-                   
                   />
                 </div>
               </div>
+            ) : (
+              <div></div>
             )}
             <div>
               <div className="flex justify-center space-x-6 mb-6">

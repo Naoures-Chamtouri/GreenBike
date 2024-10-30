@@ -125,3 +125,9 @@ layer utilities {
     @apply text-[10px] font-medium leading-[140%];
   }
 }
+
+.MuiBackdrop-root
+  .MuiModal-backdrop
+  .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
+  background-color: transparent !important;
+}

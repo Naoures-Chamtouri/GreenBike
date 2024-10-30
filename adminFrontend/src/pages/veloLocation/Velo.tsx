@@ -63,7 +63,7 @@ function VelosLocation() {
         />
         <Link
           to="/LocationVelos/Velos/ajouter"
-          className="inline-flex items-center bg-white justify-center gap-2.5 rounded-md border border-green-600 py-2 px-4 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
+          className="inline-flex items-center bg-white justify-center gap-2.5 rounded-md border border-green-600 py-2 px-4 text-center font-medium text-black  lg:px-8 xl:px-10"
         >
           <span>
             <svg

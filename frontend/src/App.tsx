@@ -23,6 +23,11 @@ import MesLocations from "./_root/pages/MesLocations";
 import MesReservations from "./_root/pages/MesReservations";
 import ProtectedRoute from "./_auth/ProtectedRoute";
 
+import Profile from "./_root/pages/profile";
+
+
+
+
 function App() {
   return (
     <AuthProvider>
@@ -62,12 +67,17 @@ function App() {
                     {/* private routes */}
                     <Route element={<ProtectedRoute />}>
                       <Route path="/commande" element={<PageCommande />} />
+
                       <Route path="/location" element={<PageLocation />} />
                       <Route path="/mes-commandes" element={<MesCommandes />} />
                       <Route path="/mes-locations" element={<MesLocations />} />
                       <Route
-                        path="mes-reservations"
+                        path="/mes-reservations"
                         element={<MesReservations />}
+                      />
+                      <Route
+                        path="/profile"
+                        element={<Profile/>}
                       />
                     </Route>
                   </Route>

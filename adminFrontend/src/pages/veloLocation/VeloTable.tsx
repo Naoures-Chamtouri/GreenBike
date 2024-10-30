@@ -3,34 +3,51 @@ import { Package } from '../../types/package';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SupprimeModal from './SupprimeModal';
+import { Box, CircularProgress } from '@mui/material';
 
 const VeloTable = ({ searchTerm }) => {
 
    const [open, setOpen] = useState(false);
+   const [veloId,setVeloId]=useState(null);
 
-   const handleOpen = () => setOpen(true);
+   const handleOpen = (id) =>{
+    setVeloId(id)
+     setOpen(true)};
 
    const handleClose = () => setOpen(false);
 
   const [velos, setVelos] = useState([]);
+     const [loading, setLoading] = useState(true);
    const navigate = useNavigate();
 
    const handleVoirVelo = (id, velo) => {
      navigate(`/LocationVelos/Velos/${id}`, { state: { velo } });
    };
-
+  
   useEffect(() => {
     axios
       .get('http://localhost:4000/admin/veloLocations')
       .then((response) => {
         setVelos(response.data.data);
         console.log(response.data.data);
+         setLoading(false);
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des vélos:', error);
       });
   }, []);
-
+if (loading) {
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
+      <CircularProgress color="success" />
+    </Box>
+  );
+}
   const filteredVelos = velos.filter((velo) => {
     return (
       velo.velo.marque.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -129,7 +146,7 @@ const VeloTable = ({ searchTerm }) => {
                     </button>
                     <button
                       className="hover:text-green-600"
-                      onClick={handleOpen}
+                      onClick={()=>{handleOpen(velo._id)}}
                     >
                       <svg
                         className="fill-current"
@@ -157,13 +174,15 @@ const VeloTable = ({ searchTerm }) => {
                         />
                       </svg>
                     </button>
-                    <SupprimeModal
-                      open={open}
-                      handleClose={handleClose}
-                      veloId={velo._id}
-                    />
                   </div>
                 </td>
+                <SupprimeModal
+                  open={open}
+                  handleClose={handleClose}
+                  veloId={veloId}
+                  velos={velos}
+                  setVelos={setVelos}
+                />
               </tr>
             ))}
           </tbody>

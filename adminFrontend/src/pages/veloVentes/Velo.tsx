@@ -1,18 +1,26 @@
-import { Link } from "react-router-dom";
-import VeloTable from "./VeloTable";
-import { TextField, InputAdornment } from '@mui/material';
+import { Link } from 'react-router-dom';
+import VeloTable from './VeloTable';
+import {
+  TextField,
+  InputAdornment,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from "react";
+import { useState } from 'react';
 
+function Velos() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showOutOfStock, setShowOutOfStock] = useState(false); // État pour la checkbox
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
+  const handleCheckboxChange = (event) => {
+    setShowOutOfStock(event.target.checked);
+  };
 
-function Velos(){
-   const [searchTerm, setSearchTerm] = useState(''); 
-
-   const handleSearchChange = (event) => {
-     setSearchTerm(event.target.value); 
-   };
   return (
     <div>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -31,6 +39,7 @@ function Velos(){
           </ol>
         </nav>
       </div>
+
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <TextField
           variant="outlined"
@@ -47,7 +56,7 @@ function Velos(){
                 borderRadius: '30px',
               },
               '&:hover fieldset': {
-                borderColor: 't#16a34a',
+                borderColor: '#16a34a',
               },
               '&.Mui-focused fieldset': {
                 borderColor: '#16a34a',
@@ -57,54 +66,75 @@ function Velos(){
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: '#16a34a' }} />{' '}
-                {/* Green search icon */}
+                <SearchIcon sx={{ color: '#16a34a' }} />
               </InputAdornment>
             ),
-            style: { color: '#9CA3AF' }, // Placeholder and text color
+            style: { color: '#9CA3AF' },
           }}
         />
-        <Link
-          to="/VenteVelos/Velos/ajouter"
-          className="inline-flex items-center bg-white justify-center gap-2.5 rounded-md border border-green-600 py-2 px-4 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
-        >
-          <span>
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 30 25"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+
+        <div>
+         
+            <FormControlLabel
+            className='mb-7'
+              control={
+                <Checkbox
+                  checked={showOutOfStock}
+                  onChange={handleCheckboxChange}
+                  sx={{
+                    color: '#16a34a',
+                    '&.Mui-checked': {
+                      color: '#16a34a',
+                    },
+                  }}
+                />
+              }
+              label="en rupture de stock"
+            />
+        
+          <Link
+            to="/VenteVelos/Velos/ajouter"
+            className="inline-flex items-center bg-white justify-center gap-2.5 rounded-md border border-green-600 py-2 px-4 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"
+          >
+            <span>
               <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
+                width="30"
+                height="30"
+                viewBox="0 0 30 25"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"
-                  stroke="#16a34a"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8"
-                  stroke="#16a34a"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
+                <svg
+                  width="24px"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"
+                    stroke="#16a34a"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8"
+                    stroke="#16a34a"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </svg>
-            </svg>
-          </span>
-          Ajouter Velo
-        </Link>
+            </span>
+            Ajouter Velo
+          </Link>
+        </div>
       </div>
-      <VeloTable searchTerm={searchTerm} />
-     
+
+      {/* Passer showOutOfStock et searchTerm en tant que props */}
+      <VeloTable searchTerm={searchTerm} showOutOfStock={showOutOfStock} />
     </div>
   );
 }
 
-export default Velos
+export default Velos;

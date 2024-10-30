@@ -33,7 +33,7 @@
 /* third-party libraries CSS */
 
 .tableCheckbox:checked ~ div span {
-  @apply opacity-100;
+  /* @apply opacity-100; */
 }
 .tableCheckbox:checked ~ div {
   @apply bg-primary border-primary;
@@ -189,7 +189,7 @@ span.flatpickr-weekday,
 }
 
 .taskCheckbox:checked ~ .box span {
-  @apply opacity-100;
+  /* @apply opacity-100; */
 }
 .taskCheckbox:checked ~ p {
   @apply line-through;

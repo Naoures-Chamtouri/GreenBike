@@ -38,22 +38,23 @@ const createVeloVente = async (req, res) => {
       selle,
       frein,
       ownerLicense,
-      marque,newMarque,selectedCouleurs
+      marque,
+      newMarque,
+      selectedCouleurs,
     } = req.body;
 
     const images = await Promise.all(
       ownerLicense.map(async (imageData) => {
         const newImage = new Image({
-          name:imageData.name,
-          path:imageData.photo
+          name: imageData.name,
+          path: imageData.photo,
         });
         return await newImage.save();
       })
     );
-     const newRoue = await Roue.create(roue);
-     const newCadre = await Cadre.create(cadre);
-   
-    
+    const newRoue = await Roue.create(roue);
+    const newCadre = await Cadre.create(cadre);
+
     const newVelo = await Velo.create({
       categorie: categorie._id,
       type: type || null,
@@ -63,7 +64,7 @@ const createVeloVente = async (req, res) => {
       taille,
       description,
       suspension,
-      vitesse,
+      nbrVitesse: vitesse,
       roue: newRoue._id,
       cadre: newCadre._id,
       selle: selle,
@@ -74,21 +75,19 @@ const createVeloVente = async (req, res) => {
     });
     if (newMarque) {
       const newMarque = await Marque.create({ nom: newMarque });
-      newVelo.marque=newMarque;
-      await newVelo.save()
+      newVelo.marque = newMarque;
+      await newVelo.save();
     } else {
-      newVelo.marque=marque;
-      await newVelo.save()
-      }
+      newVelo.marque = marque;
+      await newVelo.save();
+    }
 
+    if (moteur.type) {
+      const newMoteur = await Moteur.create(moteur);
+      newVelo.moteur = newMoteur;
+      await newVelo.save();
+    }
 
-      if (moteur.type) {
-        const newMoteur = await Moteur.create(moteur);
-        newVelo.moteur=newMoteur;
-        await newVelo.save()  
-         }
-
-  
     const newVeloVente = await VeloVente.create({
       velo: newVelo,
       stock,
@@ -101,7 +100,7 @@ const createVeloVente = async (req, res) => {
       data: newVeloVente,
     });
   } catch (error) {
-   console.log(error)
+    console.log(error);
     return res.status(500).json({
       status: "error",
       message: error.message,
@@ -133,12 +132,12 @@ const getAllVeloVentes = async (req, res) => {
       })
       .populate({ path: "avis", model: Avis });
 
-    return  res.status(200).json({
+    return res.status(200).json({
       status: httpStatus.SUCCESS,
       data: veloVentes,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       status: httpStatus.ERROR,
       message: error.message,
@@ -223,10 +222,10 @@ const updateVeloVente = async (req, res) => {
       selectedCouleurs,
       ownerLicense,
     } = req.body;
-   console.log(categorie)
+    console.log(categorie);
     // Recherche du vélo en vente avec son sous-document "velo"
     const veloVente = await VeloVente.findById(id).populate("velo");
-  
+
     if (!veloVente) {
       return res.status(404).json({
         status: httpStatus.NOT_FOUND,
@@ -236,14 +235,14 @@ const updateVeloVente = async (req, res) => {
 
     // Mise à jour des champs du sous-document "v
     if (categorie) veloVente.velo.categorie = categorie;
-    if (type&&(categorie.nom!="Vélos Electriques ")) veloVente.velo.type = type;
+    if (type != "undefined") veloVente.velo.type = type;
     if (modele) veloVente.velo.modele = modele;
     if (genre) veloVente.velo.genre = genre;
     if (age) veloVente.velo.categorieAge = age;
     if (taille) veloVente.velo.taille = taille;
     if (description) veloVente.velo.description = description;
     if (suspension !== undefined) veloVente.velo.suspension = suspension;
-    if (vitesse) veloVente.velo.vitesse = vitesse;
+    if (vitesse) veloVente.velo.nbrVitesse = vitesse;
     if (isPliable !== undefined) veloVente.velo.pliable = isPliable;
     if (selle) veloVente.velo.selle = selle;
     if (frein) veloVente.velo.frein = frein;
@@ -309,7 +308,7 @@ const updateVeloVente = async (req, res) => {
     if (prix) veloVente.prix = prix;
     if (duree) veloVente.duréeUtilisation = duree;
     if (stock) veloVente.stock = stock;
-   
+
     await veloVente.save();
 
     return res.status(200).json({
@@ -325,28 +324,34 @@ const updateVeloVente = async (req, res) => {
   }
 };
 
-const deleteVeloVente=async(req,res)=>{
-  try{
-     const id=req.params.id;
-     const result=await VeloVente.deleteOne({_id:id});
-     if(result){
-       return res.status(200).json({
-         status: httpStatus.SUCCESS,
-         message: "delete avec success",
-       });
-     }
-     return res.status(400).json({
-       status: httpStatus.ERROR,
-       message:"erreur dans le delete"
-     });
-     
-  }catch(error){
-     console.log(error);
-     return res.status(500).json({
-       status: httpStatus.ERROR,
-       message: error.message,
-     });
+const deleteVeloVente = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const result = await VeloVente.deleteOne({ _id: id });
+    if (result) {
+      return res.status(200).json({
+        status: httpStatus.SUCCESS,
+        message: "delete avec success",
+      });
+    }
+    return res.status(400).json({
+      status: httpStatus.ERROR,
+      message: "erreur dans le delete",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: httpStatus.ERROR,
+      message: error.message,
+    });
   }
-}
+};
 
-export default { createVeloVente,getAllVeloVentes,getVeloVenteById ,updateVeloVente,deleteVeloVente};
+export default {
+  createVeloVente,
+  getAllVeloVentes,
+  getVeloVenteById,
+  updateVeloVente,
+  deleteVeloVente,
+};

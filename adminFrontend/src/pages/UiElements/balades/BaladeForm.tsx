@@ -11,7 +11,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -26,6 +26,7 @@ import axios from 'axios';
 function BaladeForm() {
   const { types } = useVeloContext();
 
+  const navigate=useNavigate()
   const [startPlace, setStartPlace] = useState([]);
   const [endPlace, setEndPlace] = useState([]);
   const [distance, setDistance] = useState(0);
@@ -100,7 +101,9 @@ function BaladeForm() {
       setShowPopover(true);
       setTimeout(() => {
         setShowPopover(false);
+        navigate('/ReservationBalades/Balades');
       }, 2000);
+      
     } catch (error) {
       console.error('Erreur lors de la création:', error);
     }

@@ -1,6 +1,8 @@
 import { AiOutlineDelete, AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useVeloVenteCart } from "@/context/VeloVenteCartContext";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
 
 const ShoppingCartItem = ({ id, initialQuantity }) => {
   const {
@@ -10,11 +12,10 @@ const ShoppingCartItem = ({ id, initialQuantity }) => {
     getItemQuantity,
   } = useVeloVenteCart();
   const quantity = getItemQuantity(id);
+  const [loading, setLoading] = useState(true);
 
   const {
     data: item,
-    error,
-    isLoading,
   } = useQuery({
     queryKey: ["item", id],
     queryFn: async () => {
@@ -25,14 +26,23 @@ const ShoppingCartItem = ({ id, initialQuantity }) => {
         throw new Error("Failed to fetch velo");
       }
       const result = await response.json();
+      setLoading(false)
       return result.data;
     },
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  if (!item || !item.velo) return <p>No data available</p>;
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress color="success" />
+      </Box>
+    );
+  }
 
   return (
     <div className="flex items-center p-4 border-b border-gray-200 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">

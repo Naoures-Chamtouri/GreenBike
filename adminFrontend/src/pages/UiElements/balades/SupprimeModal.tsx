@@ -2,13 +2,14 @@ import React from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
 import axios from 'axios';
 
-const SupprimeModal = ({ open, handleClose, baladeId }) => {
+const SupprimeModal = ({ open, handleClose, baladeId,balades,setBalades }) => {
+  console.log(baladeId)
  
   const handleDelete = async () => {
     try {
       
       await axios.delete(`http://localhost:4000/admin/balades/${baladeId}`);
-     
+      setBalades(balades.filter((balade) => balade._id !== baladeId));
       handleClose();
    
       alert('Balade supprimée avec succès');
@@ -21,6 +22,7 @@ const SupprimeModal = ({ open, handleClose, baladeId }) => {
 
   return (
     <Modal
+      key={baladeId}
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-title"
@@ -40,7 +42,7 @@ const SupprimeModal = ({ open, handleClose, baladeId }) => {
         }}
       >
         <Typography id="modal-title" variant="h6" component="h2">
-          Êtes-vous sûr de vouloir supprimer cette balade ?
+          Êtes-vous sûr de vouloir supprimer cette balade ? {baladeId}
         </Typography>
         <Typography id="modal-description" sx={{ mt: 2 }}>
           Cette action est irréversible.

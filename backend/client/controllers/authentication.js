@@ -39,7 +39,7 @@ const login = async (req, res) => {
 
       if (isPasswordValid) {
         generateToken(res, client._id);
-        res.status(200).json({
+       return res.status(200).json({
           status: httpStatus.SUCCESS,
           data: clientObj,
         });

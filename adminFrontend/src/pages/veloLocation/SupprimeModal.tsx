@@ -2,12 +2,13 @@ import React from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
 import axios from 'axios';
 
-const SupprimeModal = ({ open, handleClose, veloId }) => {
+const SupprimeModal = ({ open, handleClose, veloId,velos,setVelos }) => {
  
   const handleDelete = async () => {
     try {
       
       await axios.delete(`http://localhost:4000/admin/veloLocations/${veloId}`);
+       setVelos(velos.filter((velo) => velo._id !== veloId));
      
       handleClose();
    
@@ -21,6 +22,7 @@ const SupprimeModal = ({ open, handleClose, veloId }) => {
 
   return (
     <Modal
+    key={veloId}
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-title"
@@ -40,7 +42,7 @@ const SupprimeModal = ({ open, handleClose, veloId }) => {
         }}
       >
         <Typography id="modal-title" variant="h6" component="h2">
-          Êtes-vous sûr de vouloir supprimer cette vélo ?
+          Êtes-vous sûr de vouloir supprimer cette vélo ? 
         </Typography>
         <Typography id="modal-description" sx={{ mt: 2 }}>
           Cette action est irréversible.

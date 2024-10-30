@@ -282,7 +282,7 @@ const deleteBaladeById = async (req, res) => {
       }
     }
 
-    // Supprimer la balade après avoir envoyé les e-mails
+     await Reservation.deleteMany({ balade: id });
     await Balade.findByIdAndDelete(id);
 
     return res.status(200).json({

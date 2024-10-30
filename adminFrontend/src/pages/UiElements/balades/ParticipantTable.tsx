@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
+  Box,
   Checkbox,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -9,10 +11,8 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
 
 const ParticipantTable = ({
   searchTerm,
@@ -24,7 +24,7 @@ const ParticipantTable = ({
   const [reservations, setReservations] = useState([]);
   const [update, setUpdate] = useState(Array(0).fill(false));
   const [statusReservation, setStatutReservation] = useState('payée');
-  
+     const [loading, setLoading] = useState(true);
   const statusOptions = ['payée', 'annulée'];
 
   const isSameDay = (date1, date2) => {
@@ -37,33 +37,7 @@ const ParticipantTable = ({
     );
   };
 
-  const handleUpdate = async (participantId, index) => {
-    try {
-      const updatedData = {
-        statutCommande: statusReservation || reservations[index].statutReservation,
-       
-      };
-      console.log(updatedData);
-      const response = await axios.put(
-        `http://localhost:4000/admin/commandes/${commandeId}`,
-        updatedData,
-      );
-
-      const updatedReservations = [...reservations];
-      updatedReservations[index] = response.data.data;
-      setReservations(updatedReservations);
-
-      setStatutReservation('');
-     
-      setUpdate((prev) => {
-        const newUpdate = [...prev];
-        newUpdate[index] = false;
-        return newUpdate;
-      });
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de la reservation:', error);
-    }
-  };
+  
 
   useEffect(() => {
     axios
@@ -71,13 +45,25 @@ const ParticipantTable = ({
       .then((response) => {
           console.log(response.data.data)
                setReservations(response.data.data);
+                setLoading(false);
         setUpdate(Array(response.data.data.length).fill(false));
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des reservations:', error);
       });
   }, [setReservations]);
-
+ if (loading) {
+   return (
+     <Box
+       display="flex"
+       justifyContent="center"
+       alignItems="center"
+       minHeight="100vh"
+     >
+       <CircularProgress color="success" />
+     </Box>
+   );
+ }
 
     const filteredReservations = reservations.filter((reservation) => {
      return (

@@ -1,12 +1,24 @@
 import { useFilterVenteContext } from "@/context/FiltersVenteContext";
 import VeloVenteCard from "./VeloVenteCard";
-import Loader from "../shared/loader";
-import { useState } from "react";
 
-function VeloVenteContentData({ velos, selectedCategory }) {
-   const [loading,setLoading]=useState(true)
-  const{filteredVelos}=useFilterVenteContext()
- 
+import { Box,CircularProgress } from '@mui/material';
+
+function VeloVenteContentData() {
+  
+  const{filteredVelos,loading}=useFilterVenteContext()
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        marginLeft="70vh"
+        marginBottom="70vh"
+      >
+        <CircularProgress color="success" />
+      </Box>
+    );
+  }
 
 
   return (

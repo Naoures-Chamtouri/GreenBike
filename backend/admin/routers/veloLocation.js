@@ -8,5 +8,6 @@ router.post("/", upload.single("ownerLicense"),veloLocationController.createVelo
 router.get("/",veloLocationController.getAllVeloLocations);
 router.get("/:id",veloLocationController.getVeloLocationById);
 router.put("/:id", upload.single("ownerLicense"),veloLocationController.updateVeloLocation);
+router.delete("/:id",veloLocationController.deleteVeloLocation);
 
 export default router;

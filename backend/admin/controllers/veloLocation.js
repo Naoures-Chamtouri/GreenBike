@@ -1,5 +1,5 @@
 import VeloLocation from "../../models/veloLocation.js";
-import Velo from "../../models/velo.js"
+import Velo from "../../models/velo.js";
 import Image from "../../models/image.js";
 import httpStatus from "../../utils/httpStatus.js";
 import Avis from "../../models/avis.js";
@@ -26,9 +26,9 @@ const createVeloLocation = async (req, res) => {
       age,
       taille,
       description,
-      
+
       prix,
-     
+
       stock,
       isPliable,
       suspension,
@@ -42,7 +42,7 @@ const createVeloLocation = async (req, res) => {
       marque,
       newMarque,
       adresseDisponible,
-      selectedCouleurs
+      selectedCouleurs,
     } = req.body;
 
     const images = await Promise.all(
@@ -66,15 +66,14 @@ const createVeloLocation = async (req, res) => {
       taille,
       description,
       suspension,
-      vitesse,
+      nbrVitesse: vitesse,
       roue: newRoue._id,
       cadre: newCadre._id,
       selle: selle,
       frein,
       pliable: isPliable,
       images: images.map((image) => image._id),
-      couleur:selectedCouleurs
-    
+      couleur: selectedCouleurs,
     });
     if (newMarque) {
       const newMarque = await Marque.create({ nom: newMarque });
@@ -207,9 +206,9 @@ const updateVeloLocation = async (req, res) => {
       age,
       taille,
       description,
-     
+
       prix,
-     adresseDisponible,
+      adresseDisponible,
       stock,
       isPliable,
       suspension,
@@ -237,15 +236,14 @@ const updateVeloLocation = async (req, res) => {
 
     // Mise à jour des champs du sous-document "velo"
     if (categorie) veloLocation.velo.categorie = categorie._id;
-    if (type && categorie.nom != "Vélos Electriques ")
-      veloLocation.velo.type = type;
+    if (type != "undefined") veloLocation.velo.type = type;
     if (modele) veloLocation.velo.modele = modele;
     if (genre) veloLocation.velo.genre = genre;
     if (age) veloLocation.velo.categorieAge = age;
     if (taille) veloLocation.velo.taille = taille;
     if (description) veloLocation.velo.description = description;
     if (suspension !== undefined) veloLocation.velo.suspension = suspension;
-    if (vitesse) veloLocation.velo.vitesse = vitesse;
+    if (vitesse) veloLocation.velo.nbrVitesse = vitesse;
     if (isPliable !== undefined) veloLocation.velo.pliable = isPliable;
     if (selle) veloLocation.velo.selle = selle;
     if (frein) veloLocation.velo.frein = frein;
@@ -265,7 +263,6 @@ const updateVeloLocation = async (req, res) => {
       veloLocation.velo.images = images.map((image) => image._id);
     }
 
- 
     if (roue) {
       if (veloLocation.velo.roue) {
         await Roue.findByIdAndUpdate(veloLocation.velo.roue, roue, {
@@ -273,7 +270,7 @@ const updateVeloLocation = async (req, res) => {
         });
       } else {
         const newRoue = await Roue.create(roue);
-       veloLocation.velo.roue = newRoue._id;
+        veloLocation.velo.roue = newRoue._id;
       }
     }
 
@@ -296,7 +293,7 @@ const updateVeloLocation = async (req, res) => {
         });
       } else {
         const newMoteur = await Moteur.create(moteur);
-       veloLocation.velo.moteur = newMoteur._id;
+        veloLocation.velo.moteur = newMoteur._id;
       }
     }
 
@@ -308,8 +305,6 @@ const updateVeloLocation = async (req, res) => {
       veloLocation.velo.marque = marque;
     }
 
-    
-  
     if (prix) veloLocation.prixHeure = prix;
     if (adresseDisponible) veloLocation.adresseDisponible = adresseDisponible;
     if (stock) veloLocation.stock = stock;
@@ -329,4 +324,33 @@ const updateVeloLocation = async (req, res) => {
   }
 };
 
-export default { createVeloLocation,getAllVeloLocations,getVeloLocationById ,updateVeloLocation};
+const deleteVeloLocation = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await VeloLocation.deleteOne({ _id: id });
+    if (result) {
+      return res.status(200).json({
+        status: httpStatus.SUCCESS,
+        message: "delete avec success",
+      });
+    }
+    return res.status(400).json({
+      status: httpStatus.ERROR,
+      message: "erreur dans le delete",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: httpStatus.ERROR,
+      message: error.message,
+    });
+  }
+};
+
+export default {
+  createVeloLocation,
+  getAllVeloLocations,
+  getVeloLocationById,
+  updateVeloLocation,
+  deleteVeloLocation,
+};

@@ -6,8 +6,10 @@ import { useVeloVenteCart } from "@/context/VeloVenteCartContext";
 import ResumePanier from "@/components/veloVente/ResumePanier";
 import { z } from "zod";
 import { Button } from "@mui/material";
-import { Person } from "@mui/icons-material";
+
 import { useNavigate } from "react-router-dom";
+/* import StripeCheckout from "@/components/payement/StripeCheckout"; */
+
 
 
 // Définir le schéma de validation avec Zod
@@ -290,8 +292,6 @@ const PageCommande = () => {
             </p>
           </div>
         </div>
-
-    
       </form>
 
       <div>
@@ -305,6 +305,7 @@ const PageCommande = () => {
           >
             Finaliser la commande
           </Button>
+        {/*   <StripeCheckout amount={10} /> */}
         </div>
       </div>
       {showPopover && (

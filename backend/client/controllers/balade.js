@@ -39,49 +39,45 @@ const getBaladebyId=async(req,res)=>{
 }
 
  const filterBalades = async (req, res) => {
-   const { lieu, niveau, min, max } = req.body;
+   const { niveau, min, max } = req.body;
   
 
    try {
      const filters = {};
 
-     
-     if (lieu) {
-    
-       filters.$or = [
-         { "adresseDepart.location": { $regex: lieu, $options: "i" } },
-         { "adresseArrivée.location": { $regex: lieu, $options: "i" } },
-       ];
-     }
-
+     // Appliquer le filtre de difficulté si présent
      if (niveau && niveau.length > 0) {
-       filters.Difficulté = { $in: niveau }; 
+       filters.Difficulté = { $in: niveau };
      }
 
+     // Appliquer le filtre de durée si présent
      if (min || max) {
        filters.duree = {};
        if (min) {
-         filters.duree.$gte = Number(min); 
+         filters.duree.$gte = Number(min);
        }
        if (max) {
-         filters.duree.$lte = Number(max); 
+         filters.duree.$lte = Number(max);
        }
      }
-     
 
-     const balades = await Balade.find(filters)
+     // Récupérer les balades qui correspondent aux autres filtres
+     let balades = await Balade.find(filters)
        .populate({ path: "adresseDepart", model: AdresseBalade })
        .populate({ path: "adresseArrivée", model: AdresseBalade })
        .populate({ path: "images", model: Image });
 
+     // Appliquer le filtre de lieu sur les résultats obtenus
+    
+
      return res.status(200).json({
-       status:httpStatus.SUCCESS,
+       status: httpStatus.SUCCESS,
        data: balades,
      });
    } catch (error) {
      console.error(error);
      return res.status(500).json({
-       status:httpStatus.ERROR,
+       status: httpStatus.ERROR,
        message: "Une erreur est survenue lors de la récupération des balades.",
      });
    }

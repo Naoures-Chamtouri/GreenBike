@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import axios from "axios";
@@ -18,6 +18,7 @@ function LocationTable({
   const [locations, setLocations] = useState([]);
   const [update, setUpdate] = useState(Array(0).fill(false));
   const [statusLocation, setStatutLocation] = useState('');
+     const [loading, setLoading] = useState(true);
 
 
  
@@ -65,19 +66,32 @@ function LocationTable({
     }
   };
 
+
   useEffect(() => {
     axios
       .get('http://localhost:4000/admin/locations')
       .then((response) => {
         setLocations(response.data.data);
         setUpdate(Array(response.data.data.length).fill(false));
+         setLoading(false);
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des locations:', error);
       });
   }, [setLocations]);
 
-
+    if (loading) {
+      return (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="100vh"
+        >
+          <CircularProgress color="success" />
+        </Box>
+      );
+    }
   const filteredLocations = locations.filter((location) => {
     return (
       (!searchTerm ||

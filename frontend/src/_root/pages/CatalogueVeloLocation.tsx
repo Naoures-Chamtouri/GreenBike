@@ -16,24 +16,7 @@ import VeloLocationContentData from "@/components/VeloLouer/VeloLocationContentD
 
 function CatalogueVeloVente() {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { data: velosLouer } = useQuery({
-    queryKey: ["velos"],
-    queryFn: async () => {
-      const response = await fetch(
-        "http://localhost:4000/client/veloLocations"
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch velos");
-      }
-
-      const result = await response.json();
-      console.log(result);
-      return result.data;
-    },
-    staleTime: 1 * 60 * 1000,
-    placeholderData: keepPreviousData,
-  });
+ 
 
   return (
     <div>
@@ -72,8 +55,7 @@ function CatalogueVeloVente() {
       <div className="flex min-h-lvh  ">
         <Filters selectedCategory={selectedCategory} />
         <VeloLocationContentData
-          velos={velosLouer}
-          selectedCategory={selectedCategory}
+         
         />
       </div>
     </div>

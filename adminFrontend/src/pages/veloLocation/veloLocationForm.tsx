@@ -212,9 +212,7 @@ function VeloLocationForm() {
         setAge('');
         setTaille('');
         setDescription('');
-        setEtat('');
         setPrix(0);
-        setDuree('');
         setStock(0);
         setPliable(false);
         setSuspension('');

@@ -35,6 +35,9 @@ function Topbar() {
   const handleCommandeClick=()=>{
     navigate('/mes-commandes');
   }
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
   const handleLocationClick = () => {
     navigate("/mes-locations");
   };
@@ -100,8 +103,17 @@ function Topbar() {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <Avatar sx={{ width: 45, height: 45 }}>
-                  {user ? user.initials : "nn"}
+                <Avatar
+                  sx={{ width: 45, height: 45 }}
+                  src={
+                    user && user.utilisateur && user.utilisateur.image?.path
+                      ? user.utilisateur.image?.path
+                      : undefined
+                  }
+                  alt={user ? `${user.nomUtilisateur} avatar` : "avatar"}
+                >
+                
+                  {user && user.initials ? user.initials : "!"}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -159,7 +171,7 @@ function Topbar() {
                   </Typography>
                 </MenuItem>
                 <Divider sx={{ my: 1 }} />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleProfileClick}>
                   <Typography variant="body2" color="text.primary">
                     Mon Profil
                   </Typography>
@@ -242,9 +254,6 @@ function Topbar() {
             </a>
             <a href="/balades" className="text-black hover:text-gray-500">
               Balades
-            </a>
-            <a href="#" className="text-black hover:text-gray-500">
-              Contact
             </a>
           </div>
         </div>

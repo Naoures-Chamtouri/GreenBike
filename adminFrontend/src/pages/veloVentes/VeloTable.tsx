@@ -1,61 +1,71 @@
 import { useEffect, useState } from 'react';
-import { Package } from '../../types/package';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import SupprimeModal from './SupprimeModal';
+import { Box, CircularProgress } from '@mui/material';
+
+const VeloTable = ({ searchTerm,showOutOfStock }) => {
+  const [open, setOpen] = useState(false);
+  const [velos,setVelos]=useState([]);
+  const [veloId,setVeloId]=useState(null);
+
+  const handleOpen = (id) => {setVeloId(id) 
+    setOpen(true)};
+
+  const handleClose = () => setOpen(false);
+
+  const navigate = useNavigate();
+     const [loading, setLoading] = useState(true);
+
+  const handleVoirVelo = (id, velo) => {
+    navigate(`/VenteVelos/Velos/${id}`, { state: { velo } });
+  };
 
 
+   useEffect(() => {
+     axios
+       .get('http://localhost:4000/admin/veloVentes')
+       .then((response) => {
+         setVelos(response.data.data);
+        
+         setLoading(false);
+       })
+       .catch((error) => {
+         console.error('Erreur lors de la récupération des velos:', error);
+       });
+   }, [setVelos]);
 
-const VeloTable = ({searchTerm}) => {
-   const [open, setOpen] = useState(false);
-
-   const handleOpen = () => setOpen(true);
-
-   const handleClose = () => setOpen(false);
-
-
-  
-    const navigate=useNavigate()
-
-    const handleVoirVelo=(id,velo)=>{
-      navigate(`/VenteVelos/Velos/${id}`, {state: {velo}})
-
-    }
-
-     const { data: velos } = useQuery({
-       queryKey: ['velosVente'],
-       queryFn: async () => {
-         const response = await fetch(
-           'http://localhost:4000/admin/veloVentes',
-         );
-
-         if (!response.ok) {
-           throw new Error('Failed to fetch velos');
-         }
-         const result = await response.json();
-         console.log(result.data);
-         return result.data;
-       },
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress color="success" />
+      </Box>
+    );
+  }
+const filteredVelos = velos
+  ? velos.filter((velo) => {
       
-       placeholderData: keepPreviousData, 
-     });
+      const matchesSearch =
+        velo.velo.marque.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        velo.velo.modele.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        velo.velo.categorie.nom
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        velo.prix.toString().includes(searchTerm) ||
+        velo.stock.toString().includes(searchTerm);
 
+   
+      const matchesStock = showOutOfStock ? velo.stock === 0 : velo.stock>0;
 
-     const filteredVelos = velos?velos.filter((velo) => {
-       return (
-         velo.velo.marque.nom
-           .toLowerCase()
-           .includes(searchTerm.toLowerCase()) ||
-         velo.velo.modele.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         velo.velo.categorie.nom
-           .toLowerCase()
-           .includes(searchTerm.toLowerCase()) ||
-         velo.prix.toString().includes(searchTerm) ||
-         velo.stock.toString().includes(searchTerm)
-       );
-     }):[];
-
+   
+      return matchesSearch && matchesStock;
+    })
+  : [];
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -142,7 +152,7 @@ const VeloTable = ({searchTerm}) => {
                     </button>
                     <button
                       className="hover:text-green-600"
-                      onClick={handleOpen}
+                      onClick={()=>{handleOpen(velo._id)}}
                     >
                       <svg
                         className="fill-current"
@@ -170,13 +180,15 @@ const VeloTable = ({searchTerm}) => {
                         />
                       </svg>
                     </button>
-                    <SupprimeModal
-                      open={open}
-                      handleClose={handleClose}
-                      veloId={velo._id}
-                    />
                   </div>
                 </td>
+                <SupprimeModal
+                  open={open}
+                  handleClose={handleClose}
+                  veloId={veloId}
+                  velos={velos}
+                  setVelos={setVelos}
+                />
               </tr>
             ))}
           </tbody>

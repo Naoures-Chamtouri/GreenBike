@@ -15,6 +15,7 @@ const FilterVenteProvider = ({ children }) => {
   const [selectedMarques, setSelectedMarques] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchFilteredVelos = async () => {
     const response = await fetch(
@@ -36,6 +37,7 @@ const FilterVenteProvider = ({ children }) => {
       throw new Error("Failed to fetch filtered velos");
     }
     const result = await response.json();
+    setLoading(false)
     return result.data;
   };
 
@@ -92,6 +94,7 @@ const FilterVenteProvider = ({ children }) => {
         filteredVelos,
         isLoading,
         error,
+        loading
       }}
     >
       {children}

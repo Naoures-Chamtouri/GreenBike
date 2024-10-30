@@ -22,6 +22,8 @@ import  baladeRouter from "./routers/balade.js";
 import reservationRouter from "./routers/reservation.js"
 import locationRouter from "./routers/location.js"
 import adresseLocalRouter from "./routers/adresseLocal.js"
+import authRouter from "./routers/authentication.js";
+import profileRouter from "./routers/profile.js"
 dotenv.config();
 const port = process.env.PORT;
 const app = express();
@@ -32,7 +34,7 @@ const app = express();
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); */
-
+app.use("/admin",authRouter)
 app.use("/admin/adresses",adresseRouter);
 app.use("/admin/couleurs",couleurRouter);
 app.use("/admin/categories",categorieVeloRouter);
@@ -53,6 +55,7 @@ app.use("/admin/balades", baladeRouter);
 app.use("/admin/reservations",reservationRouter);
 app.use("/admin/locations",locationRouter);
 app.use("/admin/adressesLocal",adresseLocalRouter);
+app.use("/admin/profile",profileRouter);
 
 
 export default app;

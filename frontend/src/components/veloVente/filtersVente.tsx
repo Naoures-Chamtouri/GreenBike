@@ -130,7 +130,7 @@ const {
       <div className="prix-filtre ">
         <Accordion type="single" defaultValue="item-1" collapsible>
           <AccordionItem value="item-1">
-            <AccordionTrigger className="text-lg">Par Prix</AccordionTrigger>
+            <AccordionTrigger className="text-lg ml-4">Par Prix</AccordionTrigger>
             <AccordionContent>
               <div className="mt-2">
                 <button

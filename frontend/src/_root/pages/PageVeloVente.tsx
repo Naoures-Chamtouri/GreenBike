@@ -10,11 +10,9 @@ import Carousel from "@/components/ui/carousel";
 import { useLocation } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 import NumberStepper from "@/components/ui/numberStepper";
-import { Modal, Box, Typography, Snackbar, Alert } from "@mui/material";
 import AvisSection from "@/components/used/avisSection";
 import { useVeloVenteCart } from "@/context/VeloVenteCartContext";
 import ShoppingCart from "@/components/veloVente/ShoppingCart";
-import CartAlert from "@/functions/CartAlert";
 import { useState } from "react";
 import CaracteristicModal from "@/components/shared/CaracteristicModal";
 

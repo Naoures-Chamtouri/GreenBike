@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 
 
 function Home() {
- 
+
   return (
     <div className="">
       <div className=" top-home relative">

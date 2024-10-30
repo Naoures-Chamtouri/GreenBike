@@ -13,31 +13,43 @@ const FilterBaladeProvider = ({ children }) => {
   const [selectedLieu, setSelectedLieu] = useState("");
   const [selectedMin, setSelectedMin] = useState("");
    const [selectedMax, setSelectedMax] = useState("");
+   const [loading, setLoading] = useState(true);
 
-console.log(selectedNiveau)
-  const fetchFilteredBalades = async () => {
-    const response = await fetch(
-      "http://localhost:4000/client/balades/filter",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          lieu:selectedLieu,
-          niveau:selectedNiveau,
-          min:selectedMin,
-          max:selectedMax
-        }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch filtered balades");
-    }
-    const result = await response.json();
-    console.log(result.data);
-    return result.data;
-  };
+const fetchFilteredBalades = async () => {
+  const response = await fetch("http://localhost:4000/client/balades/filter", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      niveau: selectedNiveau,
+      min: selectedMin,
+      max: selectedMax,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch filtered balades");
+  }
+
+  const result = await response.json();
+
+  let balades = result.data;
+
+  // Filtrer par lieu si un lieu est sélectionné
+  if (selectedLieu) {
+    balades = balades.filter((balade) => {
+      const adresseDepart = balade.adresseDepart.nom?.toLowerCase() || "";
+      const adresseArrivée = balade.adresseArrivée.nom?.toLowerCase() || "";
+      return (
+        adresseDepart.includes(selectedLieu.toLowerCase()) ||
+        adresseArrivée.includes(selectedLieu.toLowerCase())
+      );
+    });
+  }
+   setLoading(false)
+  return balades;
+};
 
   const {
     data: filteredBalades,
@@ -49,7 +61,7 @@ console.log(selectedNiveau)
       selectedLieu,selectedMax,selectedMin,selectedNiveau
     ],
     queryFn: fetchFilteredBalades,
-    staleTime: 1 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
     placeholderData: [],
   });
 
@@ -85,6 +97,7 @@ console.log(selectedNiveau)
         filteredBalades,
         isLoading,
         error,
+        loading
       }}
     >
       <Backdrop

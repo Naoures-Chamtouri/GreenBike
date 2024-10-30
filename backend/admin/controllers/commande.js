@@ -7,206 +7,243 @@ import Type from "../../models/type.js";
 import CategorieVelo from "../../models/categorieVelo.js";
 import Marque from "../../models/marque.js";
 import Image from "../../models/image.js";
-import Client from "../../models/client.js"
+import Client from "../../models/client.js";
 import Ville from "../../models/ville.js";
 import District from "../../models/district.js";
 import Delegation from "../../models/delegation.js";
+import sendEmail from "../../utils/sendMail.js";
 
-
-const getAllCommandes=async(req,res)=>{
-    try{
-        const commandes = await Commande.find()
-          .populate({
-            path: "articles",
-            populate: {
-              path: "article",
-              populate: {
-                path: "velo",
-                populate: [
-                  {
-                    path: "type",
-                    model: Type,
-                  },
-                  { path: "categorie", model: CategorieVelo },
-                  { path: "marque", model: Marque },
-                  { path: "images", model: Image },
-                ],
+const getAllCommandes = async (req, res) => {
+  try {
+    const commandes = await Commande.find()
+      .populate({
+        path: "articles",
+        populate: {
+          path: "article",
+          populate: {
+            path: "velo",
+            populate: [
+              {
+                path: "type",
+                model: Type,
               },
-              model: VeloVente,
-            },
-            model: LignePanier,
-          })
-          .populate({
-            path: "adresseLivraison",
-            
-        populate:[
-          {path:"ville",model:Ville},
-          {path:"district",model:District},
-          {path:"delegation",model:Delegation}
+              { path: "categorie", model: CategorieVelo },
+              { path: "marque", model: Marque },
+              { path: "images", model: Image },
+            ],
+          },
+          model: VeloVente,
+        },
+        model: LignePanier,
+      })
+      .populate({
+        path: "adresseLivraison",
 
+        populate: [
+          { path: "ville", model: Ville },
+          { path: "district", model: District },
+          { path: "delegation", model: Delegation },
         ],
-            model: Adresse,
-          })
-          .populate({
-            path: "client",
-            model: Client,
-            select:
-              "utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone ",
-          });
-        if (commandes.length>0){
-            return res.status(200).json({status:httpStatus.SUCCESS,data:commandes});
-        
-        }
-        return res.status(404).json({status:httpStatus.NOT_FOUND,data:"Aucune commande"});
-    }catch(e){
-        console.log(e);
-        return res.status(500).json({status:httpStatus.BAD_REQUEST,message:e});
+        model: Adresse,
+      })
+      .populate({
+        path: "client",
+        model: Client,
+        select:
+          "utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone ",
+      });
+    if (commandes.length > 0) {
+      return res
+        .status(200)
+        .json({ status: httpStatus.SUCCESS, data: commandes });
     }
-}
+    return res
+      .status(404)
+      .json({ status: httpStatus.NOT_FOUND, data: "Aucune commande" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ status: httpStatus.BAD_REQUEST, message: e });
+  }
+};
 
-const getCommande=async(req,res)=>{
-    try{
-        const commandeId=req.params.commandeId;
-        const commandes = await Commande.findById({ commandeId })
-          .populate({
-            path: "articles",
-            populate: {
-              path: "article",
-              populate: {
-                path: "velo",
-                populate: [
-                  {
-                    path: "type",
-                    model: Type,
-                  },
-                  { path: "categorie", model: CategorieVelo },
-                  { path: "marque", model: Marque },
-                  { path: "images", model: Image },
-                ],
+const getCommande = async (req, res) => {
+  try {
+    const commandeId = req.params.commandeId;
+    const commandes = await Commande.findById(commandeId)
+      .populate({
+        path: "articles",
+        populate: {
+          path: "article",
+          populate: {
+            path: "velo",
+            populate: [
+              {
+                path: "type",
+                model: Type,
               },
-              model: VeloVente,
-            },
-            model: LignePanier,
-          })
-          .populate({
-            path: "adresseLivraison",
-            model: Adresse,
-          }).populate({path:"client",model:Client,select:"utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone "});
-        if (commandes){
-            return res.status(200).json({status:httpStatus.SUCCESS,data:commandes});
-        }
-       return res
-         .status(404)
-         .json({ status: httpStatus.NOT_FOUND, data: "Aucune commande" });
+              { path: "categorie", model: CategorieVelo },
+              { path: "marque", model: Marque },
+              { path: "images", model: Image },
+            ],
+          },
+          model: VeloVente,
+        },
+        model: LignePanier,
+      })
+      .populate({
+        path: "adresseLivraison",
 
-    }catch(e){
-        console.log(e);
-        return res
-          .status(500)
-          .json({ status: httpStatus.BAD_REQUEST, message: e });
+        populate: [
+          { path: "ville", model: Ville },
+          { path: "district", model: District },
+          { path: "delegation", model: Delegation },
+        ],
+        model: Adresse,
+      })
+      .populate({
+        path: "client",
+        model: Client,
+        select:
+          "utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone ",
+      });
+    if (commandes) {
+      return res
+        .status(200)
+        .json({ status: httpStatus.SUCCESS, data: commandes });
     }
-}
+    return res
+      .status(404)
+      .json({ status: httpStatus.NOT_FOUND, data: "Aucune commande" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ status: httpStatus.BAD_REQUEST, message: e });
+  }
+};
 const updateCommande = async (req, res) => {
   try {
     const { commandeId } = req.params;
     const { statutCommande, dateLivraison } = req.body;
 
-   
-    const commande = await Commande.findById(commandeId).populate({
-            path: "articles",
-            populate: {
-              path: "article",
-              populate: {
-                path: "velo",
-                populate: [
-                  {
-                    path: "type",
-                    model: Type,
-                  },
-                  { path: "categorie", model: CategorieVelo },
-                  { path: "marque", model: Marque },
-                  { path: "images", model: Image },
-                ],
-              },
-              model: VeloVente,
-            },
-            model: LignePanier,
-          })
-          .populate({
-            path: "adresseLivraison",
-            model: Adresse,
-          }).populate({path:"client",model:Client,select:"utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone "});;
+    const commande = await Commande.findById(commandeId)
+      .populate({
+        path: "articles",
+        populate: {
+          path: "article",
+          populate: [
+            { path: "type", model: Type },
+            { path: "categorie", model: CategorieVelo },
+            { path: "marque", model: Marque },
+            { path: "images", model: Image },
+          ],
+        },
+        model: VeloVente,
+      })
+      .populate({ path: "adresseLivraison", model: Adresse })
+      .populate({
+        path: "client",
+        model: Client,
+        select:
+          "utilisateur.nomUtilisateur utilisateur.email utilisateur.numTelephone",
+      });
+
     if (!commande) {
       return res.status(404).json({ message: "Commande non trouvée" });
     }
 
-   
-    if (dateLivraison) {
+    let emailText = "";
+    const destinataire = commande.client.utilisateur.email;
+
+    // Check if dateLivraison is updated
+    if (dateLivraison && dateLivraison !== commande.dateLivraison) {
       commande.dateLivraison = dateLivraison;
+      emailText = `Bonjour ${commande.client.utilisateur.nomUtilisateur},
+
+Votre commande passée le ${commande.dateCommande.toLocaleDateString()} est prévue pour être livrée le ${commande.dateLivraison.toLocaleDateString()}.
+
+Merci de votre confiance.
+L'équipe GreenBike`;
     }
 
-    
-    if (statutCommande) {
+    // Check if statutCommande is updated to "expédiée" or "livrée"
+    if (
+      statutCommande &&
+      statutCommande !== commande.statutCommande &&
+      (statutCommande === "expédiée" || statutCommande === "livrée")
+    ) {
       commande.statutCommande = statutCommande;
+      emailText = `Bonjour ${commande.client.utilisateur.nomUtilisateur},
+
+Votre commande passée le ${commande.dateCommande.toLocaleDateString()} a été ${
+        commande.statutCommande
+      }.
+
+Merci de votre confiance.
+L'équipe GreenBike`;
     }
 
-    
     await commande.save();
 
-     return res
-       .status(200)
-       .json({ status: httpStatus.SUCCESS, data: commande });
+    // Send the email if there's an update
+  /*   if (emailText) {
+      const sujet = `Mise à jour de votre commande n°${commande._id}`;
+      await sendEmail(destinataire, sujet, emailText);
+    } */
+
+    return res.status(200).json({ status: httpStatus.SUCCESS, data: commande });
   } catch (error) {
-  console.log(error);
-        return res
-          .status(500)
-          .json({ status: httpStatus.BAD_REQUEST, message: error });
-    }
+    console.log(error);
+    return res.status(500).json({
+      status: httpStatus.BAD_REQUEST,
+      message: error.message,
+    });
   }
+};
 
-
-const  getCommandeByClient=async(req,res)=>{
-    try{
-        const {clientId}=req.params;
-        const commande=await Commande.find({client:clientId})
-        if (commande) {
-            return res
-              .status(200)
-              .json({ status: httpStatus.SUCCESS, data: commande })
-              .populate({
-                path: "articles",
-                populate: {
-                  path: "article",
-                  populate: {
-                    path: "velo",
-                    populate: [
-                      {
-                        path: "type",
-                        model: Type,
-                      },
-                      { path: "categorie", model: CategorieVelo },
-                      { path: "marque", model: Marque },
-                      { path: "images", model: Image },
-                    ],
-                  },
-                  model: VeloVente,
+const getCommandeByClient = async (req, res) => {
+  try {
+    const { clientId } = req.params;
+    const commande = await Commande.find({ client: clientId });
+    if (commande) {
+      return res
+        .status(200)
+        .json({ status: httpStatus.SUCCESS, data: commande })
+        .populate({
+          path: "articles",
+          populate: {
+            path: "article",
+            populate: {
+              path: "velo",
+              populate: [
+                {
+                  path: "type",
+                  model: Type,
                 },
-                model: LignePanier,
-              })
-              .populate({
-                path: "adresseLivraison",
-                model: Adresse,
-              });
-            }
-            return res.status(404).json({ status: httpStatus.NOT_FOUND,message:"pas de commande "})
-}catch(e){
-        console.log(e);
-        return res
-          .status(500)
-          .json({ status: httpStatus.BAD_REQUEST, message: e });
+                { path: "categorie", model: CategorieVelo },
+                { path: "marque", model: Marque },
+                { path: "images", model: Image },
+              ],
+            },
+            model: VeloVente,
+          },
+          model: LignePanier,
+        })
+        .populate({
+          path: "adresseLivraison",
+          model: Adresse,
+        });
     }
-}
+    return res
+      .status(404)
+      .json({ status: httpStatus.NOT_FOUND, message: "pas de commande " });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ status: httpStatus.BAD_REQUEST, message: e });
+  }
+};
 
-export default {getAllCommandes,getCommande,getCommandeByClient,updateCommande}
-
-
+export default {
+  getAllCommandes,
+  getCommande,
+  getCommandeByClient,
+  updateCommande,
+};

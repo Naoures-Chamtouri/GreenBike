@@ -1,11 +1,12 @@
 import express from "express";
 import upload from "../../utils/multer.js";
 import profileController from "../controllers/profile.js";
+import clientAuthMiddleware from "../../authMiddleware/authClientMiddleware.js";
 
 const router=express.Router();
 
-router.get("/:id",profileController.getClient);
-router.post("/:id",upload.single("image"),profileController.updateClient);
-router.put("/:id",profileController.updatePassword);
+
+router.put("/",clientAuthMiddleware,profileController.updateClient);
+router.put("/mdp",clientAuthMiddleware,profileController.updatePassword);
 
 export default router;

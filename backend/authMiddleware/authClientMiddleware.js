@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import Client from "../models/client.js";
 import dotenv from "dotenv";
 dotenv.config();
+import Image from "../models/image.js";
 
 const clientAuthMiddleware = async (req, res, next) => {
   try {
@@ -16,7 +17,13 @@ const clientAuthMiddleware = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const client = await Client.findById(decoded.userId);
+    const client = await Client.findById(decoded.userId)
+      .select("-motDePasse")
+      .populate({
+        path: "utilisateur",
+        populate: { path: "image", model: Image }
+       
+      });
 
     if (!client) {
       return res.status(404).json({ message: "client non trouvé" });

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
+  Box,
   Checkbox,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -13,6 +15,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 const CommandeTable = ({
   searchTerm,
@@ -27,6 +30,7 @@ const CommandeTable = ({
   const [statusCommande, setStatutCommande] = useState('');
   const [newDateLivraison, setNewDateLivraison] = useState(null);
   const statusOptions = ['en cours', 'expédiée', 'livrée', 'annulée'];
+   const [loading, setLoading] = useState(true);
 
   const isSameDay = (date1, date2) => {
     const d1 = new Date(date1);
@@ -68,17 +72,38 @@ const CommandeTable = ({
     } 
   };
 
+   const navigate = useNavigate();
+
+   const handleVoircommande = (idCommande) => {
+     navigate(`/VenteVelos/Commandes/${idCommande}`, { state: { idCommande } });
+   };
+
+
   useEffect(() => {
     axios
       .get('http://localhost:4000/admin/commandes')
       .then((response) => {
         setCommandes(response.data.data);
         setUpdate(Array(response.data.data.length).fill(false));
+        setLoading(false)
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des commandes:', error);
       });
   }, [setCommandes]);
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress color="success" />
+      </Box>
+    );
+  }
 
   const filteredCommandes = commandes.filter((commande) => {
     return (
@@ -288,7 +313,7 @@ const CommandeTable = ({
                       </div>
                     ) : (
                       <div className="flex items-center ">
-                        <button>
+                        <button onClick={()=>handleVoircommande(commande._id)}>
                           <svg
                             className="fill-current"
                             width="20"

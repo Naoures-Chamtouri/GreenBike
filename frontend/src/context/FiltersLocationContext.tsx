@@ -14,6 +14,7 @@ const FilterLocationProvider = ({ children }) => {
   const [selectedLocationTypes, setSelectedLocationTypes] = useState([]);
   const [selectedLocationMarques, setSelectedLocationMarques] = useState([]);
   const [selectedLocationCategory, setSelectedLocationCategory] = useState("");
+  const [loading, setLoading] = useState(true);
  
   const fetchFilteredVelos = async () => {
     const response = await fetch(
@@ -35,6 +36,7 @@ const FilterLocationProvider = ({ children }) => {
     }
     const result = await response.json();
     console.log(result.data)
+    setLoading(false)
     return result.data;
   };
 
@@ -87,6 +89,7 @@ const FilterLocationProvider = ({ children }) => {
         filteredVelos,
         isLoading,
         error,
+        loading
       }}
     >
       <Backdrop

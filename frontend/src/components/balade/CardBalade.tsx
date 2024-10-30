@@ -64,6 +64,7 @@ function CardBalade({ balade }) {
               <Typography variant="body2">
                 {balade.adresseDepart.nom}
               </Typography>
+              
             </div>
             <div className="flex mt-3 ">
               <MdOutlineDateRange className=" h-5 w-5 text-gray-500 mr-1 " />

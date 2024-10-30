@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SupprimeModal from './SupprimeModal';
+import { Box, CircularProgress } from '@mui/material';
 
 
 
@@ -9,8 +10,11 @@ const BaladeTable = ({ searchTerm, dateDepart, sortOrderDate,statusBalade }) => 
   
 
    const [open, setOpen] = useState(false);
-
-   const handleOpen = () => setOpen(true);
+   const [baladeId,setBaladeId]=useState(null)
+   const [loading, setLoading] = useState(true);
+   const handleOpen = (id) => {setOpen(true)
+    setBaladeId(id)
+   };
 
    const handleClose = () => setOpen(false);
   const [balades, setBalades] = useState([]);
@@ -29,11 +33,26 @@ const BaladeTable = ({ searchTerm, dateDepart, sortOrderDate,statusBalade }) => 
       .then((response) => {
         setBalades(response.data.data);
         console.log(response.data.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des vélos:', error);
       });
   }, []);
+
+  
+      if (loading) {
+        return (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+          >
+            <CircularProgress color="success" />
+          </Box>
+        );
+      }
 
   const isSameDay = (date1, date2) => {
     const d1 = new Date(date1);
@@ -184,7 +203,10 @@ const BaladeTable = ({ searchTerm, dateDepart, sortOrderDate,statusBalade }) => 
                         />
                       </svg>
                     </button>
-                    <button className="hover:text-green-600" onClick={handleOpen}>
+                    <button
+                      className="hover:text-green-600"
+                      onClick={()=>{handleOpen(balade._id)}}
+                    >
                       <svg
                         className="fill-current"
                         width="18"
@@ -211,13 +233,15 @@ const BaladeTable = ({ searchTerm, dateDepart, sortOrderDate,statusBalade }) => 
                         />
                       </svg>
                     </button>
-                    <SupprimeModal
-                      open={open}
-                      handleClose={handleClose}
-                      baladeId={balade._id}
-                    />
                   </div>
                 </td>
+                <SupprimeModal
+                  open={open}
+                  handleClose={handleClose}
+                  baladeId={baladeId}
+                  balades={balades}
+                  setBalades={setBalades}
+                />
               </tr>
             ))}
           </tbody>

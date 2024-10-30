@@ -16,12 +16,14 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
     "@mui/x-date-pickers": "^7.18.0",
     "@tanstack/react-query": "^5.59.0",
     "apexcharts": "^3.41.0",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.6",
     "dayjs": "^1.11.13",
     "flatpickr": "^4.6.13",
     "headlessui": "^0.0.0",
@@ -31,8 +33,10 @@
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-drag-drop-files": "^2.3.10",
+    "react-hook-form": "^7.53.1",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
     "react-leaflet": "^4.2.1",
@@ -40,7 +44,8 @@
     "react-router-dom": "^6.14.2",
     "react-toastify": "^9.1.3",
     "sort-by": "^0.0.2",
-    "sweetalert2": "^11.14.1"
+    "sweetalert2": "^11.14.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",

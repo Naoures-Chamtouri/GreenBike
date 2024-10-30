@@ -66,11 +66,28 @@ const initialValues = {
 
 const [showPopover,setShowPopover]=useState(false)
 
-const handleChange=(event)=>{
-  const {name,value}=event.target;
-  setFormValues({...formValues,[name]:value})
+const handleChange = (event) => {
+  const { name, value } = event.target;
 
-}
+  // Fonction pour mettre à jour un champ imbriqué
+  const updateNestedField = (path, value) => {
+    const keys = path.split('.'); // Split by '.' to handle nested fields like "roue.materiau"
+    let updatedValues = { ...formValues }; // Create a copy of formValues
+    let field = updatedValues;
+
+    // Parcourir les clés imbriquées pour mettre à jour la valeur correcte
+    for (let i = 0; i < keys.length - 1; i++) {
+      field = field[keys[i]];
+    }
+
+    field[keys[keys.length - 1]] = value; // Mettre à jour la clé finale
+
+    setFormValues(updatedValues); // Mettre à jour l'état
+  };
+
+  updateNestedField(name, value);
+};
+
   const handleUpdate=async()=>{
   let formIsValid = true;
   console.log(formValues)
