@@ -71,7 +71,7 @@ const {
         locationData,
         { withCredentials: true }
       );
-      console.log("Location ajoutée:", response.data);
+      
       setShowPopover(true);
       setTimeout(() => {
         navigate("/velo-a-louer");
@@ -136,10 +136,7 @@ const {
             </label>
           </div>
         </form>
-        <p className="text-sm text-gray-500 mt-10">
-          Note : Vous pouvez annuler votre réservation jusqu'à 3 jours avant la
-          date de début.
-        </p>
+        
         <p className="text-sm text-gray-500 mt-4">
           Note : Tout retard dans le retour du vélo peut entraîner des frais
           supplémentaires.
@@ -192,8 +189,8 @@ const {
         </div>
       </div>
       {showPopover && (
-        <div className="fixed top-25 right-4 p-4 bg-green-200 text-white rounded shadow-lg">
-          location ajoutée avec succès !
+        <div className="fixed top-10 right-4 p-4 bg-green-400 text-white rounded shadow-lg">
+          Location ajoutée avec succès !
         </div>
       )}
     </div>

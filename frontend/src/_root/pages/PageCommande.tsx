@@ -164,7 +164,7 @@ const PageCommande = () => {
             withCredentials: true,
           }
         );
-        console.log("Commande passée avec succès:", response.data);
+        
          setShowPopover(true);
          setTimeout(() => {
            navigate("/velo-a-vendre");

@@ -16,9 +16,10 @@ const getReservationsbyBalade=async(req,res)=>{
     });
 
    }else{
-      return res.status(400).json({
+      return res.status(200).json({
         status: httpStatus.NOT_FOUND,
         message: "pas de reservations pour cette balade",
+        data:[]
       });
    }
 
@@ -44,9 +45,10 @@ const getReservations= async (req, res) => {
         data: reservations,
       });
     } else {
-      return res.status(400).json({
+      return res.status(200).json({
         status: httpStatus.NOT_FOUND,
         message: "pas de reservations ",
+        data: []
       });
     }
   } catch (error) {
@@ -62,7 +64,11 @@ const updateReservation=async(req,res)=>{
     try{
         const reservationId=req.params.id
         const {status}=req.body
-        const reservation=await Reservation.findByIdAndUpdate(reservationId,{status:status},{new:true});
+        const reservation = await Reservation.findByIdAndUpdate(
+          reservationId,
+          { status: status },
+          { new: true }
+        ).populate({ path: "participant", model: Client });
         if(reservation){
            return res
              .status(200)

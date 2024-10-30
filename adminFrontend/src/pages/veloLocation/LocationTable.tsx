@@ -44,7 +44,7 @@ function LocationTable({
       const updatedData = {
         etat: statusLocation || locations[index].etat
       };
-      console.log(updatedData);
+      
       const response = await axios.put(
         `http://localhost:4000/admin/locations/${locationId}`,
         updatedData,

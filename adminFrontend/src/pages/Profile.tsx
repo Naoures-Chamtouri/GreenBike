@@ -30,7 +30,7 @@ function Profile() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  console.log(user);
+ 
   useEffect(() => {
     if (user) {
       setFormData({

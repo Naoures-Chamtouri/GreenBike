@@ -22,7 +22,7 @@ const ChangeMapView = ({ coords }) => {
 };
 
 const SimpleMap = ({ trajet }) => {
- console.log(trajet)
+ 
   const [selectedCity, setSelectedCity] = useState(trajet[0]);
   const [startMarker, setStartMarker] = useState(trajet[0]);
   const [endMarker, setEndMarker] = useState(trajet[trajet.length - 1]);

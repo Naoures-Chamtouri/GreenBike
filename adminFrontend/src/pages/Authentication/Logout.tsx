@@ -15,7 +15,7 @@ const Logout = () => {
    {},
    { withCredentials: true },
  );
- console.log(response);
+
 navigate('/sign-in'); 
       } catch (error) {
         console.error('Logout failed:', error);

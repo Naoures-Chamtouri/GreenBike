@@ -18,7 +18,7 @@ function ResumePanier({setArticles}) {
     setLoading(false);
    
    
-    console.log(response.data.data);
+    
     }catch(e){
       console.log(e)
     }

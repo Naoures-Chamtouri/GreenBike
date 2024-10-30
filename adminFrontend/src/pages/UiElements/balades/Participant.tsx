@@ -34,11 +34,11 @@ function PageParticipant() {
   const [searchTerm, setSearchTerm] = useState('');
   const [open, setOpen] = useState(false);
   const [dateReservation, setDateReservation] = useState(null);
-  const [statusFilters, setStatusFilters] = useState(['payée']);
+  const [statusFilters, setStatusFilters] = useState(['réservée']);
   const [sortOrderReservation, setSortOrderReservation] = useState('asc');
   const anchorRef = useRef(null); // Reference for Popper
 
-  const statusOptions = ['payée','annulée'];
+  const statusOptions = ['payée','annulée','réservée'];
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);

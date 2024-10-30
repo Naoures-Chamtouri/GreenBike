@@ -14,7 +14,7 @@ function MesLocations() {
       );
       setLocations(response.data.data);
     } catch (e) {
-      console.log(e);
+     
     }
   };
 

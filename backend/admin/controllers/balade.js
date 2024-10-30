@@ -86,7 +86,8 @@ const getAllBalades = async (req, res) => {
     const Balades = await Balade.find()
       .populate({ path: "adresseDepart", model: AdresseBalade })
       .populate({ path: "adresseArrivée", model: AdresseBalade }).populate({path:"images",model:Image})
-    return res.status(200).json({ status: httpStatus.SUCCESS, data: Balades });
+    if(Balades.length>0){  return res.status(200).json({ status: httpStatus.SUCCESS, data: Balades });}
+    else{  return res.status(200).json({ status: httpStatus.SUCCESS, data:[] });}
   } catch (error) {
     return res.status(500).json({ staus: httpStatus.ERROR, message: error.message });
   }

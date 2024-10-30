@@ -43,7 +43,7 @@ const VeloVenteProvider = ({ children }) => {
         backendItems
       );
       setVeloVenteCartItems(mergedCart);
-      console.log("merg",mergedCart)
+   
       localStorage.setItem("veloVenteCart", JSON.stringify(mergedCart));
 
       const response= await axios.post(
@@ -54,7 +54,7 @@ const VeloVenteProvider = ({ children }) => {
           withCredentials: true,
         }
       );
-      console.log(response)
+     
     } catch (error) {
       console.error("Erreur lors de la synchronisation du panier:", error);
     }

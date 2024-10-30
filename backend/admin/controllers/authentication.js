@@ -2,6 +2,7 @@ import Admin from "../../models/admin.js";
 import httpStatus from "../../utils/httpStatus.js";
 import generateToken from "../../utils/generateToken.js";
 import bcrypt from "bcryptjs";
+import Image from "../../models/image.js"
 
 // Contrôleur pour l'inscription
 const registerAdmin = async (req, res) => {
@@ -74,6 +75,7 @@ const loginAdmin = async (req, res) => {
        data: adminObj,
      });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Erreur lors de la connexion" });
   }
 };

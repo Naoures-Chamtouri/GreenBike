@@ -28,7 +28,7 @@ function SignupForm() {
   });
 
 async function onSubmit(values: z.infer<typeof SignupValidation>) {
-  console.log(values);
+ 
   setLoading(true);
   setError("");
   try {
@@ -43,7 +43,7 @@ async function onSubmit(values: z.infer<typeof SignupValidation>) {
     );
 
     setUser(response.data.data);
-    console.log(response.data.data);
+    
     syncCartWithBackend();
   
     navigate("/");

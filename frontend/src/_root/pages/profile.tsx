@@ -10,10 +10,13 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material"; // Import des icônes
 import DragComponent from "@/components/used/DragAndDrop/DragComponent";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const { user, updateUser, updatemdp } = useAuth();
+  const navigate=useNavigate()
   const [ownerLicense, setOwnerLicense] = useState([]);
+  const [showPopover,setShowPopover]=useState(false)
   const [formData, setFormData] = useState({
     nomUtilisateur: "",
     numTelephone: "",
@@ -31,7 +34,6 @@ function Profile() {
     confirmerMotDePasse: false,
   });
 
-  console.log(user);
   useEffect(() => {
     if (user) {
       setFormData({
@@ -58,6 +60,10 @@ function Profile() {
 
   const handleUpdateInfo = async () => {
     await updateUser(formData);
+      setShowPopover(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
   };
 
   const handleUpdatePassword = async () => {
@@ -66,6 +72,10 @@ function Profile() {
       return;
     }
     await updatemdp(passwordData);
+    setShowPopover(true);
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
   };
 
   return (
@@ -247,6 +257,11 @@ function Profile() {
           />
         </div>
       </Box>
+      {showPopover && (
+        <div className="fixed top-16 right-4 p-4 bg-green-400 text-white rounded shadow-lg">
+          profile mise a jour avec succès !
+        </div>
+      )}
     </div>
   );
 }

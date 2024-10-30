@@ -90,7 +90,7 @@ const handleChange = (event) => {
 
   const handleUpdate=async()=>{
   let formIsValid = true;
-  console.log(formValues)
+  
   
   
   if (!formValues.categorie) {
@@ -652,6 +652,7 @@ const newVelo = {
                   onChange={handleChange}
                 >
                   <MenuItem value="S">S</MenuItem>
+                  <MenuItem value="M">M</MenuItem>
                   <MenuItem value="XL">XL</MenuItem>
                   <MenuItem value="XXL">XXL</MenuItem>
                 </Select>
@@ -883,7 +884,7 @@ const newVelo = {
                 className="w-1/3"
                 color="success"
                 id="suspension-input"
-                label="Suspension"
+                label="Suspension/mm"
                 variant="outlined"
                 name="suspension"
                 value={formValues.suspension}
@@ -951,7 +952,7 @@ const newVelo = {
                   className="w-1/3"
                   color="success"
                   id="roue-taille-input"
-                  label="Taille"
+                  label="Taille/pouce"
                   variant="outlined"
                   name="roue.taille"
                   value={formValues.roue.taille}
@@ -976,7 +977,7 @@ const newVelo = {
                   className="w-1/3"
                   color="success"
                   id="poids-input"
-                  label="Poids"
+                  label="Poids/kg"
                   variant="outlined"
                   name="roue.poids"
                   value={formValues.roue.poids}
@@ -1045,7 +1046,7 @@ const newVelo = {
                   className="w-1/3"
                   color="success"
                   id="cadre-taille-input"
-                  label="Taille du Cadre"
+                  label="Taille du Cadre/cm"
                   variant="outlined"
                   name="cadre.taille"
                   value={formValues.cadre.taille}

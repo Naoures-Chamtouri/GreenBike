@@ -67,12 +67,12 @@ function ProfitChart() {
   // Calcul du total avec filtre pour chaque type de service
   const calculateFilteredTotal = (data, statusKey, statusValue, priceKey) =>
     data
-      .filter((item) => item[statusKey] === statusValue)
+      ?.filter((item) => item[statusKey] === statusValue)
       .reduce((sum, item) => sum + (item[priceKey] || 0), 0);
 
       const calculateFilteredTotal2 = (data, statusKey, statusValue, priceKey) =>
         data
-          .filter((item) => item[statusKey] === statusValue)
+          ?.filter((item) => item[statusKey] === statusValue)
           .reduce((sum, item) => sum + (item.balade[priceKey] || 0), 0);
 
   const totalCommandes = calculateFilteredTotal(
@@ -113,7 +113,7 @@ function ProfitChart() {
     datasets: [
       {
         data: ['Réservé', 'En Cours', 'Terminé', 'Annulé', 'En retard'].map(
-          (etat) => locations.filter((item) => item.etat === etat).length,
+          (etat) => locations?.filter((item) => item.etat === etat).length,
         ),
         backgroundColor: [
           '#FFECB3',
@@ -134,12 +134,12 @@ function ProfitChart() {
   };
 
   const reservationsData = {
-    labels: ['Payée', 'Annulée'],
+    labels: ['Payée', 'Annulée','Réservée'],
     datasets: [
       {
-        data: ['payée', 'annulée'].map(
+        data: ['payée', 'annulée','réservée'].map(
           (status) =>
-            reservations.filter((item) => item.status === status).length,
+            reservations?.filter((item) => item.status === status).length,
         ),
         backgroundColor: ['#C8E6C9', '#A5D6A7'],
         hoverBackgroundColor: ['#A5D6A7', '#66BB6A'],

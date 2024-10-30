@@ -88,7 +88,7 @@ function PageVeloLocation() {
   };
   const handleUpdate = async () => {
     let formIsValid = true;
-    console.log(formValues);
+
 
     if (!formValues.categorie) {
       formIsValid = false;
@@ -829,7 +829,7 @@ function PageVeloLocation() {
                 className="w-1/3"
                 color="success"
                 id="suspension-input"
-                label="Suspension"
+                label="Suspension/mm"
                 variant="outlined"
                 name="suspension"
                 value={formValues.suspension}
@@ -897,7 +897,7 @@ function PageVeloLocation() {
                   className="w-1/3"
                   color="success"
                   id="roue-taille-input"
-                  label="Taille"
+                  label="Taille/pouce"
                   variant="outlined"
                   name="roue.taille"
                   value={formValues.roue.taille}
@@ -922,7 +922,7 @@ function PageVeloLocation() {
                   className="w-1/3"
                   color="success"
                   id="poids-input"
-                  label="Poids"
+                  label="Poids/kg"
                   variant="outlined"
                   name="roue.poids"
                   value={formValues.roue.poids}
@@ -991,7 +991,7 @@ function PageVeloLocation() {
                   className="w-1/3"
                   color="success"
                   id="cadre-taille-input"
-                  label="Taille du Cadre"
+                  label="Taille du Cadre/cm"
                   variant="outlined"
                   name="cadre.taille"
                   value={formValues.cadre.taille}

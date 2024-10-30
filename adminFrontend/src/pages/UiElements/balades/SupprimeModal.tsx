@@ -3,7 +3,7 @@ import { Modal, Box, Typography, Button } from '@mui/material';
 import axios from 'axios';
 
 const SupprimeModal = ({ open, handleClose, baladeId,balades,setBalades }) => {
-  console.log(baladeId)
+  
  
   const handleDelete = async () => {
     try {

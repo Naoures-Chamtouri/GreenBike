@@ -32,7 +32,7 @@ const BaladeTable = ({ searchTerm, dateDepart, sortOrderDate,statusBalade }) => 
       .get('http://localhost:4000/admin/balades')
       .then((response) => {
         setBalades(response.data.data);
-        console.log(response.data.data);
+     
         setLoading(false);
       })
       .catch((error) => {
@@ -127,7 +127,7 @@ const BaladeTable = ({ searchTerm, dateDepart, sortOrderDate,statusBalade }) => 
             </tr>
           </thead>
           <tbody>
-            {sortedBalades.map((balade, key) => (
+            {sortedBalades?.map((balade, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-3  dark:border-strokedark ">
                   <h4 className="font-medium text-black dark:text-white">

@@ -89,7 +89,7 @@ function BaladeForm() {
         distance,
         trajet,
       };
-      console.log('newBalade :', newBalade);
+     
       const response = await axios.post(
         'http://localhost:4000/admin/balades',
         newBalade,

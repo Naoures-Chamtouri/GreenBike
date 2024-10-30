@@ -34,7 +34,7 @@ function FiltresBalade() {
 
   const handlePlaceSearch = () => {
     setSelectedLieu(searchPlace);
-    console.log(`Rechercher par lieu: ${searchPlace}`);
+    
   };
 
   const handleKeyDown = (e) => {

@@ -61,6 +61,7 @@ const getLocationbyUser=async(req,res)=>{
             return res.status(200).json({
               status:httpStatus.SUCCESS,
               message:"pas de locations"
+              ,data:[]
             })
           }
           return res.status(200).json({status:httpStatus.SUCCESS,data:locations})

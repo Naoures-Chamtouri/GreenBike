@@ -48,7 +48,7 @@ const CommandeTable = ({
         statutCommande: statusCommande || commandes[index].statutCommande,
         dateLivraison: newDateLivraison || commandes[index].dateLivraison,
       };
-   console.log(updatedData)
+  
         const response = await axios.put(
         `http://localhost:4000/admin/commandes/${commandeId}`,
         updatedData,

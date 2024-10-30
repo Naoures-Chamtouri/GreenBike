@@ -52,7 +52,7 @@ function Topbar() {
          {},
          { withCredentials: true }
        );
-       console.log(response);
+       
        localStorage.removeItem("veloVenteCart");
        window.location.href = "/";
      } catch (error) {

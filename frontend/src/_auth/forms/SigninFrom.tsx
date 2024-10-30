@@ -52,7 +52,7 @@ const from = location.state?.from?.pathname || "/";
 
      
       setUser(response.data.data); 
-      console.log(response.data.data)
+      
      
 await syncCartWithBackend(); 
        navigate(from, { replace: true });

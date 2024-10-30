@@ -192,7 +192,7 @@ function VeloLocationForm() {
           newMarque,
           adresseDisponible
         };
-        console.log(velo);
+        
         const response = await axios.post(
           'http://localhost:4000/admin/veloLocations',
           velo,
@@ -200,7 +200,7 @@ function VeloLocationForm() {
             withCredentials: true,
           },
         );
-        console.log('Commande passée avec succès:', response.data);
+      
         setShowPopover(true);
         setTimeout(() => {
           setShowPopover(false);
@@ -809,7 +809,7 @@ function VeloLocationForm() {
               className="w-1/3"
               color="success"
               id="suspension-input"
-              label="Suspension"
+              label="Suspension/mm"
               variant="outlined"
               value={suspension}
               onChange={(event) => {
@@ -878,7 +878,7 @@ function VeloLocationForm() {
                 className="w-1/3"
                 color="success"
                 id="roue-taille-input"
-                label="Taille"
+                label="Taille/pouce"
                 variant="outlined"
                 value={roue.taille}
                 onChange={(event) =>
@@ -903,7 +903,7 @@ function VeloLocationForm() {
                 className="w-1/3"
                 color="success"
                 id="poids-input"
-                label="Poids"
+                label="Poids/kg"
                 variant="outlined"
                 value={roue.poids}
                 onChange={(event) =>
@@ -973,7 +973,7 @@ function VeloLocationForm() {
                 className="w-1/3"
                 color="success"
                 id="cadre-taille-input"
-                label="Taille du Cadre"
+                label="Taille du Cadre/cm"
                 variant="outlined"
                 value={cadre.taille}
                 onChange={(event) =>

@@ -55,14 +55,14 @@ function VeloForm() {
    
       const [isAddingMarque, setIsAddingMarque] = useState(false);
     
-      console.log(formValues.categorie)
+
 
 
 const [showPopover,setShowPopover]=useState(false)
   const handleSubmit=async()=>{
 
      let formIsValid = true;
-  console.log(formValues)
+  
   
   
   if (!formValues.categorie) {
@@ -163,7 +163,7 @@ const [showPopover,setShowPopover]=useState(false)
         ...formValues,
         ownerLicense,
       };
-      console.log(velo);
+
       const response = await axios.post(
         'http://localhost:4000/admin/veloVentes',
         velo,
@@ -171,7 +171,7 @@ const [showPopover,setShowPopover]=useState(false)
           withCredentials: true,
         },
       );
-      console.log('Ajout de velo avec succès:', response.data);
+      
       setShowPopover(true);
       setTimeout(() => {
         setShowPopover(false);
@@ -459,6 +459,7 @@ const handleChange = (event) => {
                 onChange={handleChange}
               >
                 <MenuItem value="S">S</MenuItem>
+                 <MenuItem value="M">M</MenuItem>
                 <MenuItem value="XL">XL</MenuItem>
                 <MenuItem value="XXL">XXL</MenuItem>
               </Select>
@@ -613,7 +614,7 @@ const handleChange = (event) => {
               className="w-1/3"
               color="success"
               id="suspension-input"
-              label="Suspension"
+              label="Suspension/mm"
               variant="outlined"
               name="suspension"
               value={formValues.suspension}
@@ -680,7 +681,7 @@ const handleChange = (event) => {
                 className="w-1/3"
                 color="success"
                 id="roue-taille-input"
-                label="Taille"
+                label="Taille/pouce"
                 variant="outlined"
                 name="roue.taille"
                 value={formValues.roue.taille}
@@ -704,7 +705,7 @@ const handleChange = (event) => {
                 className="w-1/3"
                 color="success"
                 id="poids-input"
-                label="Poids"
+                label="Poids/kg"
                 variant="outlined"
                 name="roue.poids"
                 value={formValues.roue.poids}
@@ -772,7 +773,7 @@ const handleChange = (event) => {
                 className="w-1/3"
                 color="success"
                 id="cadre-taille-input"
-                label="Taille du Cadre"
+                label="Taille du Cadre/cm"
                 variant="outlined"
                 name="cadre.taille"
                 value={formValues.cadre.taille}

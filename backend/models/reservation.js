@@ -5,7 +5,7 @@ const reservationSchema=new mongoose.Schema({
     numTelephone:{type:String,required:true},
     balade:{type:mongoose.Schema.Types.ObjectId,ref:"Balade"},
     dateReservation:{type:Date,required:true,default:Date.now()},
-    status:{type:String,enum:["payée","annulée"],default:"payée"}
+    status:{type:String,enum:["payée","réservée","annulée"],default:"réservée"}
 });
 const Reservation=mongoose.model("reservation",reservationSchema,"reservation");
 export default Reservation;

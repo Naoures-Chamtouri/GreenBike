@@ -46,7 +46,7 @@ function SigninForm() {
         { withCredentials: true },
       );
 
-      console.log(response.data.data);
+     
       setUser(response.data.data)
       navigate('/');
     } catch (error) {

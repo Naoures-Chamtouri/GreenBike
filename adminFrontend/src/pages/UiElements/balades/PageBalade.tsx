@@ -71,7 +71,7 @@ function PageBalade() {
           typeVelo: response.data.data.typeVelo,
           conseils: response.data.data.conseils,
         });
-        console.log(response.data.data);
+      
         setImages(() => {
           return response.data.data.images?.map((image) => image.path);
         });
@@ -140,8 +140,7 @@ function PageBalade() {
       distance,
       trajet,
     };
-    console.log('newBalade :', newBalade);
-
+    
     try {
       const response = await axios.put(
         `http://localhost:4000/admin/balades/${id}`,
@@ -161,7 +160,7 @@ function PageBalade() {
         typeVelo: response.data.data.typeVelo,
         conseils: response.data.data.conseils,
       });
-      console.log(response.data.data);
+      
       setImages(() => {
         return response.data.data.images?.map((image) => image.path);
       });

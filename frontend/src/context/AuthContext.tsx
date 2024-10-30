@@ -36,7 +36,7 @@ const AuthProvider=({ children })=> {
          );
          setUser(response.data.data); // Mise à jour de l'état local
 
-         alert("Informations mises à jour avec succès !");
+        
        } catch (error) {
          console.error("Erreur de mise à jour :", error);
          alert("Erreur lors de la mise à jour des informations.");
@@ -53,7 +53,7 @@ const AuthProvider=({ children })=> {
             }
           );
           setUser(response.data.data); // Mise à jour de l'état local
-          alert("Informations mises à jour avec succès !");
+          
         } catch (error) {
           console.error("Erreur de mise à jour :", error);
           alert("Erreur lors de la mise à jour des informations.");

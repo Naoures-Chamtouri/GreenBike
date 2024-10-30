@@ -29,7 +29,7 @@ const VeloTable = ({ searchTerm }) => {
       .get('http://localhost:4000/admin/veloLocations')
       .then((response) => {
         setVelos(response.data.data);
-        console.log(response.data.data);
+       
          setLoading(false);
       })
       .catch((error) => {

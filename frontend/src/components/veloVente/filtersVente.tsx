@@ -28,7 +28,6 @@ const {
      ? `http://localhost:4000/client/types/${selectedCategory.id}`
      : "http://localhost:4000/client/types";
 
-     console.log()
 
   const { data: types } = useQuery({
     queryKey: ["types", selectedCategory],

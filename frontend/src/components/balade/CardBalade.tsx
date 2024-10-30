@@ -17,7 +17,7 @@ function CardBalade({ balade }) {
     const navigate = useNavigate();
 
     const handleBaladeClick = (ref, balade) => {
-      console.log(ref)
+      
       navigate(`/balades/${ref}`, { state: { balade } });
     };
   return (

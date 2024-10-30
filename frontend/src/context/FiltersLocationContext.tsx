@@ -35,7 +35,7 @@ const FilterLocationProvider = ({ children }) => {
       throw new Error("Failed to fetch filtered velos");
     }
     const result = await response.json();
-    console.log(result.data)
+    
     setLoading(false)
     return result.data;
   };

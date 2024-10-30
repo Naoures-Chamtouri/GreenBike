@@ -58,8 +58,8 @@ const getAllCommandes = async (req, res) => {
         .json({ status: httpStatus.SUCCESS, data: commandes });
     }
     return res
-      .status(404)
-      .json({ status: httpStatus.NOT_FOUND, data: "Aucune commande" });
+      .status(200)
+      .json({ status: httpStatus.NOT_FOUND, data:[] });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ status: httpStatus.BAD_REQUEST, message: e });
@@ -112,8 +112,8 @@ const getCommande = async (req, res) => {
         .json({ status: httpStatus.SUCCESS, data: commandes });
     }
     return res
-      .status(404)
-      .json({ status: httpStatus.NOT_FOUND, data: "Aucune commande" });
+      .status(200)
+      .json({ status: httpStatus.NOT_FOUND, data:[] });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ status: httpStatus.BAD_REQUEST, message: e });
@@ -124,7 +124,40 @@ const updateCommande = async (req, res) => {
     const { commandeId } = req.params;
     const { statutCommande, dateLivraison } = req.body;
 
-    const commande = await Commande.findById(commandeId)
+    // Définir les champs à mettre à jour
+    const updateFields = {};
+    let emailText = "";
+
+    // Vérifier si dateLivraison doit être mise à jour
+    if (dateLivraison) {
+      updateFields.dateLivraison = dateLivraison;
+      /* emailText = `Bonjour ${commande.client.utilisateur.nomUtilisateur},
+
+Votre commande passée le ${commande.dateCommande.toLocaleDateString()} est prévue pour être livrée le ${new Date(
+        dateLivraison
+      ).toLocaleDateString()}.
+
+Merci de votre confiance.
+L'équipe GreenBike`; */
+    }
+  updateFields.statutCommande = statutCommande;
+    // Vérifier si statutCommande doit être mis à jour
+    if (statutCommande === "expédiée" || statutCommande === "livrée") {
+    
+     /*  emailText = `Bonjour ${commande.client.utilisateur.nomUtilisateur},
+
+Votre commande passée le ${commande.dateCommande.toLocaleDateString()} a été ${statutCommande}.
+
+Merci de votre confiance.
+L'équipe GreenBike`; */
+    }
+
+    // Mettre à jour la commande et peupler les données associées
+    const commande = await Commande.findByIdAndUpdate(
+      commandeId,
+      updateFields,
+      { new: true }
+    )
       .populate({
         path: "articles",
         populate: {
@@ -150,48 +183,15 @@ const updateCommande = async (req, res) => {
       return res.status(404).json({ message: "Commande non trouvée" });
     }
 
-    let emailText = "";
-    const destinataire = commande.client.utilisateur.email;
-
-    // Check if dateLivraison is updated
-    if (dateLivraison && dateLivraison !== commande.dateLivraison) {
-      commande.dateLivraison = dateLivraison;
-      emailText = `Bonjour ${commande.client.utilisateur.nomUtilisateur},
-
-Votre commande passée le ${commande.dateCommande.toLocaleDateString()} est prévue pour être livrée le ${commande.dateLivraison.toLocaleDateString()}.
-
-Merci de votre confiance.
-L'équipe GreenBike`;
-    }
-
-    // Check if statutCommande is updated to "expédiée" or "livrée"
-    if (
-      statutCommande &&
-      statutCommande !== commande.statutCommande &&
-      (statutCommande === "expédiée" || statutCommande === "livrée")
-    ) {
-      commande.statutCommande = statutCommande;
-      emailText = `Bonjour ${commande.client.utilisateur.nomUtilisateur},
-
-Votre commande passée le ${commande.dateCommande.toLocaleDateString()} a été ${
-        commande.statutCommande
-      }.
-
-Merci de votre confiance.
-L'équipe GreenBike`;
-    }
-
-    await commande.save();
-
-    // Send the email if there's an update
-  /*   if (emailText) {
+    // Envoyer l'email si nécessaire
+    /* if (emailText) {
       const sujet = `Mise à jour de votre commande n°${commande._id}`;
-      await sendEmail(destinataire, sujet, emailText);
+      await sendEmail(commande.client.utilisateur.email, sujet, emailText);
     } */
 
     return res.status(200).json({ status: httpStatus.SUCCESS, data: commande });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({
       status: httpStatus.BAD_REQUEST,
       message: error.message,
@@ -233,8 +233,8 @@ const getCommandeByClient = async (req, res) => {
         });
     }
     return res
-      .status(404)
-      .json({ status: httpStatus.NOT_FOUND, message: "pas de commande " });
+      .status(200)
+      .json({ status: httpStatus.NOT_FOUND, message: "pas de commande ", data:[] });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ status: httpStatus.BAD_REQUEST, message: e });
