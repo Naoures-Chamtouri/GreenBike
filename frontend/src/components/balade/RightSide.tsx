@@ -1,12 +1,17 @@
 import  { useState } from "react";
 import ReservationModal from "./ReservationModal";
+import { useNavigate } from "react-router-dom";
 
-function RightSide({ balade, setAnchorElPopOver, setSuccessMessage,handlePopoverClose }) {
+function RightSide({ balade}) {
 
-   const [open, setOpen] = useState(false);
+const navigate=useNavigate()
 
-   const handleOpen = () => setOpen(true);
-   const handleClose = () => setOpen(false);
+   const handleSubmit = async () => {
+   
+       navigate("/reservation",{state:{balade}});
+    
+   };
+   
 
   return (
     <div className="w-3/5 mt-9 ml-11">
@@ -34,19 +39,11 @@ function RightSide({ balade, setAnchorElPopOver, setSuccessMessage,handlePopover
       </div>
       <button
         className="rounded-sm border-x-customGreen-dark text-2xl py-4 px-10 border-2 hover:bg-customGreen mt-7 ml-80"
-        onClick={handleOpen}
+        onClick={handleSubmit}
       >
         Réserver
       </button>
-      <ReservationModal
-        open={open}
-        handleClose={handleClose}
-        idBalade={balade._id}
-        setAnchorElPopOver={setAnchorElPopOver}
-        setSuccessMessage={setSuccessMessage}
-        handlePopoverClose={handlePopoverClose}
-        montant={balade.tarif}
-      />
+  
     </div>
   );
 }

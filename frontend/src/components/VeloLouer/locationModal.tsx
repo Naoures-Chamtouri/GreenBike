@@ -132,7 +132,7 @@ function RentalModal({ open, onClose, velo }) {
     const isAvailable = await checkAvailability();
 
     if (isAvailable) {
-     const reservationDetails = {
+     const locationDetails = {
        velo,
        startDate: startDate ? startDate.toISOString() : null,
        endDate: endDate ? endDate.toISOString() : null,
@@ -145,7 +145,7 @@ function RentalModal({ open, onClose, velo }) {
 
      localStorage.setItem(
        "reservationDetails",
-       JSON.stringify(reservationDetails)
+       JSON.stringify(locationDetails)
      );
 
      // Rediriger vers la page de réservation

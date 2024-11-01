@@ -11,26 +11,20 @@ import { useLocation } from "react-router-dom";
 import LeftSide from "@/components/balade/LeftSide";
 import Carousel from "@/components/ui/carousel";
 import RightSide from "@/components/balade/RightSide";
-import { Alert, Box, Popover, Snackbar, Typography } from "@mui/material";
-import { useState } from "react";
+
 import SimpleMap from "@/components/ui/mapComponent";
 function PageBalade (){
 const location = useLocation();
 const { balade } = location.state || {};
 
-const [anchorEl, setAnchorEl] = useState(null);
-const [successMessage, setSuccessMessage] = useState("");
+
 const images = balade.images.map((image) => image.path);
 
-  const openPopover = Boolean(anchorEl);
-  const id = openPopover ? "simple-popover" : undefined;
+
     
 
 
-const handlePopoverClose = () => {
-  setAnchorEl(null);
-  setSuccessMessage("");
-};
+
 
 
     
@@ -71,26 +65,9 @@ const handlePopoverClose = () => {
             <LeftSide balade={balade} />
             <RightSide
               balade={balade}
-              setAnchorElPopOver={setAnchorEl}
-              setSuccessMessage={setSuccessMessage}
-              handlePopoverClose={handlePopoverClose}
+             
             />
           </div>
-
-          <Snackbar
-            open={Boolean(anchorEl)}
-            autoHideDuration={2000}
-            onClose={handlePopoverClose}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          >
-            <Alert
-              onClose={handlePopoverClose}
-              severity="success"
-              sx={{ width: "100%" }}
-            >
-              {successMessage}
-            </Alert>
-          </Snackbar>
         </div>
       </div>
     );

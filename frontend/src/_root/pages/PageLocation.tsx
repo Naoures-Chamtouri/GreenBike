@@ -11,12 +11,12 @@ function PageLocation() {
   const navigate = useNavigate();
 const [locationData, setLocationData] = useState(null);
 const [phoneNumber, setPhoneNumber] = useState("");
-const [paymentMethod] = useState("online");
+
 const [showPopover, setShowPopover] = useState(false);
 
 
 useEffect(() => {
-  const storedData = localStorage.getItem("reservationDetails");
+  const storedData = localStorage.getItem("locationDetails");
   if (storedData) {
     setLocationData(JSON.parse(storedData));
   }

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import logo from "../../images/logo/logo.png"
 
 const SigninValidation = z.object({
   email: z.string().email('Adresse email invalide'),
@@ -60,7 +61,11 @@ function SigninForm() {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
         <div className="flex flex-col items-center">
-          <img src="/assets/images/logo.png" alt="logo" className="h-16 mb-6" />
+          <img
+            src={logo}
+            alt="logo"
+            className="h-24 mb-6"
+          />
           <h2 className="text-2xl font-semibold mb-6 text-gray-800">
             Connection Admin
           </h2>
