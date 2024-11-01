@@ -65,18 +65,6 @@ function Topbar() {
       <div className="w-full flex items-center justify-between px-6 bg-white shadow-black shadow-sm">
         <img src="/assets/images/logo.png" alt="logo" className="h-24" />
 
-        <div className="relative w-full max-w-md mx-auto">
-          <Input
-            type="text"
-            className="w-full max-w-xl pr-10 py-2 border rounded"
-            placeholder="Recherche..."
-          />
-          <img
-            src="/assets/icons/search-svgrepo-com.svg"
-            className="w-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-400"
-            alt="search"
-          />
-        </div>
 
         <div className="flex space-x-3 mr-12">
           <div className="p-2 border-2 border-customGreen rounded-full">
