@@ -44,6 +44,6 @@ app.use("/client/reservations", reservationRouter);
 app.use("/client/adresses", adresseRouter);
 app.use("/client/panier", panierRouter);
 app.use("/client/commandes", commandeRouter);
-app.use("/create-payment-intent", payementRouter);
+app.use("/payement", payementRouter);
 
 export default app;

@@ -31,7 +31,7 @@ function Velos() {
         <nav>
           <ol className="flex items-center gap-2">
             <li>
-              <Link className="font-medium" to="/VenteVelos">
+              <Link className="font-medium" to="">
                 Vente des Velos /
               </Link>
             </li>

@@ -34,7 +34,7 @@ function PageParticipant() {
   const [searchTerm, setSearchTerm] = useState('');
   const [open, setOpen] = useState(false);
   const [dateReservation, setDateReservation] = useState(null);
-  const [statusFilters, setStatusFilters] = useState(['réservée']);
+
   const [sortOrderReservation, setSortOrderReservation] = useState('asc');
   const anchorRef = useRef(null); // Reference for Popper
 
@@ -64,11 +64,11 @@ function PageParticipant() {
           <nav>
             <ol className="flex items-center gap-2">
               <li>
-                <Link className="font-medium" to="/VenteVelos">
-                  Reservations Balades /
+                <Link className="font-medium" to="/ReservationBalades/Balades">
+                  Balades/
                 </Link>
               </li>
-              <li className="font-medium text-primary">Balades/</li>
+
               <li className="font-medium text-primary">Participants</li>
             </ol>
           </nav>
@@ -164,36 +164,6 @@ function PageParticipant() {
                 </div>
               </div>
             </FormControl>
-            {/* Filtre par statut */}
-            <FormControl
-              className="w-[229px]"
-              sx={{
-                '& .MuiInputLabel-root': { color: 'green' },
-                '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'green',
-                },
-              }}
-            >
-              <InputLabel>Status</InputLabel>
-              <Select
-                multiple
-                value={statusFilters}
-                onChange={handleStatusChange}
-                input={<OutlinedInput label="Status" />}
-                renderValue={(selected) => selected.join(', ')}
-                color="success"
-              >
-                {statusOptions.map((status) => (
-                  <MenuItem key={status} value={status}>
-                    <Checkbox
-                      color="success"
-                      checked={statusFilters.indexOf(status) > -1}
-                    />
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </Paper>
         </Popper>
 
@@ -201,7 +171,6 @@ function PageParticipant() {
         <ParticipantTable
           searchTerm={searchTerm}
           dateReservation={dateReservation}
-          statusFilters={statusFilters}
           sortOrderReservation={sortOrderReservation}
           id={balade._id}
         />

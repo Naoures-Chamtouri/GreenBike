@@ -30,6 +30,7 @@
     "@stripe/stripe-js": "^4.9.0",
     "@tanstack/react-query": "^5.51.23",
     "axios": "^1.7.7",
+    "braintree-web-drop-in-react": "^1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",

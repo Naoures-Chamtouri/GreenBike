@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Button } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
+import PaymentComponent from "@/components/payement/PaymentComponent";
 /* import StripeCheckout from "@/components/payement/StripeCheckout"; */
 
 
@@ -44,10 +45,11 @@ const PageCommande = () => {
     district: "",
     adresse: "",
   });
+  const [total,setTotal]=useState(0)
   const [deliveryInfo, setDeliveryInfo] = useState({ date: "" });
   const [errors, setErrors] = useState({});
     const [showPopover, setShowPopover] = useState(false);
-    const articles =VeloVenteCartItems.map(item => item.id);
+   
   useEffect(() => {
     
     const fetchVilles = async () => {
@@ -143,10 +145,10 @@ const PageCommande = () => {
     }
   }, [address.delegation]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+   
 
-    if (validateForm()) {
+   
       try {
        
         const commandeData = {
@@ -177,7 +179,7 @@ const PageCommande = () => {
       } catch (error) {
         console.error("Erreur lors du passage de la commande:", error);
       }
-    }
+    
   };
 
   return (
@@ -295,18 +297,9 @@ const PageCommande = () => {
       </form>
 
       <div>
-        <ResumePanier items={VeloVenteCartItems} />
-        <div className="mt-6">
-          <Button
-            variant="contained"
-            color="success"
-            className="w-full"
-            onClick={handleSubmit}
-          >
-            Finaliser la commande
-          </Button>
-        {/*   <StripeCheckout amount={10} /> */}
-        </div>
+        <ResumePanier items={VeloVenteCartItems} setTotal={setTotal} />
+        <PaymentComponent montant={total} onSuccess={handleSubmit} validate={validateForm} />
+       
       </div>
       {showPopover && (
         <div className="fixed top-16 right-4 p-4 bg-green-400 text-white rounded shadow-lg">

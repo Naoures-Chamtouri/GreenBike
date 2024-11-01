@@ -64,35 +64,16 @@ function ProfitChart() {
       );
   }, []);
 
-  // Calcul du total avec filtre pour chaque type de service
-  const calculateFilteredTotal = (data, statusKey, statusValue, priceKey) =>
-    data
-      ?.filter((item) => item[statusKey] === statusValue)
-      .reduce((sum, item) => sum + (item[priceKey] || 0), 0);
+  // Calcul du total sans filtre
+  const calculateTotal = (data, priceKey) =>
+    data?.reduce((sum, item) => sum + (item[priceKey] || 0), 0);
 
-      const calculateFilteredTotal2 = (data, statusKey, statusValue, priceKey) =>
-        data
-          ?.filter((item) => item[statusKey] === statusValue)
-          .reduce((sum, item) => sum + (item.balade[priceKey] || 0), 0);
+  const calculateTotal2 = (data, priceKey) =>
+    data?.reduce((sum, item) => sum + (item.balade[priceKey] || 0), 0);
 
-  const totalCommandes = calculateFilteredTotal(
-    commandes,
-    'statutCommande',
-    'livrée',
-    'total',
-  );
-  const totalLocations = calculateFilteredTotal(
-    locations,
-    'etat',
-    'Terminé',
-    'prixLocation',
-  );
-  const totalReservations = calculateFilteredTotal2(
-    reservations,
-    'status',
-    'payée',
-    'tarif',
-  );
+  const totalCommandes = calculateTotal(commandes, 'total');
+  const totalLocations = calculateTotal(locations, 'prixLocation');
+  const totalReservations = calculateTotal2(reservations, 'tarif');
 
   const commandesData = {
     labels: ['Livrée', 'En cours', 'Expédiée', 'Annulée'],
@@ -134,10 +115,10 @@ function ProfitChart() {
   };
 
   const reservationsData = {
-    labels: ['Payée', 'Annulée','Réservée'],
+    labels: ['Réservée'],
     datasets: [
       {
-        data: ['payée', 'annulée','réservée'].map(
+        data: ['payée'].map(
           (status) =>
             reservations?.filter((item) => item.status === status).length,
         ),
@@ -160,74 +141,74 @@ function ProfitChart() {
     ],
   };
 
-   const lineData = {
-     labels: [
-       'Jan',
-       'Fév',
-       'Mar',
-       'Avr',
-       'Mai',
-       'Juin',
-       'Juil',
-       'Août',
-       'Sep',
-       'Oct',
-       'Nov',
-       'Déc',
-     ],
-     datasets: [
-       {
-         label: 'Profits Commandes',
-         data: Array.from({ length: 12 }, () =>
-           Math.floor(Math.random() * 500),
-         ),
-         borderColor: '#4FC3F7',
-         fill: false,
-       },
-       {
-         label: 'Profits Locations',
-         data: Array.from({ length: 12 }, () =>
-           Math.floor(Math.random() * 400),
-         ),
-         borderColor: '#FFB74D',
-         fill: false,
-       },
-       {
-         label: 'Profits Réservations',
-         data: Array.from({ length: 12 }, () =>
-           Math.floor(Math.random() * 300),
-         ),
-         borderColor: '#81C784',
-         fill: false,
-       },
-     ],
-   };
-
-const chartOptions2 = {
-  responsive: true,
-  plugins: {
-    legend: { position: 'top' },
-    title: { display: true, text: 'Statistiques de Services' },
-  },
-  scales: {
-    y: {
-      type: 'logarithmic', // Utilisez l'échelle logarithmique
-      title: {
-        display: true,
-        text: 'Total en DT',
+  const lineData = {
+    labels: [
+      'Jan',
+      'Fév',
+      'Mar',
+      'Avr',
+      'Mai',
+      'Juin',
+      'Juil',
+      'Août',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Déc',
+    ],
+    datasets: [
+      {
+        label: 'Profits Commandes',
+        data: Array.from({ length: 12 }, () =>
+          Math.floor(Math.random() * 500),
+        ),
+        borderColor: '#4FC3F7',
+        fill: false,
       },
-      min: 1, // Assurez-vous que le minimum est supérieur à 0
-    },
-  },
-};
+      {
+        label: 'Profits Locations',
+        data: Array.from({ length: 12 }, () =>
+          Math.floor(Math.random() * 400),
+        ),
+        borderColor: '#FFB74D',
+        fill: false,
+      },
+      {
+        label: 'Profits Réservations',
+        data: Array.from({ length: 12 }, () =>
+          Math.floor(Math.random() * 300),
+        ),
+        borderColor: '#81C784',
+        fill: false,
+      },
+    ],
+  };
 
-  const chartOptions = {
+  const chartOptions2 = {
     responsive: true,
     plugins: {
       legend: { position: 'top' },
       title: { display: true, text: 'Statistiques de Services' },
     },
+    scales: {
+      y: {
+        type: 'logarithmic', // Utilisez l'échelle logarithmique
+        title: {
+          display: true,
+          text: 'Total en DT',
+        },
+        min: 1, // Assurez-vous que le minimum est supérieur à 0
+      },
+    },
   };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top',
+        title: { display: true, text: 'Statistiques de Services' },
+    },
+  }};
 
   return (
     <div className="p-8 space-y-8 bg-gray-100">

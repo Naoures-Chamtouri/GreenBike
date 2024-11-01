@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import dayjs from "dayjs";
+import PaymentComponent from "@/components/payement/PaymentComponent";
 
 function PageLocation() {
   const { user } = useAuth();
@@ -82,7 +83,7 @@ const {
   };
 
   return (
-    <div className="mt-16 flex px-48">
+    <div className="mt-16 flex px-20">
       <div className="flex-1 mr-4">
         <h1 className="text-2xl font-bold mb-4">Détails de la Location</h1>
         <form>
@@ -120,33 +121,12 @@ const {
               required
             />
           </div>
-          <div className="mb-4 mt-5">
-            <span className="block text-sm font-medium mb-1">
-              Mode de Paiement
-            </span>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                value={paymentMethod}
-                checked
-                readOnly
-                className="mr-2"
-              />
-              Paiement sur Place
-            </label>
-          </div>
         </form>
-        
+
         <p className="text-sm text-gray-500 mt-4">
           Note : Tout retard dans le retour du vélo peut entraîner des frais
           supplémentaires.
         </p>
-        <button
-          onClick={handleSubmit}
-          className="mt-7 bg-green-500 text-white py-3 px-5 rounded hover:bg-green-600"
-        >
-          Confirmer la Location
-        </button>
       </div>
       <div className="flex-1">
         <h2 className="text-xl font-bold mb-4">Résumé de la Location</h2>
@@ -186,6 +166,10 @@ const {
               Prix total: {totalPrice} TND
             </span>
           </div>
+          <PaymentComponent
+            montant={totalPrice}
+            onSuccess={handleSubmit} validate={true}            
+          />
         </div>
       </div>
       {showPopover && (

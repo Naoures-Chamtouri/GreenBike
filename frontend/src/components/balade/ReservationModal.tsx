@@ -12,15 +12,21 @@ import {
 } from "@mui/material";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
+import PaymentComponent from "../payement/PaymentComponent";
+import { MonitorDot } from "lucide-react";
 
-const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSuccessMessage,handlePopoverClose}) => {
+const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSuccessMessage,handlePopoverClose,montant}) => {
   const [nom, setNom] = useState("");
   const [numTelephone, setNumTelephone] = useState("");
   const { user } = useAuth();
   
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    const phoneRegex = /^[0-9]{8}$/;
+    if (!phoneRegex.test(numTelephone)) {
+      alert("Le numéro de téléphone doit contenir exactement 8 chiffres.");
+      return;
+    }
 
     try {
       await axios.post("http://localhost:4000/client/reservations", {
@@ -45,7 +51,7 @@ const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSu
     <>
       <Modal open={open} onClose={handleClose}>
         <Box
-          className="bg-white rounded-lg p-10 mx-auto my-16 w-full max-w-lg shadow-lg border-2 border-green-500"
+          className="bg-white rounded-lg p-5 mx-auto my-10 w-full max-w-lg shadow-lg border-2 border-green-500"
           sx={{
             "@media (max-width: 600px)": { padding: "16px" }, // Styles responsifs si nécessaire
           }}
@@ -105,32 +111,7 @@ const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSu
               }}
             />
 
-            <RadioGroup value="presentiel" className="mb-8 ">
-              <FormControlLabel
-                value="presentiel"
-                control={
-                  <Radio
-                    sx={{
-                      color: "#52B71D",
-                      "&.Mui-checked": { color: "green" },
-                    }}
-                  />
-                }
-                label="Paiement en présentiel"
-                className="text-gray-800"
-              />
-            </RadioGroup>
-
-            <Typography
-              variant="body1"
-              className="mb-6 text-gray-600 "
-              sx={{ lineHeight: "1.5", fontSize: "16px" }}
-            >
-              ⚠️ Vous pouvez annuler la réservation jusqu'à 3 jours avant la
-              date de la balade.
-            </Typography>
-
-            <Button
+           {/*  <Button
               type="submit"
               variant="contained"
               className="w-full "
@@ -145,8 +126,10 @@ const ReservationModal = ({ open, handleClose ,idBalade,setAnchorElPopOver,setSu
               }}
             >
               Réserver
-            </Button>
+            </Button> */}
+            <PaymentComponent montant={montant} onSuccess={handleSubmit} validate={true} />
           </form>
+        
         </Box>
       </Modal>
 

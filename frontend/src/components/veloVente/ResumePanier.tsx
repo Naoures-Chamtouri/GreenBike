@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import Loader from "../shared/loader";
 
 
-function ResumePanier({setArticles}) {
+function ResumePanier({setTotal}) {
   const [panier, setPanier] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ function ResumePanier({setArticles}) {
   useEffect(() => {
    
     fetchPanier();
-    
+    setTotal(panier.articles?.reduce((sum, item) => sum + item.total, 0));
    
     
      

@@ -45,6 +45,7 @@ function RightSide({ balade, setAnchorElPopOver, setSuccessMessage,handlePopover
         setAnchorElPopOver={setAnchorElPopOver}
         setSuccessMessage={setSuccessMessage}
         handlePopoverClose={handlePopoverClose}
+        montant={balade.tarif}
       />
     </div>
   );

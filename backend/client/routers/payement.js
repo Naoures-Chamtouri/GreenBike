@@ -1,6 +1,7 @@
 import express from "express"
-import payement from "../controllers/payement.js"
+import payementController from "../controllers/payement.js"
 const router=express.Router()
-router.post("/",payement);
+router.post("/braintree/checkout", payementController.payement);
+router.get("/braintree/token",payementController.keyClient);
 
 export default router

@@ -20,7 +20,7 @@ function VelosLocation() {
         <nav>
           <ol className="flex items-center gap-2">
             <li>
-              <Link className="font-medium" to="/LocationVelos">
+              <Link className="font-medium" to="">
                 Location des Velos /
               </Link>
             </li>

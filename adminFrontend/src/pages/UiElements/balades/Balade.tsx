@@ -40,7 +40,7 @@ function Balade() {
           <nav>
             <ol className="flex items-center gap-2">
               <li>
-                <Link className="font-medium" to="/LocationVelos">
+                <Link className="font-medium" to="/ReservationBalades/Balades">
                   Reservation des Balades /
                 </Link>
               </li>
@@ -94,7 +94,7 @@ function Balade() {
                 Filtrer
               </Button>
             </div>
-            
+
             {/* Checkbox Historique */}
             <FormControlLabel
               control={
