@@ -10,13 +10,13 @@ function PageLocation() {
 
   const navigate = useNavigate();
 const [locationData, setLocationData] = useState(null);
-const [phoneNumber, setPhoneNumber] = useState("");
+const [phoneNumber, setPhoneNumber] = useState(user?user.utilisateur.numTelephone:"");
 
 const [showPopover, setShowPopover] = useState(false);
 
 
 useEffect(() => {
-  const storedData = localStorage.getItem("locationDetails");
+  const storedData = localStorage.getItem("reservationDetails");
   if (storedData) {
     setLocationData(JSON.parse(storedData));
   }
@@ -103,7 +103,7 @@ const {
             </label>
             <input
               type="tel"
-              value={phoneNumber}
+              value={phoneNumber||user.utilisateur.numTelephone}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="border rounded px-2 py-2 w-1/2 "
               required

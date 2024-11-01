@@ -67,27 +67,31 @@ const initialValues = {
 const [showPopover,setShowPopover]=useState(false)
 
 const handleChange = (event) => {
-  const { name, value } = event.target;
+  const { name, type, checked, value } = event.target;
+
+  // Déterminer la valeur en fonction du type de champ
+  const inputValue = type === 'checkbox' ? checked : value;
 
   // Fonction pour mettre à jour un champ imbriqué
-  const updateNestedField = (path, value) => {
-    const keys = path.split('.'); // Split by '.' to handle nested fields like "roue.materiau"
-    let updatedValues = { ...formValues }; // Create a copy of formValues
+  const updateNestedField = (path, inputValue) => {
+    const keys = path.split('.'); // Pour gérer les champs imbriqués comme "roue.materiau"
+    let updatedValues = { ...formValues }; // Copier formValues
     let field = updatedValues;
 
-    // Parcourir les clés imbriquées pour mettre à jour la valeur correcte
+    // Parcourir les clés imbriquées pour trouver le champ correct
     for (let i = 0; i < keys.length - 1; i++) {
+      if (!field[keys[i]]) field[keys[i]] = {}; // Créer les objets imbriqués si nécessaire
       field = field[keys[i]];
     }
 
-    field[keys[keys.length - 1]] = value; // Mettre à jour la clé finale
+    field[keys[keys.length - 1]] = inputValue; // Mettre à jour la dernière clé
 
     setFormValues(updatedValues); // Mettre à jour l'état
   };
 
-  updateNestedField(name, value);
+  // Appeler la fonction pour mettre à jour le champ
+  updateNestedField(name, inputValue);
 };
-
   const handleUpdate=async()=>{
   let formIsValid = true;
   

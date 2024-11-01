@@ -205,7 +205,7 @@ const PageCommande = () => {
             onChange={(e) => handleChange(e, "personInfo")}
             placeholder="Numéro de téléphone"
             className="w-full p-2 border border-green-600 rounded"
-            disabled={!!user.utilisateur.numTelephone}
+           
           />
           {errors.telephone && (
             <p className="text-red-500">{errors.telephone}</p>

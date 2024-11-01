@@ -17,8 +17,11 @@ function PageReservation() {
   const location = useLocation();
   const { balade } = location.state || {};
   const [nom, setNom] = useState("");
-  const [numTelephone, setNumTelephone] = useState("");
+ 
   const { user } = useAuth();
+   const [numTelephone, setNumTelephone] = useState(
+     user ? user.utilisateur.numTelephone : ""
+   );
   const navigate = useNavigate();
   const [showPopover, setShowPopover] = useState(false);
 
@@ -112,7 +115,7 @@ function PageReservation() {
                 value={user ? user.utilisateur?.numTelephone : numTelephone}
                 onChange={(e) => setNumTelephone(e.target.value)}
                 required
-                disabled={!!user?.utilisateur?.numTelephone}
+             
                 InputLabelProps={{
                   style: { color: "black" },
                 }}

@@ -21,7 +21,7 @@ const payement = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }; */
-import braintree from "braintree"
+import braintree from "braintree";
 const gateway = new braintree.BraintreeGateway({
   environment: braintree.Environment.Sandbox, // ou Production
   merchantId: "d945wsgspbp9vvvy",
@@ -35,13 +35,12 @@ const keyClient = async (req, res) => {
       console.log(err);
       return res.status(500).send(err);
     }
-    
+
     res.send(response.clientToken);
   });
 };
 
 const payement = async (req, res) => {
-
   const nonceFromClient = req.body.paymentMethodNonce;
   const amount = req.body.amount; // Montant à traiter
 
@@ -55,11 +54,11 @@ const payement = async (req, res) => {
     },
     (err, result) => {
       if (err || !result.success) {
-        console.log(err)
+        console.log(err);
         return res.status(500).send(err || result.message);
       }
       res.send(result);
     }
   );
 };
-export default {payement,keyClient}
+export default { payement, keyClient };
