@@ -138,7 +138,7 @@ function CaracteristicModal({ openModal, handleCloseModal, velo }) {
 
         <button
           onClick={handleCloseModal}
-          className="mt-4 w-full px-4 py-2 text-white bg-customgreen rounded shadow hover:bg-green-600 transition-all duration-200"
+          className="mt-4 w-full px-4 py-2 text-white bg-customgreen rounded shadow bg-green-600 transition-all duration-200"
         >
           Fermer
         </button>

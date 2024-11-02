@@ -8,7 +8,7 @@ import Image from "../../models/image.js"
 
 const getAllBalades=async(req,res)=>{
     try{
-      const Balades = await Balade.find()
+      const Balades = await Balade.find({ etat: "Publiée" })
         .populate({ path: "adresseDepart", model: AdresseBalade })
         .populate({ path: "adresseArrivée", model: AdresseBalade })
         .populate({ path: "images", model: Image });
@@ -60,6 +60,7 @@ const getBaladebyId=async(req,res)=>{
          filters.duree.$lte = Number(max);
        }
      }
+     filters.etat="Publiée"
 
      // Récupérer les balades qui correspondent aux autres filtres
      let balades = await Balade.find(filters)

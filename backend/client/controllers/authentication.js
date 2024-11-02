@@ -7,11 +7,11 @@ import bcrypt from 'bcryptjs';
 const login = async (req, res) => {
   try {
     const { email, motDePasse } = req.body;
-    console.log("Email reçu :", email);
+  
 
     
     const clients = await Client.find({ "utilisateur.email": email }).limit(1);
-    console.log("Clients trouvés :", clients);
+   
 
     
     if (clients.length === 0) {
@@ -23,7 +23,7 @@ const login = async (req, res) => {
 
    
     const client = clients[0];
-    console.log("Client trouvé :", client);
+  
 
    
     if (client && client.utilisateur) {

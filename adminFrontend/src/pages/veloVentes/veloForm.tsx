@@ -549,7 +549,7 @@ const handleChange = (event) => {
               className="w-1/3"
               color="success"
               id="duree-input"
-              label="Durée d'utilisation (annee/mois)"
+              label="Durée d'utilisation/mois"
               variant="outlined"
               name="duree"
               value={formValues.duree}

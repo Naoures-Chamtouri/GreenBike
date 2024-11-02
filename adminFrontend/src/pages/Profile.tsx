@@ -35,7 +35,7 @@ function Profile() {
     if (user) {
       setFormData({
         nomUtilisateur: user.nomUtilisateur || '',
-        image: ownerLicense[0] || user.image || '', // Utiliser l'image existante ou celle téléchargée
+        image: ownerLicense[0] || user.image || '', 
       });
     }
   }, [user, ownerLicense]);

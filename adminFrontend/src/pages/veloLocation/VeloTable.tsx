@@ -3,16 +3,43 @@ import { Package } from '../../types/package';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SupprimeModal from './SupprimeModal';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, Button, CircularProgress, Popover, Typography } from '@mui/material';
 
 const VeloTable = ({ searchTerm }) => {
 
    const [open, setOpen] = useState(false);
    const [veloId,setVeloId]=useState(null);
+ const [showPopover, setShowPopover] = useState(false);
+ const [anchorEl, setAnchorEl] = useState(null);
+const handleDelete = async (bikeId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:4000/admin/locations/check/${bikeId}`,
+    );
+    const data = await response.json();
 
-   const handleOpen = (id) =>{
-    setVeloId(id)
-     setOpen(true)};
+    if (data.hasLocations) {
+      setShowPopover(true);
+    } else {
+      setVeloId(bikeId);
+      setOpen(true);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la vérification des commandes:', error);
+  }
+};
+
+const handleOpen = (id) => {
+  handleDelete(id);
+};
+ const handleClosePopover = () => {
+   setShowPopover(false);
+   setAnchorEl(null);
+ };
+
+
+
+
 
    const handleClose = () => setOpen(false);
 
@@ -146,7 +173,9 @@ if (loading) {
                     </button>
                     <button
                       className="hover:text-green-600"
-                      onClick={()=>{handleOpen(velo._id)}}
+                      onClick={() => {
+                        handleOpen(velo._id);
+                      }}
                     >
                       <svg
                         className="fill-current"
@@ -188,6 +217,26 @@ if (loading) {
           </tbody>
         </table>
       </div>
+      <Popover
+        open={showPopover}
+        anchorEl={anchorEl}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Typography sx={{ p: 2 }}>
+          Ce vélo est associé à des locations. Vous ne pouvez pas le supprimer.
+        </Typography>
+        <Button onClick={handleClosePopover} color="success">
+          Fermer
+        </Button>
+      </Popover>
     </div>
   );
 };

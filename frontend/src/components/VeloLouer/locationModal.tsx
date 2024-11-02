@@ -61,6 +61,32 @@ function RentalModal({ open, onClose, velo }) {
       })
     );
   };
+  const validateDates = () => {
+    const today = dayjs();
+    if (!startDate || !endDate) {
+      setErrors((prev) => ({
+        ...prev,
+        date: "Les dates de début et de fin sont requises.",
+      }));
+      return false;
+    }
+    if (startDate.isBefore(today, "day")) {
+      setErrors((prev) => ({
+        ...prev,
+        startDate: "La date de début doit être dans le futur.",
+      }));
+      return false;
+    }
+    if (endDate.isBefore(startDate)) {
+      setErrors((prev) => ({
+        ...prev,
+        endDate: "La date de fin doit être après la date de début.",
+      }));
+      return false;
+    }
+    setErrors({});
+    return true;
+  };
 
   const calculateTotalPrice = (start, end) => {
     if (start && end && velo.prixHeure) {
@@ -127,7 +153,7 @@ function RentalModal({ open, onClose, velo }) {
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!validateForm() || !validateDates()) return;
 
     const isAvailable = await checkAvailability();
 

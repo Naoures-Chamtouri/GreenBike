@@ -6,12 +6,11 @@ import bcrypt from "bcryptjs";
 const login = async (req, res) => {
   try {
     const { email, motDePasse } = req.body;
-    console.log("Email reçu :", email);
+   
 
    
     const guides = await Guide.find({ "utilisateur.email": email }).limit(1);
-    console.log("guide trouvés :", guides);
-
+   
    
     if (guides.length === 0) {
       return res.status(404).json({
@@ -22,7 +21,7 @@ const login = async (req, res) => {
 
     // Prendre le premier client du tableau
     const guide = guides[0];
-    console.log("guide trouvé :", guide);
+
 
     // Vérifiez si le client a été trouvé
     if (guide && guide.utilisateur) {

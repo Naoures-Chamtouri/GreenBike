@@ -223,7 +223,7 @@ const updateVeloLocation = async (req, res) => {
       selectedCouleurs,
       ownerLicense,
     } = req.body;
-    console.log(categorie);
+ 
     // Recherche du vélo en vente avec son sous-document "velo"
     const veloLocation = await VeloLocation.findById(id).populate("velo");
 

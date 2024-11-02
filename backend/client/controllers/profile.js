@@ -32,7 +32,7 @@ const updateClient = async (req, res) => {
       { $set: updateFields },
       { new: true }
     ).populate({path:'utilisateur',populate:{path:"image",model:Image}}); 
-    console.log("client",client)
+    
 
     if (!client) {
       return res.status(404).json({

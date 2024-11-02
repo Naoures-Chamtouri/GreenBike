@@ -30,8 +30,8 @@ function Commandes() {
   const [open, setOpen] = useState(false);
   const [dateCommande, setDateCommande] = useState(null);
   const [dateLivraison, setDateLivraison] = useState(null);
-  const [sortOrderCommande, setSortOrderCommande] = useState('asc');
-  const [sortOrderLivraison, setSortOrderLivraison] = useState('asc');
+  const [sortOrderCommande, setSortOrderCommande] = useState('desc');
+  const [sortOrderLivraison, setSortOrderLivraison] = useState('desc');
   const [statusFilters, setStatusFilters] = useState(['en cours', 'expédiée']);
   const anchorRef = useRef(null); // Reference for Popper
 

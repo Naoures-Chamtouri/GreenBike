@@ -35,7 +35,7 @@ function PageParticipant() {
   const [open, setOpen] = useState(false);
   const [dateReservation, setDateReservation] = useState(null);
 
-  const [sortOrderReservation, setSortOrderReservation] = useState('asc');
+  const [sortOrderReservation, setSortOrderReservation] = useState('desc');
   const anchorRef = useRef(null); // Reference for Popper
 
   const statusOptions = ['payée','annulée','réservée'];

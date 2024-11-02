@@ -57,8 +57,7 @@ function MesLocations() {
 
             <div className="text-3xl font-bold text-customgreen mb-4">
               Prix Total :{" "}
-              {location.prixLocation *
-                calculateHours(location.dateDebut, location.dateFin)}{" "}
+              {location.prixLocation }
               TND
             </div>
 

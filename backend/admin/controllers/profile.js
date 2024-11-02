@@ -52,7 +52,7 @@ const updateAdmin = async (req, res) => {
 const updatePassword = async (req, res) => {
   try {
     const { motDePasseActuel, nouveauMotDePasse } = req.body;
-    console.log(motDePasseActuel);
+  
     const id = req.admin._id;
 
     const admin = await Admin.findById(id);

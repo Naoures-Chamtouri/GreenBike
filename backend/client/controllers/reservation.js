@@ -7,7 +7,7 @@ import AdresseBalade from "../../models/adresseBalade.js";
 const createReservation =async(req,res)=>{
     try{
         const{participant,numTelephone,balade}=req.body;
-        console.log(balade)
+   
         const reservation=new Reservation({participant,numTelephone,balade});
         await reservation.save();
         res.status(200).json({status:httpStatus.SUCCESS,data:reservation});

@@ -5,8 +5,7 @@ import CategorieVelo from "../../models/categorieVelo.js";
  const createType = async (req, res) => {
   try {
     const { nom, categorie } = req.body;
-    console.log(nom);
-    console.log(categorie)
+ 
 
     const existingCategory = await CategorieVelo.findById(categorie);
     if (!existingCategory) {
@@ -26,7 +25,7 @@ import CategorieVelo from "../../models/categorieVelo.js";
 const getTypesbyCategory = async (req, res) => {
   try {
     const { categorie } = req.params;
-    console.log(categorie)
+   
 
    
     if (!categorie) {

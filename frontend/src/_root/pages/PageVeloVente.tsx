@@ -91,7 +91,7 @@ function PageVeloVente() {
             </h2>
             <h2>
               <span className="text-customGreen">Durée d'utilisation:</span>
-              {velo.duréeUtilisation}
+              {velo.duréeUtilisation} mois
             </h2>
           </div>
 
@@ -121,7 +121,7 @@ function PageVeloVente() {
           </button>
         </div>
       </div>
-      <AvisSection id={velo._id} />
+  
     </div>
   );
 }

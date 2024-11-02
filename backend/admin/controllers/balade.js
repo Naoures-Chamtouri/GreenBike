@@ -128,19 +128,7 @@ const getBaladeById = async (req, res) => {
 const updateBaladeById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nom,
-      description,
-      dateDepart,
-      duree,
-      adresseDepart,
-      adresseArrivée,
-      tarif,
-      distance,
-      Difficulté,
-      ownerLicense,
-      typeVelo,
-      conseils,
-      trajet} = req.body;
+    const { etat} = req.body;
 
     // Trouve la balade par ID
     const balade = await Balade.findById(id);
@@ -152,58 +140,11 @@ const updateBaladeById = async (req, res) => {
       });
     }
    
-     const findOrCreateAdresse = async (adresseData) => {
-      const { lat, lng, nom } = adresseData;
-      let adresse = await AdresseBalade.findOne({ lat, lng, nom });
-
-      if (!adresse) {
-        adresse = new AdresseBalade({ lat, lng, nom });
-        await adresse.save();
-      }
-
-      return adresse._id; // retourne l'ID de l'adresse trouvée ou créée
-    };
-
-    // Vérifie ou crée l'adresse de départ et d'arrivée
-    const adresseDepartId = await findOrCreateAdresse(adresseDepart);
-    const adresseArriveeId = await findOrCreateAdresse(adresseArrivée);
-
-    // Création des nouvelles images si `ownerLicense` est fourni
-    let newImagesIds = [];
-    if (ownerLicense && ownerLicense.length > 0) {
-      const newImages = await Promise.all(
-        ownerLicense.map(async (imageData) => {
-          const newImage = new Image({
-            name: imageData.name,
-            path: imageData.photo,
-          });
-          return await newImage.save();
-        })
-      );
-      newImagesIds = newImages;
-    }
-
     
-    const oldImagesIds = balade.images ? balade.images : [];
-
-    const updatedImages = [...oldImagesIds, ...newImagesIds];
-
     const updatedBalade = await Balade.findByIdAndUpdate(
       id,
       {
-        nom,
-        description,
-        dateDepart,
-        duree,
-        adresseDepart: adresseDepartId,
-        adresseArrivee: adresseArriveeId,
-        tarif,
-        distance,
-        Difficulté,
-        images: updatedImages,
-        typeVelo,
-        conseils,
-        trajet,
+        etat: etat,
       },
       { new: true }
     )
@@ -298,6 +239,9 @@ const deleteBaladeById = async (req, res) => {
     });
   }
 };
+
+
+
 
 export default {
   createBalade,

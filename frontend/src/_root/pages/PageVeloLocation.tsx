@@ -103,7 +103,7 @@ function PageVeloLocation() {
           />
         </div>
       </div>
-      <AvisSection id={velo._id} />
+    
     </div>
   );
 }

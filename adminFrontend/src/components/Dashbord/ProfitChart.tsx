@@ -244,12 +244,7 @@ function ProfitChart() {
         <Bar data={barData} options={chartOptions2} />
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">
-          Évolution des Profits par Mois
-        </h3>
-        <Line data={lineData} options={chartOptions} />
-      </div>
+    
     </div>
   );
 }

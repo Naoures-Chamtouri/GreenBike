@@ -2,15 +2,35 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SupprimeModal from './SupprimeModal';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, Button, CircularProgress, Popover, Typography } from '@mui/material';
+import { FaBullseye } from 'react-icons/fa';
 
 const VeloTable = ({ searchTerm,showOutOfStock }) => {
   const [open, setOpen] = useState(false);
   const [velos,setVelos]=useState([]);
+  const [showPopover,setShowPopover]=useState(false)
   const [veloId,setVeloId]=useState(null);
 
-  const handleOpen = (id) => {setVeloId(id) 
-    setOpen(true)};
+const handleDelete = async (bikeId) => {
+  try {
+    const response = await fetch(`http://localhost:4000/admin/commandes/check/${bikeId}`);
+    const data = await response.json();
+
+    if (data.hasOrders) {
+      setShowPopover(true); 
+    } else {
+      setVeloId(bikeId); 
+      setOpen(true); 
+    }
+  } catch (error) {
+    console.error('Erreur lors de la vérification des commandes:', error);
+  }
+};
+
+const handleOpen = (id) => {
+ 
+  handleDelete(id); 
+};
 
   const handleClose = () => setOpen(false);
 
@@ -21,6 +41,18 @@ const VeloTable = ({ searchTerm,showOutOfStock }) => {
     navigate(`/VenteVelos/Velos/${id}`, { state: { velo } });
   };
 
+
+   const [anchorEl, setAnchorEl] = useState(null);
+
+ 
+ const handleClosePopover = () => {
+   setShowPopover(false);
+   setAnchorEl(null);
+ };
+
+ const handleOpenPopover = (event) => {
+   setAnchorEl(event.currentTarget);
+ };
 
    useEffect(() => {
      axios
@@ -152,7 +184,9 @@ const filteredVelos = velos
                     </button>
                     <button
                       className="hover:text-green-600"
-                      onClick={()=>{handleOpen(velo._id)}}
+                      onClick={() => {
+                        handleOpen(velo._id);
+                      }}
                     >
                       <svg
                         className="fill-current"
@@ -194,6 +228,25 @@ const filteredVelos = velos
           </tbody>
         </table>
       </div>
+
+      <Popover
+        open={showPopover}
+        anchorEl={anchorEl}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Typography sx={{ p: 2 }}>
+          Ce vélo est associé à des commandes. Vous ne pouvez pas le supprimer.
+        </Typography>
+        <Button onClick={handleClosePopover} color='success'>Fermer</Button>
+      </Popover>
     </div>
   );
 };

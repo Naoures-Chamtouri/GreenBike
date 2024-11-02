@@ -110,9 +110,7 @@ const getVeloLocationsByFilter = async (req, res) => {
     const marques = req.body.marques || [];
     const categorie = req.body.categorie || "";
 
-    console.log("Types:", types);
-    console.log("Marques:", marques);
-    console.log("Categorie:", categorie);
+ 
 
     let typeIds = [];
 

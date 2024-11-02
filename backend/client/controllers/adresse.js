@@ -6,7 +6,7 @@ import District from "../../models/district.js"
 
 const getAllVilles=async(req,res)=>{
     try{
-        console.log("hh",req.client._id)
+      
         const villes=await Ville.find();
         return res.status(200).json({status:httpStatus.SUCCESS,data:villes})
 
@@ -21,7 +21,7 @@ const getDelegationbyVille=async(req,res)=>{
     try{
         const id=req.params.villeId;
         const delegations= await Delegation.find({ville:id});
-        console.log("del",delegations)
+       
         return res.status(200).json({status:httpStatus.SUCCESS,data:delegations})
     }catch(error){
          return res

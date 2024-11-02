@@ -1,32 +1,13 @@
-/* import stripe from "stripe"
-import dotenv from "dotenv";
 
+import dotenv from "dotenv";
 dotenv.config()
 
-const Stripe=stripe(process.env.PAY_KEY)
-
-const payement = async (req, res) => {
-  const { amount } = req.body;
-
-  try {
-    const paymentIntent = await Stripe.paymentIntents.create({
-      amount, 
-      currency: "usd", 
-    });
-
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}; */
 import braintree from "braintree";
 const gateway = new braintree.BraintreeGateway({
   environment: braintree.Environment.Sandbox, // ou Production
-  merchantId: "d945wsgspbp9vvvy",
-  publicKey: "54znmztb3mzdx3y5",
-  privateKey: "45a56b03a25adcf57ed489df137bde8a",
+  merchantId:process.env.MERCHANT,
+  publicKey:process.env.PUBLIC_KEY,
+  privateKey:process.env.PRIVATE_KEY,
 });
 
 const keyClient = async (req, res) => {

@@ -178,7 +178,7 @@ const getVeloVenteById = async (req, res) => {
     }
 
     const avis = await Avis.find({ reference: id, onType: "VeloVente" });
-    console.log(avis);
+    
 
     veloVente.avis = avis;
 
@@ -222,7 +222,7 @@ const updateVeloVente = async (req, res) => {
       selectedCouleurs,
       ownerLicense,
     } = req.body;
-    console.log(categorie);
+  
     // Recherche du vélo en vente avec son sous-document "velo"
     const veloVente = await VeloVente.findById(id).populate("velo");
 
@@ -327,7 +327,7 @@ const updateVeloVente = async (req, res) => {
 const deleteVeloVente = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+   
     const result = await VeloVente.deleteOne({ _id: id });
     if (result) {
       return res.status(200).json({

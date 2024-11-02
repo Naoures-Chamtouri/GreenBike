@@ -71,6 +71,7 @@ function LocationTable({
     axios
       .get('http://localhost:4000/admin/locations')
       .then((response) => {
+          
         setLocations(response.data.data);
         setUpdate(Array(response.data.data.length).fill(false));
          setLoading(false);
@@ -170,7 +171,7 @@ function LocationTable({
               </tr>
             </thead>
             <tbody>
-              {sortedLocations.map((location, key) => (
+              {sortedLocations.reverse().map((location, key) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] py-5 px-1 dark:border-strokedark ">
                     <h4 className="font-medium text-black dark:text-white">

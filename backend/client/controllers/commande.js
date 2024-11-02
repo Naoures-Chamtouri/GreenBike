@@ -15,7 +15,7 @@ const passerCommande = async (req, res) => {
   try {
     const clientId = req.client._id;
     const {adresseLivraison,dateLivraison,numTelephone}=req.body
-    console.log(adresseLivraison)
+   
    
     const panier = await Panier.findOne({ client: clientId }).populate(
       {path:"articles",model:LignePanier}

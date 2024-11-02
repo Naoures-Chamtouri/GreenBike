@@ -20,7 +20,7 @@ import httpStatus from "../../utils/httpStatus.js";
 const getTypesbyCategory = async (req, res) => {
   try {
     const { categorie } = req.params;
-    console.log(categorie)
+
 
    
     if (!categorie) {

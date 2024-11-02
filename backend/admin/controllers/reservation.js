@@ -8,8 +8,10 @@ import Balade from "../../models/balade.js";
 const getReservationsbyBalade=async(req,res)=>{
     try{ 
         const baladeId=req.params.baladeId
-        const reservations=await Reservation.find({balade:baladeId}).populate({path:"participant",model:Client});
-   if(reservations.length>0){
+      
+    const reservations=await Reservation.find({balade:baladeId}).populate({path:"participant",model:Client});
+   
+    if(reservations.length>0){
     return res.status(200).json({
       status: httpStatus.SUCCESS,
       data:reservations,
@@ -35,14 +37,16 @@ const getReservationsbyBalade=async(req,res)=>{
 const getReservations= async (req, res) => {
   try {
    
-    const reservations = await Reservation.find().populate({
-      path: "balade",
-      model: Balade,
-    });
+    const reservations = await Reservation.find()
+      .populate({
+        path: "balade",
+        model: Balade,
+      });
+      const reservationInverse = reservations.reverse();
     if (reservations.length > 0) {
       return res.status(200).json({
         status: httpStatus.SUCCESS,
-        data: reservations,
+        data: reservationInverse,
       });
     } else {
       return res.status(200).json({
@@ -91,5 +95,16 @@ const updateReservation=async(req,res)=>{
      });
     }
 }
+const getReservationbyBalade = async (req, res) => {
+  try {
+    const baladeId = req.params.id;
 
-export default {getReservationsbyBalade,updateReservation,getReservations}
+    const reservations = await Reservation.find({ "balade": baladeId });
+    return res.status(200).json({ hasReservations: reservations.length > 0 });
+  } catch (error) {
+    console.log("Erreur lors de la vérification des reservations:", error);
+    return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
+
+export default {getReservationsbyBalade,updateReservation,getReservations,getReservationbyBalade}

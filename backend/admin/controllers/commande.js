@@ -13,6 +13,7 @@ import District from "../../models/district.js";
 import Delegation from "../../models/delegation.js";
 import sendEmail from "../../utils/sendMail.js";
 
+
 const getAllCommandes = async (req, res) => {
   try {
     const commandes = await Commande.find()
@@ -241,9 +242,23 @@ const getCommandeByClient = async (req, res) => {
   }
 };
 
+const getCommandesbyVelo=async(req,res)=>{
+  try{
+   const veloId=req.params.id
+
+   const commandes = await Commande.find({ "articles.article": veloId });
+   return res.status(200).json({ hasOrders: commandes.length > 0 });
+
+  }catch(error){
+ console.log("Erreur lors de la vérification des commandes:", error);
+ return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+}
+
 export default {
   getAllCommandes,
   getCommande,
   getCommandeByClient,
   updateCommande,
+  getCommandesbyVelo
 };

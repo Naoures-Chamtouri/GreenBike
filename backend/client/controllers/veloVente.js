@@ -79,7 +79,7 @@ const getVeloVenteById = async (req, res) => {
 
    
     const avis = await Avis.find({ reference: id, onType: "VeloVente" });
-    console.log(avis)
+  
 
     
     veloVente.avis = avis;
@@ -114,12 +114,6 @@ const getVeloVentesByFilter = async (req, res) => {
       maxPrix = null;
     }
 
-    console.log("Types:", types);
-    console.log("Marques:", marques);
-    console.log("Prix:", prix);
-    console.log("Min Prix:", minPrix);
-    console.log("Max Prix:", maxPrix);
-    console.log("Categorie:", categorie);
 
     let typeIds = [];
 
@@ -174,7 +168,7 @@ const getVeloVentesByFilter = async (req, res) => {
       }
     }
 
-    console.log("Query finale:", query);
+ 
 
   
     const veloVentes = await VeloVente.find(query)

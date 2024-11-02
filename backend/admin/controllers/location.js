@@ -138,5 +138,17 @@ const updateLocation = async (req, res) => {
   }
 };
 
+const getLocationsbyVelo = async (req, res) => {
+  try {
+    const veloId = req.params.id;
 
-export default {getAllLocations,updateLocation}
+    const locations = await Location.find({ velo: veloId });
+    return res.status(200).json({ hasLocations: locations.length > 0 });
+  } catch (error) {
+    console.log("Erreur lors de la vérification des locations:", error);
+    return res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+};
+
+
+export default {getAllLocations,updateLocation,getLocationsbyVelo}
